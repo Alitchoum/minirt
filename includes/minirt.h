@@ -25,7 +25,7 @@ typedef struct s_color
 typedef struct s_ambient
 {
 	double	ratio;
-	t_color	color;
+	t_color	*color;
 }			t_ambient;
 
 typedef struct s_cam
@@ -73,7 +73,7 @@ typedef struct s_scene
 }				t_scene;
 
 int		main(int ac, char **av);
-int		read_and_parse_scene(char *file, t_scene *scene);
+int		parse_scene(char *file, t_scene *scene);
 void	free_split(char **s);
 
 #endif

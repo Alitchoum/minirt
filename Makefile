@@ -8,11 +8,11 @@ MLX_DIR = minilibx-linux
 MLX_LIB = $(MLX_DIR)libmlx.a
 LIBFT = ./libft/libft.a
 INCLUDES = -I. -I$(INC_DIR) -I../libft -I$(MLX_DIR)
-CFLAGS = -Wextra -Werror -Wall #-fsanitize=address
+CFLAGS = -Wextra -Werror -Wall -fsanitize=address
 MLX = -L$(MLX_DIR) -lmlx -lX11 -lXext
 
 SRCS = $(SRCS_DIR)main.c \
-		$(SRCS_DIR)parsing.c \
+		$(SRCS_DIR)parsing_file.c \
 		$(SRCS_DIR)utils.c \
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
