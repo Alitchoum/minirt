@@ -8,7 +8,7 @@ MLX_DIR = minilibx-linux
 MLX_LIB = $(MLX_DIR)libmlx.a
 LIBFT = ./libft/libft.a
 INCLUDES = -I. -I$(INC_DIR) -I../libft -I$(MLX_DIR)
-CFLAGS = -Wextra -Werror -Wall -fsanitize=address
+CFLAGS = -Wextra -Werror -Wall -g3 #-fsanitize=address
 MLX = -L$(MLX_DIR) -lmlx -lX11 -lXext
 
 SRCS = $(SRCS_DIR)main.c \

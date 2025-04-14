@@ -51,16 +51,16 @@ static int	check_extension(char *file)
 }
 
 //counts nb of line in the file.rt
-static int count_lines_file(char *file)
+int count_lines_file(char *file)
 {
 	int		fd;
 	int		count;
-	char	*line;
+	char	*line = NULL;
 
 	count = 0;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (perror("Error: Cannot open the file"), 0);
+		return (perror("Error: Cannot open the file"), exit(EXIT_FAILURE), 0);
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -80,14 +80,19 @@ char	**create_tab_of_scene(char *file)
 	char	**scene_array;
 	int		len;
 	int		i;
-	
+
 	len = count_lines_file(file);
-	scene_array = malloc(sizeof(char *) * (len + 1));
+	if (len == 0)
+	{
+		ft_putstr_fd("Error: file is empty.\n", 2);
+		exit(EXIT_FAILURE);
+	}
+	scene_array = ft_calloc(len + 1, sizeof(char *));
 	if (!scene_array)
 		return (NULL);
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (free_split(scene_array), perror("Error: Cannot open the file"), NULL);
+		return (free_split(scene_array), perror("Error: Cannot open the file"), exit(EXIT_FAILURE), NULL);
 	line = get_next_line(fd);
 	i = 0;
 	while (line)
@@ -96,11 +101,13 @@ char	**create_tab_of_scene(char *file)
 		i++;
 		line = get_next_line(fd);
 	}
-	scene_array[i] = NULL;
 	close(fd);
 	return (scene_array);
 }
 
+// 1: Check element IDs are valid (1st word)
+// 2: Check right number of elements
+// 3: Correct num parameters for each element
 static int	check_type_of_scene(char **lines)
 {
 	int	i;
@@ -130,6 +137,7 @@ static int	check_type_of_scene(char **lines)
 }
 
 //create & return a struct with code color RGB
+//CHECKS: int overflow; isdigit; split with isspace
 t_color	*extract_color(char *line)
 {
 	t_color *color;
@@ -147,7 +155,7 @@ t_color	*extract_color(char *line)
 	color->r = ft_atoi(rgb[0]);
 	color->g = ft_atoi(rgb[1]);
 	color->b = ft_atoi(rgb[2]);
-	if ((color->r < 0 || color->r > 255) && (color->g < 0 || color->r > 255) &&
+	if ((color->r < 0 || color->r > 255) || (color->g < 0 || color->r > 255) ||
 		(color->b < 0 || color->b > 255))
 	{
 		free_split(rgb);
@@ -193,10 +201,18 @@ static int	parse_element_line(char *line, t_scene *scene)
 }
 
 //Function parsing global
+//A: Check Valid Inputs
+// 1: Check file extension
+// 2: Check issue with open
+// 2a: Check file is not empty
+//
+//B: Parse into appropriate structs/format
+//
+//CHECK MAX NUMBER OF ELEMENTS?
 int	parse_scene(char *file, t_scene *scene)
 {
-	char	**lines;
-	int		i;
+	char	**lines = NULL;
+	int		i = 0;
 	
 	if (!check_extension(file))
 		return (0);

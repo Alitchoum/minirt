@@ -15,10 +15,13 @@
 int	main(int ac, char **av)
 {
 	t_scene scene;
-	
+
+	ft_bzero(&scene, sizeof(t_scene));
+
 	if (ac != 2)
 		return (ft_putstr_fd("Error:Numbers of arguments no valid.\n", 2), EXIT_FAILURE);
 	if (!parse_scene(av[1], &scene))
 		return (EXIT_FAILURE);
+	free(scene.ambient.color);
 	return (0);
 }
