@@ -7,6 +7,21 @@
 # include <stdio.h>
 # include "minilibx-linux/mlx.h"
 # include "libft/libft.h"
+# include <math.h>
+
+#define W_WIDTH 1080
+#define W_HEIGHT 900
+
+# define PURPLE 0x4b0082
+# define WHITE 0xffffff
+# define YELLOW 0xffa500
+# define PINK 0xff69b4
+# define TEAL 0x008080
+# define CORAL 0xff7f50
+# define BLUE 0x0000ff
+# define FUSCHIA 0xff00ff
+# define BRIGHT_GREEN 0x00ff00
+# define RED 0xff0000
 
 typedef struct s_vector
 {
@@ -75,5 +90,8 @@ typedef struct s_scene
 int		main(int ac, char **av);
 int		parse_scene(char *file, t_scene *scene);
 void	free_split(char **s);
+
+// DRAW
+void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour);
 
 #endif
