@@ -6,7 +6,7 @@
 #    By: caburges <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 13:11:03 by caburges          #+#    #+#              #
-#    Updated: 2025/01/12 18:58:45 by caburges         ###   ########.fr        #
+#    Updated: 2025/04/15 17:14:33 by caburges         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS = ft_isalpha.c \
        ft_strjoin.c \
        ft_strtrim.c \
        ft_split.c \
+       ft_split_set.c \
        ft_itoa.c \
        ft_strmapi.c \
        ft_striteri.c \
