@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 14:46:17 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/04 15:02:54 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:57:55 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,16 @@ void	free_split(char **s)
 		i++;
 	}
 	free(s);
+}
+
+void	print_list(t_list *lines)
+{
+	t_list	*current;
+
+	current = lines;
+	while (current)
+	{
+		printf("[%s]\n", (char *)current->content);
+		current = current->next;
+	}	
 }

@@ -13,8 +13,9 @@ MLX = -L$(MLX_DIR) -lmlx -lX11 -lXext
 
 SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)parsing_file.c \
+		$(SRCS_DIR)parsing_types.c \
 		$(SRCS_DIR)utils.c \
-		$(SRCS_DIR)draw.c \
+		#$(SRCS_DIR)draw.c \
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
 
