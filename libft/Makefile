@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: caburges <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 13:11:03 by caburges          #+#    #+#              #
-#    Updated: 2025/04/15 17:14:33 by caburges         ###   ########.fr        #
+#    Updated: 2025/04/16 17:29:07 by alsuchon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ SRCS = ft_isalpha.c \
        ft_lstmap.c \
        get_next_line.c \
        get_next_line_utils.c \
+	   ft_atof.c \
        ft_free.c
 
 OBJS = $(SRCS:.c=.o)
