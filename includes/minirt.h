@@ -84,12 +84,23 @@ typedef struct s_scene
 {
 	t_ambient	ambient;
 	t_cam		camera;
-	t_light		light;
+	t_light		light;	
+
+	void	*win_ptr;
+	void	*mlx_ptr;
+	void	*img;
+	char	*addr;
+	int		bpp;
+	int		l_l;
+	int		end;
 }				t_scene;
 
 int		main(int ac, char **av);
 int		parse_scene(char *file, t_scene *scene);
 void	free_split(char **s);
+
+// INIT MLX
+void	initialise_mlx(t_scene *scene);
 
 // DRAW
 void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour);

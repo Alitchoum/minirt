@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw.c                                             :+:      :+:    :+:   */
+/*   init_mlx.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caburges <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 12:31:14 by caburges          #+#    #+#             */
-/*   Updated: 2025/04/15 12:31:16 by caburges         ###   ########.fr       */
+/*   Created: 2025/04/15 13:45:00 by caburges          #+#    #+#             */
+/*   Updated: 2025/04/15 13:45:02 by caburges         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour)
+void	initialise_mlx(t_scene *scene)
 {
-	char	*dst;
-
-	if ((x >= 0 && x < W_WIDTH) && (y > 0 && y < W_HEIGHT))
-	{
-		dst = map->addr + (y * map->l_l + x * (map->bpp / 8));
-		*(unsigned int *)dst = colour;
-	}
+	scene->mlx_ptr = mlx_init();
+	scene->win_ptr = mlx_new_window(scene->mlx_ptr, W_WIDTH, W_HEIGHT, "MiniRT");
+	scene->img = mlx_new_image(scene->mlx_ptr, W_WIDTH, W_HEIGHT);
+	scene->addr = mlx_get_data_addr(scene->img, &scene->bpp, &scene->l_l, &scene->end);
 }

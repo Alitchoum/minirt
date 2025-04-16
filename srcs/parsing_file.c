@@ -172,7 +172,7 @@ static int	check_ambient(char *line, t_scene *scene)
 {
 	char	**elements = NULL;
 	
-	elements = ft_split(line, ' ');
+	elements = ft_split_set(line, "\t ");
 	if (!elements)
 			return (ft_putstr_fd("Error: Split failed.\n", 2), 0);
 	if (count_line_tab(elements)!= 3)
