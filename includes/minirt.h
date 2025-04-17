@@ -9,8 +9,8 @@
 # include "libft/libft.h"
 # include <math.h>
 
-#define W_WIDTH 1080
-#define W_HEIGHT 900
+#define W_WIDTH 800
+#define W_HEIGHT 800
 
 # define PURPLE 0x4b0082
 # define WHITE 0xffffff
@@ -45,14 +45,14 @@ typedef struct s_ambient
 
 typedef struct s_cam
 {
-	double		viewpoint;
+	t_vector		viewpoint;
 	t_vector	orientation;
 	int			fov;
 }				t_cam;
 
 typedef struct s_light
 {
-	double		position;
+	t_vector		position;
 	double		ratio;
 	t_color		color;
 }				t_light;
@@ -60,7 +60,7 @@ typedef struct s_light
 typedef struct s_sphere
 {
 	t_vector	center;
-	double		diametre;
+	double		diameter;
 	t_color		color;
 }				t_sphere;
 
@@ -80,11 +80,29 @@ typedef struct s_cylinder
 	t_color		color;
 }				t_cylinder;
 
+typedef struct s_quadratic
+{
+	double	solutions[2];
+	double	discriminant;
+}	t_quadratic;
+
+typedef	struct s_mlx
+{
+	void	*win_ptr;
+	void	*mlx_ptr;
+	void	*img;
+	char	*addr;
+	int		bpp;
+	int		l_l;
+	int		end;
+}	t_mlx;
+
 typedef struct s_scene
 {
 	t_ambient	ambient;
 	t_cam		camera;
-	t_light		light;	
+	t_light		light;
+	t_mlx		mlx_data;
 
 	void	*win_ptr;
 	void	*mlx_ptr;
@@ -93,6 +111,7 @@ typedef struct s_scene
 	int		bpp;
 	int		l_l;
 	int		end;
+
 }				t_scene;
 
 int		main(int ac, char **av);

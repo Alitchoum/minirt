@@ -20,59 +20,130 @@ float	get_discriminant(double a, double b, double c)
 	return ((b * b) - (4 * a * c));
 }
 
-float	dot_product(t_vector a, t_vector b)
+float	vec3_dot(t_vector a, t_vector b)
 {
 	return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
 }
 
-int	hit_sphere(double x, double y, t_vector origin, t_vector orientation, double radius)
+t_vector	vec3_add(t_vector a, t_vector b)
+{
+	t_vector	result;
+
+	result.x = a.x + b.x;
+	result.y = a.y + b.y;
+	result.z = a.z + b.z;
+	return (result);
+}
+
+t_vector	vec3_subtract(t_vector a, t_vector b)
+{
+	t_vector	result;
+
+	result.x = a.x - b.x;
+	result.y = a.y - b.y;
+	result.z = a.z - b.z;
+	return (result);
+}
+
+
+// transofrming rgb to final int colour (taking into account light scalar)
+int	rgb_to_int(t_color colour, double light_scalar)
+{
+	colour.r *= light_scalar;
+	colour.g *= light_scalar;
+	colour.b *= light_scalar;
+	return (colour.r << 16 | colour.g << 8 | colour.b);
+}
+
+// returns what you need to multiply the colour by to take into account light
+// Essentially, solving the quadratic equation to find closest intersection to the camera
+// between 0 and 1
+double	solve_min_quadratic(double a, double b, double discriminant)
+{
+	double	t0;
+	double	t1_closest;
+
+	t0 = (-b + sqrt(discriminant)) / (2.0 * a);
+	t1_closest = (-b - sqrt(discriminant)) / (2.0 * a);
+
+	if (t0 < t1_closest)
+		return (t0);
+	return (t1_closest);
+}
+
+t_vector	vec3_scale(t_vector a, double scale)
+{
+	a.x *= scale;
+	a.y *= scale;
+	a.z *= scale;
+	return (a);
+}
+
+int	get_colour(t_vector origin, t_vector orientation, double radius)
 {
 	double	a;
 	double	b;
 	double	c;
 	double	discriminant;
+	t_color	colour;
+	//t_vector closest_hit_position;
+	//double	min_quad;
 
-	orientation.x = x;
-	orientation.y = y;
+	colour.r = 255;
+	colour.g = 0;
+	colour.b = 255;
+	double	light_scaler = 0.5; // between 0 and 1 (1 full colour, 0 black)
 
-	a = dot_product(orientation, orientation);
-	b = 2.0f * dot_product(origin, orientation);
-	c = dot_product(origin, origin) - (radius * radius);
+	a = vec3_dot(orientation, orientation);
+	b = 2.0f * vec3_dot(origin, orientation);
+	c = vec3_dot(origin, origin) - (radius * radius);
 
 	discriminant = get_discriminant(a, b, c);
 	printf("discriminant: %f\n", discriminant);
-	
-	return (discriminant >= 0);
+	// IF NO INTERSECTION(S) WERE FOUND, return BLACK
+	if (discriminant < 0.0)
+		return (0);
+	// ELSE, SOlVE THE EQUATION TO GET THE CLOSEST POINT OF INTERSECTION TO THE CAMERA
+	//min_quad = solve_min_quadratic(a, b, discriminant);
+	//closest_hit_position = vec3_add(origin, vec3_scale(orientation, min_quad));
+	return (rgb_to_int(colour, light_scaler));
 }
 
 int	render_image(t_scene *scene)
 {
-	t_vector camera;
-	t_vector orientation;
-	double	n_row;
-	double	n_col;
+	//double aspect_ratio = W_WIDTH / (double)W_HEIGHT; // to avoid distorting
+	t_vector camera_position;
+	t_vector camera_orientation;
+	double	normalised_row;
+	double	normalised_col;
 
-	camera.x = 0.0;
-	camera.y = 0.0;
-	camera.z = -2.0;
-	orientation.z = -1.0;
+	camera_position.x = 0.0;
+	camera_position.y = 0.0;
+	camera_position.z = -1.0;
+	camera_orientation.z = -1.0;
 
-	float radius = 0.5f;
+	double sphere_radius = 0.5f;
 
 	int	col = 0;
 	int	row = 0;
 
-	// BACKGROUND
+	// PUT A COLOUR ON EACH PIXEL OF THE SCREEN
 	while (row < W_HEIGHT)
 	{
+		printf("row %i\n", row);
 		col = 0;
 		while (col < W_WIDTH)
 		{
-			n_col = (double)col / (double)W_WIDTH * 2 - 1;
-			n_row = (double)row / (double)W_HEIGHT * 2 - 1;
-			printf("x:%i->nx:%f\n", col, n_col);
-			if (hit_sphere(n_col, n_row, camera, orientation, radius))
-				my_mlx_pixel_put(scene, col, row, YELLOW);
+			// NORMALIZE THE PIXEL BETWEEN -1 AND 1
+			normalised_col = ((double)col / (double)W_WIDTH * 2 - 1);// * aspect_ratio;
+			normalised_row = (double)row / (double)W_HEIGHT * 2 - 1;
+			camera_orientation.x = normalised_col;
+			camera_orientation.y = normalised_row;
+			// FIND THE COLOUR THE PIXEL SHOULD BE
+			int colour = get_colour(camera_position, camera_orientation, sphere_radius);
+			if (colour != 0)
+				printf("colour: %i\n", colour);
+			my_mlx_pixel_put(scene, col, row, colour);
 			col++;
 		}
 		row++;
