@@ -1,5 +1,6 @@
 
 #include "minirt.h"
+
 // RETURNS DOT PRODUCT OF TWO VECTORS
 // Multiplies the matching variables together then adds them up
 
@@ -64,16 +65,14 @@ double	solve_min_quadratic(double a, double b, double discriminant)
 // NORMALISE UN VECTEUR (longueur 1) = direction
 t_vector vec3_normalize(t_vector a)
 {
-	double	len;
-
-	len = sqrt(vec3_dot(a, a));
+	double len = sqrt(vec3_dot(a, a));
 	a.x /= len;
 	a.y /= len;
 	a.z /= len;
 	return (a);
 }
 //Permet de se deplacer par palier sur le rayon (vecteur directionnel * distance scalaire)
-//Avance/recule sur l'axe du rayon
+//Acance recule sur axe du rayon
 t_vector	vec3_scale(t_vector a, double scale)
 {
 	a.x *= scale;
@@ -82,7 +81,7 @@ t_vector	vec3_scale(t_vector a, double scale)
 	return (a);
 }
 
-int	get_color(t_vector origin, t_vector orientation,t_sphere *sphere, t_scene *scene)
+int	get_color(t_vector origin, t_vector orientation, double radius, t_sphere *sphere, t_scene *scene)
 {
 	double		a;
 	double		b;
@@ -98,7 +97,7 @@ int	get_color(t_vector origin, t_vector orientation,t_sphere *sphere, t_scene *s
 
 	a = vec3_dot(orientation, orientation);
 	b = 2.0f * vec3_dot(origin, orientation);
-	c = vec3_dot(origin, origin) - (sphere->diametre / 2 * sphere->diametre / 2);
+	c = vec3_dot(origin, origin) - (radius * radius);
 
 	// IF NO INTERSECTION(S) WERE FOUND, return BLACK
 	discriminant = get_discriminant(a, b, c);
@@ -110,13 +109,14 @@ int	get_color(t_vector origin, t_vector orientation,t_sphere *sphere, t_scene *s
 	if (min_quad < 0)
 		return (0);
 	hit_point = vec3_add(origin, vec3_scale(orientation, min_quad));
-	normal = vec3_normalize(vec3_subtract(hit_point, sphere->center));
+	normal = vec3_normalize(hit_point);
 	
 	light_dir = vec3_subtract(scene->light.position, hit_point);
-	light_dir = vec3_normalize(light_dir);
+	light_dir = vec3_normalize(vec3_subtract(hit_point, sphere->center));
 	
 	double dot = vec3_dot(normal, light_dir);
 	double	light_scaler = dot * scene->light.ratio;
+	//light_scaler += scene->ambient.ratio;
 	return (rgb_to_int(color, light_scaler));
 }
 
@@ -128,14 +128,16 @@ int	render_image(t_scene *scene)
 	double	normalised_row;
 	double	normalised_col;
 
-	camera_position = scene->camera.position;
-	camera_orientation = scene->camera.orientation;
-
+	camera_position.x = 0.0;
+	camera_position.y = 0.0;
+	camera_position.z = -1.0;
+	double sphere_radius = 0.5f;
+	//camera_position = scene->camera.position;
+	
 	int	col = 0;
 	int	row = 0;
-	int	color;
 	int	i;
-
+	int	color;
 	// PUT A COLOUR ON EACH PIXEL OF THE SCREEN
 	while (row < W_HEIGHT)
 	{
@@ -148,15 +150,17 @@ int	render_image(t_scene *scene)
 			normalised_row = (double)row / (double)W_HEIGHT * 2 - 1;
 			camera_orientation.x = normalised_col;
 			camera_orientation.y = normalised_row;
+			camera_orientation.z = 1.0;
 			camera_orientation = vec3_normalize(camera_orientation);
 			//FIND THE COLOUR THE PIXEL SHOULD BE
-			color = 0;
 			i = 0;
+			color = 0;
 			while (i < scene->nb_sp)
 			{
-				color = get_color(camera_position, camera_orientation, &scene->spheres[i], scene);
+				color = get_color(camera_position, camera_orientation, sphere_radius, &scene->spheres[i], scene);
 				if (color != 0)
 					break;
+				i++;
 			}
 			if (color != 0)
 			{
@@ -169,4 +173,3 @@ int	render_image(t_scene *scene)
 	}
 	return (0);
 }
-
