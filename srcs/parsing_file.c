@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alize <alize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 12:06:39 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/16 17:00:42 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/20 18:38:32 by alize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ int	create_scene_list(t_scene *scene, char *file)
 		if (ft_strncmp(line, "\n", 1) != 0)
 		{
 			content = ft_strdup(line);
-			printf("avant: %s\n", content);
+			//printf("avant: %s\n", content);
 			if (!content)
 				return (free(line), 0);
 			if (ft_strchr(content, '\n'))
 				content[ft_strlen(content) - 1] = '\0';
-			printf("apres: %s\n", content);
+			//printf("apres: %s\n", content);
 			new_node = ft_lstnew(content);
 			ft_lstadd_back(&scene->lines, new_node);
 		}
@@ -66,12 +66,10 @@ int	check_type_of_scene(t_list *lines)
 {
 	t_list	*current;
 	char	*line;
-	int		i;
 	int		cam;
 	int		ambient;
 	int		light;
-	
-	i = 0;
+
 	cam = 0;
 	ambient = 0;
 	light = 0;
@@ -93,7 +91,26 @@ int	check_type_of_scene(t_list *lines)
 		return (ft_putstr_fd("Error: Nb elements doesn't valid.\n", 2), 0);
 	return (1);
 }
+//FUNCTION COUNT NB OF OBJECTS (SP, CY, PL) IS THE SCENE + CHECK LIMITS 
+// int	count_scene_objects(t_list *lines, t_scene *scene)
+// {
+// 	t_list	*current;
 
+// 	current = lines;
+// 	while (current)
+// 	{
+// 		if (ft_strncmp(current->content, "sp", 2) == 0)
+// 			scene->nb_sp++;
+// 		else if (ft_strncmp(current->content, "cy", 2) == 0)
+// 			scene->nb_cy++;
+// 		else if (ft_strncmp(current->content, "pl", 2) == 0)
+// 			scene->nb_pl++;
+// 		current = current->next;
+// 	}
+// 	if (scene->nb_sp > MAX_SP || scene->nb_cy >MAX_CY || scene->nb_pl > MAX_PL)
+// 		return (ft_putstr_fd("Error: Too many objects in the scene.\n", 2), 0);
+// 	return (1);
+// }
 //Function parsing global
 //A: Check Valid Inputs
 // 1: Check file extension
@@ -106,7 +123,6 @@ int	check_type_of_scene(t_list *lines)
 int	parse_scene(char *file, t_scene *scene)
 {
 	t_list *current;
-	int		i;
 	char	*line;
 	
 	if (!check_extension(file))
@@ -115,7 +131,9 @@ int	parse_scene(char *file, t_scene *scene)
 		return (ft_lstclear(&scene->lines, free), 0);
 	if (!check_type_of_scene(scene->lines))
 		return (ft_lstclear(&scene->lines, free), 0);
-	i = 0;
+	scene->spheres = malloc(sizeof(t_sphere) * MAX_SP);
+	if (!scene->spheres)
+		return (ft_putstr_fd("Error: Malloc failed.\n", 2), 0);
 	current = scene->lines;
 	while (current)
 	{
