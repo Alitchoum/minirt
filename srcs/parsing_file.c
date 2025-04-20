@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 12:06:39 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/15 17:35:36 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:00:42 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,18 @@ int	create_scene_list(t_scene *scene, char *file)
 	line = get_next_line(fd);
 	while (line)
 	{
-		content = ft_strdup(line);
-		if (!content)
-			return (free(line), 0);
-		new_node = ft_lstnew(content);
-		ft_lstadd_back(&scene->lines, new_node);
+		if (ft_strncmp(line, "\n", 1) != 0)
+		{
+			content = ft_strdup(line);
+			printf("avant: %s\n", content);
+			if (!content)
+				return (free(line), 0);
+			if (ft_strchr(content, '\n'))
+				content[ft_strlen(content) - 1] = '\0';
+			printf("apres: %s\n", content);
+			new_node = ft_lstnew(content);
+			ft_lstadd_back(&scene->lines, new_node);
+		}
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -78,7 +85,7 @@ int	check_type_of_scene(t_list *lines)
 			ambient++;
 		else if (ft_strncmp(line, "L", 1) == 0)
 			light++;
-		else if (ft_strncmp(line, "\n", 1) != 0 && ft_strncmp(line, "sp", 2) != 0 && ft_strncmp(line, "pl", 2) != 0 && ft_strncmp(line, "cy", 2) != 0)
+		else if (ft_strncmp(line, "sp", 2) != 0 && ft_strncmp(line, "pl", 2) != 0 && ft_strncmp(line, "cy", 2) != 0)
 			return (ft_putstr_fd("Error: Element(s) doesn't valid(s).\n", 2), 0);
 		current = current->next;
 	}
@@ -113,6 +120,7 @@ int	parse_scene(char *file, t_scene *scene)
 	while (current)
 	{
 		line = current->content;
+		
 		if (!parse_element_line(line, scene))
 			return (ft_lstclear(&scene->lines, free), 0);
 		current = current->next;

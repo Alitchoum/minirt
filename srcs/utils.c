@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 14:46:17 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/15 16:57:55 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:31:26 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,3 +37,4 @@ void	print_list(t_list *lines)
 		current = current->next;
 	}	
 }
+

@@ -53,16 +53,16 @@ typedef struct s_cam
 
 typedef struct s_light
 {
-	double		position;
+	t_vector	position;
 	double		ratio;
-	t_color		*color;
+	t_color		color;
 }				t_light;
 
 typedef struct s_sphere
 {
 	t_vector	center;
 	double		diametre;
-	t_color		*color;
+	t_color		color;
 }				t_sphere;
 
 typedef struct s_plane
@@ -87,6 +87,7 @@ typedef struct s_scene
 	t_ambient	ambient;
 	t_cam		camera;
 	t_light		light;
+	t_sphere	sphere;
 }				t_scene;
 
 int		main(int ac, char **av);
@@ -94,13 +95,13 @@ int		parse_scene(char *file, t_scene *scene);
 
 //---FUNCTIONS UTILS---//
 void	free_split(char **s);
+double	ft_atof(char *s);
 
 // DRAW
 void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour);
 void	print_list(t_list *lines);
 
 //---PARSING TYPE---//
-t_color	*extract_color(char *line);
 int		parse_element_line(char *line, t_scene *scene);
 
 #endif
