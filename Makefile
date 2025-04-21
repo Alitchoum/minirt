@@ -21,6 +21,9 @@ SRCS = $(SRCS_DIR)main.c \
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
 
+run: all
+	./minirt scene/scene1.rt
+
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT) $(MLX_LIB)
