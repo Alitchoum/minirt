@@ -15,6 +15,18 @@
 // RETURNS DOT PRODUCT OF TWO VECTORS
 // Multiplies the matching variables together then adds them up
 
+
+t_vector	get_vec3(double x, double y, double z)
+{
+	t_vector	new;
+
+	new.x = x;
+	new.y = y;
+	new.z = z;
+
+	return (new);
+}
+
 float	get_discriminant(double a, double b, double c)
 {
 	return ((b * b) - (4 * a * c));
@@ -79,24 +91,24 @@ t_vector	vec3_scale(t_vector a, double scale)
 	return (a);
 }
 
-int	get_colour(t_vector origin, t_vector orientation, double radius)
+int	get_colour(t_vector ray_origin, t_vector ray_direction, double radius)
 {
 	double	a;
 	double	b;
 	double	c;
 	double	discriminant;
 	t_color	colour;
-	//t_vector closest_hit_position;
-	//double	min_quad;
+	t_vector closest_hit_position;
+	double	min_quad;
 
 	colour.r = 255;
 	colour.g = 0;
 	colour.b = 255;
 	double	light_scaler = 0.5; // between 0 and 1 (1 full colour, 0 black)
 
-	a = vec3_dot(orientation, orientation);
-	b = 2.0f * vec3_dot(origin, orientation);
-	c = vec3_dot(origin, origin) - (radius * radius);
+	a = vec3_dot(ray_direction, ray_direction);
+	b = 2.0f * vec3_dot(ray_origin, ray_direction);
+	c = vec3_dot(ray_origin, ray_origin) - (radius * radius);
 
 	discriminant = get_discriminant(a, b, c);
 	printf("discriminant: %f\n", discriminant);
@@ -104,25 +116,38 @@ int	get_colour(t_vector origin, t_vector orientation, double radius)
 	if (discriminant < 0.0)
 		return (0);
 	// ELSE, SOlVE THE EQUATION TO GET THE CLOSEST POINT OF INTERSECTION TO THE CAMERA
-	//min_quad = solve_min_quadratic(a, b, discriminant);
-	//closest_hit_position = vec3_add(origin, vec3_scale(orientation, min_quad));
+	min_quad = solve_min_quadratic(a, b, discriminant);
+	closest_hit_position = vec3_add(ray_origin, vec3_scale(ray_direction, min_quad));
 	return (rgb_to_int(colour, light_scaler));
+}
+
+t_vector	vec3_normalize(t_vector v)
+{
+	double	length;
+
+	length = sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
+
+	if (length == 0)
+		return (v);
+	v.x /= length;
+	v.y /= length;
+	v.z /= length;
+	return (v);
+
 }
 
 int	render_image(t_scene *scene)
 {
 	//double aspect_ratio = W_WIDTH / (double)W_HEIGHT; // to avoid distorting
-	t_vector camera_position;
-	t_vector camera_orientation;
+	t_vector camera_position = get_vec3(0.0, 0.0, 1.0);
+	//t_vector camera_orientation = get_vec3(0.0, 0.0, -1.0);
+	t_vector ray_direction;
 	double	normalised_row;
 	double	normalised_col;
 
-	camera_position.x = 0.0;
-	camera_position.y = 0.0;
-	camera_position.z = -1.0;
-	camera_orientation.z = -1.0;
-
-	double sphere_radius = 0.5f;
+	double sphere_radius = 6.0f;
+	//double fov = 180.0;
+	//double fov_scale = tan((fov * 0.5) * M_PI / 180.0);
 
 	int	col = 0;
 	int	row = 0;
@@ -135,14 +160,17 @@ int	render_image(t_scene *scene)
 		while (col < W_WIDTH)
 		{
 			// NORMALIZE THE PIXEL BETWEEN -1 AND 1
-			normalised_col = ((double)col / (double)W_WIDTH * 2 - 1);// * aspect_ratio;
+			normalised_col = ((double)col / (double)W_WIDTH * 2 - 1);
 			normalised_row = (double)row / (double)W_HEIGHT * 2 - 1;
-			camera_orientation.x = normalised_col;
-			camera_orientation.y = normalised_row;
+			ray_direction.x = normalised_col; //* aspect_ratio * fov_scale;
+			ray_direction.y = normalised_row; //* fov_scale;
+			ray_direction.z = 1;
+
+			ray_direction = vec3_normalize(ray_direction);
 			// FIND THE COLOUR THE PIXEL SHOULD BE
-			int colour = get_colour(camera_position, camera_orientation, sphere_radius);
-			if (colour != 0)
-				printf("colour: %i\n", colour);
+			int colour = get_colour(camera_position, ray_direction, sphere_radius);
+			//if (colour != 0)
+			//	printf("colour: %i\n", colour);
 			my_mlx_pixel_put(scene, col, row, colour);
 			col++;
 		}
