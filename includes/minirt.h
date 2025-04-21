@@ -28,6 +28,16 @@
 # define MAX_CY 10 //A DEFINIR
 # define MAX_PL 10 //A DEFINIR
 
+# define EPSILON 0.00001
+
+typedef struct s_tuple
+{
+	double	x;
+	double	y;
+	double	z;
+	double	w;
+}	t_tuple;
+
 typedef struct s_vector
 {
 	double		x;
@@ -142,5 +152,6 @@ int		parse_element_line(char *line, t_scene *scene);
 //--INIT MLX--//
 void	initialise_mlx(t_scene *scene);
 
-
+//--MATHS_UTILS--//
+int	is_equal(double a, double b);
 #endif

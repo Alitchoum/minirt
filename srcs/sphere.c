@@ -9,32 +9,6 @@ float	get_discriminant(double a, double b, double c)
 	return ((b * b) - (4 * a * c));
 }
 
-//Produit scalaire de 2 vecteurs
-float	vec3_dot(t_vector a, t_vector b)
-{
-	return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
-}
-
-t_vector	vec3_add(t_vector a, t_vector b)
-{
-	t_vector	result;
-
-	result.x = a.x + b.x;
-	result.y = a.y + b.y;
-	result.z = a.z + b.z;
-	return (result);
-}
-
-t_vector	vec3_subtract(t_vector a, t_vector b)
-{
-	t_vector	result;
-
-	result.x = a.x - b.x;
-	result.y = a.y - b.y;
-	result.z = a.z - b.z;
-	return (result);
-}
-
 // transofrming rgb to final int colour (taking into account light scalar)
 int	rgb_to_int(t_color colour, double light_scalar)
 {
@@ -62,25 +36,6 @@ double	solve_min_quadratic(double a, double b, double discriminant)
 	return (-1);
 }
 
-// NORMALISE UN VECTEUR (longueur 1) = direction
-t_vector vec3_normalize(t_vector a)
-{
-	double len = sqrt(vec3_dot(a, a));
-	a.x /= len;
-	a.y /= len;
-	a.z /= len;
-	return (a);
-}
-//Permet de se deplacer par palier sur le rayon (vecteur directionnel * distance scalaire)
-//Acance recule sur axe du rayon
-t_vector	vec3_scale(t_vector a, double scale)
-{
-	a.x *= scale;
-	a.y *= scale;
-	a.z *= scale;
-	return (a);
-}
-
 int	get_color(t_vector ray_origin, t_vector ray_direction, t_sphere *sphere, t_scene *scene)
 {
 	double		a;
@@ -106,7 +61,6 @@ int	get_color(t_vector ray_origin, t_vector ray_direction, t_sphere *sphere, t_s
 	discriminant = get_discriminant(a, b, c);
 	if (discriminant < 0.0)
 		return (0);
-	//printf("discriminant: %f\n", discriminant);
 	// ELSE, SOlVE THE EQUATION TO GET THE CLOSEST POINT OF INTERSECTION TO THE CAMERA
 	min_quad = solve_min_quadratic(a, b, discriminant);
 	if (min_quad < 0)
@@ -150,7 +104,7 @@ int	render_image(t_scene *scene)
 		while (col < W_WIDTH)
 		{
 			// NORMALIZE THE PIXEL BETWEEN -1 AND 1
-			normalised_col = ((double)col / (double)W_WIDTH * 2 - 1);// * aspect_ratio;
+			normalised_col = ((double)col / (double)W_WIDTH * 2 - 1);
 			normalised_row = (double)row / (double)W_HEIGHT * 2 - 1;
 
 			ray_direction.x = normalised_col * aspect_ratio * fov_scale;
