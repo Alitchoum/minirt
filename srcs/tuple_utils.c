@@ -52,3 +52,85 @@ int	tuple_is_equal(t_tuple a, t_tuple b)
 	return (1);
 }
 
+t_tuple	add_tuple(t_tuple a, t_tuple b)
+{
+	t_tuple new;
+
+	new.x = a.x + b.x;
+	new.y = a.y + b.y;
+	new.z = a.z + b.z;
+	new.w = a.w + b.w;
+	return (new);
+}
+
+t_tuple	subtract_tuple(t_tuple a, t_tuple b)
+{
+	t_tuple new;
+
+	new.x = a.x - b.x;
+	new.y = a.y - b.y;
+	new.z = a.z - b.z;
+	new.w = a.w - b.w;
+	return (new);
+}
+
+t_tuple	negate_tuple(t_tuple a)
+{
+	a.x = -a.x;
+	a.y = -a.y;
+	a.z = -a.z;
+	a.w = -a.w;
+	return (a);
+}
+
+t_tuple	scale_tuple(t_tuple a, double scale)
+{
+	a.x *= scale;
+	a.y *= scale;
+	a.z *= scale;
+	a.w *= scale;
+	return (a);
+}
+
+double	magnitude(t_tuple a)
+{
+	double	result;
+
+	result = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2) + pow(a.w, 2));
+	return (result);
+}
+
+t_tuple	normalize_tuple(t_tuple a)
+{
+	double	magnitude;
+
+	magnitude = magnitude(a);
+	a.x /= magnitude;
+	a.y /= magnitude;
+	a.z /= magnitude;
+	a.w /= magnitude;
+	return (a);
+}
+
+// smaller the dot product, the larger the angle between the vectors
+// 1 means the vectors are identical
+// -1 means they point in opposite directions
+// to be used on VECTORS only, not POINTS
+double dot_tuple(t_tuple a, t_tuple b)
+{
+	return ((a.x * b.x) + (a.y * b*y) + (a.z * b.z) + (a.w * b.w));
+}
+
+// returns a vector that is perpendicular to both of the original vectors
+t_tuple	cross_tuple(t_tuple a, t_tuple b)
+{
+	double x;
+	double y;
+	double z;
+
+	x = a.y * b.z - a.z & b.y;
+	y = a.z * b.x - a.x * b.z;
+	z = a.x * b.y - a.y * b.x;
+	return (vector(x, y, z));
+}
+

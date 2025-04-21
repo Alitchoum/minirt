@@ -112,6 +112,19 @@ typedef	struct s_mlx
 	int		end;
 }	t_mlx;
 
+typedef struct s_projectile
+{
+	t_tuple	position; // point
+	t_tuple	velocity; // vector
+}	t_projectile;
+
+
+typedef struct s_environment
+{
+	t_tuple gravity; // vector
+	t_tuple wind; // vector
+}
+
 typedef struct s_scene
 {
 	t_list		*lines;
