@@ -13,7 +13,7 @@
 #include "minirt.h"
 
 //Produit scalaire de 2 vecteurs
-float	vec3_dot(t_vector a, t_vector b)
+double	vec3_dot(t_vector a, t_vector b)
 {
 	return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
 }

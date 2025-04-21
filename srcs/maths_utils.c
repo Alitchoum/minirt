@@ -14,5 +14,5 @@
 
 int	is_equal(double a, double b)
 {
-	return (fabs(a - b) < EPSILON));
+	return (fabs(a - b) < EPSILON);
 }

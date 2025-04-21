@@ -123,7 +123,7 @@ typedef struct s_environment
 {
 	t_tuple gravity; // vector
 	t_tuple wind; // vector
-}
+}	t_environment;
 
 typedef struct s_scene
 {
@@ -167,4 +167,9 @@ void	initialise_mlx(t_scene *scene);
 
 //--MATHS_UTILS--//
 int	is_equal(double a, double b);
+double	vec3_dot(t_vector a, t_vector b);
+t_vector	vec3_add(t_vector a, t_vector b);
+t_vector	vec3_subtract(t_vector a, t_vector b);
+t_vector vec3_normalize(t_vector a);
+t_vector	vec3_scale(t_vector a, double scale);
 #endif
