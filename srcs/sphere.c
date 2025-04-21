@@ -81,7 +81,7 @@ t_vector	vec3_scale(t_vector a, double scale)
 	return (a);
 }
 
-int	get_color(t_vector origin, t_vector orientation, double radius, t_sphere *sphere, t_scene *scene)
+int	get_color(t_vector origin, t_vector orientation, t_sphere *sphere, t_scene *scene)
 {
 	double		a;
 	double		b;
@@ -97,26 +97,27 @@ int	get_color(t_vector origin, t_vector orientation, double radius, t_sphere *sp
 
 	a = vec3_dot(orientation, orientation);
 	b = 2.0f * vec3_dot(origin, orientation);
-	c = vec3_dot(origin, origin) - (radius * radius);
+	c = vec3_dot(origin, origin) - ((sphere->diametre / 2) * (sphere->diametre / 2));
 
 	// IF NO INTERSECTION(S) WERE FOUND, return BLACK
 	discriminant = get_discriminant(a, b, c);
 	if (discriminant < 0.0)
 		return (0);
-	//printf("discriminant: %f\n", discriminant);
 	// ELSE, SOlVE THE EQUATION TO GET THE CLOSEST POINT OF INTERSECTION TO THE CAMERA
 	min_quad = solve_min_quadratic(a, b, discriminant);
 	if (min_quad < 0)
 		return (0);
 	hit_point = vec3_add(origin, vec3_scale(orientation, min_quad));
-	normal = vec3_normalize(hit_point);
-	
-	light_dir = vec3_subtract(scene->light.position, hit_point);
-	light_dir = vec3_normalize(vec3_subtract(hit_point, sphere->center));
+	normal = vec3_normalize(vec3_subtract(hit_point,sphere->center));
+	light_dir = vec3_normalize(vec3_subtract(scene->light.position, hit_point));
 	
 	double dot = vec3_dot(normal, light_dir);
+	if (dot < 0)
+	dot = 0;
 	double	light_scaler = dot * scene->light.ratio;
-	//light_scaler += scene->ambient.ratio;
+	light_scaler += scene->ambient.ratio;
+	if (light_scaler > 1.0)
+		light_scaler = 1.0;
 	return (rgb_to_int(color, light_scaler));
 }
 
@@ -128,11 +129,7 @@ int	render_image(t_scene *scene)
 	double	normalised_row;
 	double	normalised_col;
 
-	camera_position.x = 0.0;
-	camera_position.y = 0.0;
-	camera_position.z = -1.0;
-	double sphere_radius = 0.5f;
-	//camera_position = scene->camera.position;
+	camera_position = scene->camera.position;
 	
 	int	col = 0;
 	int	row = 0;
@@ -157,7 +154,7 @@ int	render_image(t_scene *scene)
 			color = 0;
 			while (i < scene->nb_sp)
 			{
-				color = get_color(camera_position, camera_orientation, sphere_radius, &scene->spheres[i], scene);
+				color = get_color(camera_position, camera_orientation, &scene->spheres[i], scene);
 				if (color != 0)
 					break;
 				i++;

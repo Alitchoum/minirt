@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_types.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alize <alize@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:37:58 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/20 18:40:58 by alize            ###   ########.fr       */
+/*   Updated: 2025/04/21 12:59:06 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ static int	check_camera(char *line, t_scene *scene)
 		(scene->camera.orientation.x < -1 || scene->camera.orientation.x > 1))
 		return (free_split(elements), ft_putstr_fd("Error: Cam orientation isn't in a valid range.\n", 2), 0);
 	if (!is_valid_int(elements[3]))
-		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
+		return (free_split(elements), 0);
 	scene->camera.fov = ft_atoi(elements[3]);
 	if (scene->camera.fov < 0 || scene->camera.fov > 180) 	
 		return (free_split(elements), ft_putstr_fd("Error: Cam ratio isn't in a valid range.\n", 2), 0);

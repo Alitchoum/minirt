@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alize <alize@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 14:46:17 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/20 16:56:42 by alize            ###   ########.fr       */
+/*   Updated: 2025/04/21 13:04:06 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,28 @@ void	print_list(t_list *lines)
 
 int	is_valid_int(char *s)
 {
-	int	i;
+	int		i;
+	int		nb;
+	int		sign;
+	long	result;
 
 	i = 0;
+	sign = 1;
+	result = 0;
 	if (s[i] == '+' || s[i] == '-')
-		i++;
-	if (!s[i])
-		return (0);
+	{
+		if (s[i++] == '-')
+			sign = -sign;
+	}
 	while (s[i])
 	{
 		if (!ft_isdigit(s[i]))
-			return (0);
+			return (ft_putstr_fd("Error: Not a number.\n", 2), 0);
+		nb = s[i] - '0';
+		if ((sign == 1 && result > (INT_MAX - nb) / 10) ||
+			(sign == -1 && -result < (INT_MIN + nb) / 10))
+			return (ft_putstr_fd("Error: Overflow value.\n", 2), 0);
+		result = result * 10 + nb;
 		i++;
 	}
 	return (1);
@@ -76,7 +87,7 @@ int	is_valid_double(char *s)
 			point = 1;
 		}
 		else if (!ft_isdigit(s[i]))
-			return (0);
+			return (ft_putstr_fd("Error: Not a number.\n", 2), 0);
 		i++;
 	}
 	return (1);
