@@ -30,6 +30,10 @@
 
 # define EPSILON 0.00001
 
+# define SPHERE 0
+# define CYLINDER 1
+# define PLANE 2
+
 typedef struct s_tuple
 {
 	double	x;
@@ -47,9 +51,9 @@ typedef struct s_vector
 
 typedef struct s_color
 {
-	int		r;
-	int		g;
-	int		b;
+	double		r;
+	double		g;
+	double		b;
 }			t_color;
 
 typedef struct s_ambient
@@ -60,23 +64,26 @@ typedef struct s_ambient
 
 typedef struct s_cam
 {
-	t_vector	position;
-	t_vector	orientation;
+	t_tuple		position;
+	t_tuple		orientation;
 	int			fov;
 }				t_cam;
 
 typedef struct s_light
 {
-	t_vector	position;
+	t_tuple		position;
 	double		ratio;
 	t_color		color;
 }				t_light;
 
 typedef struct s_sphere
 {
-	t_vector	center;
+	t_tuple		center;
 	double		diametre;
 	t_color		color;
+	double		translation_matrix[4][4]; //moves to the correct position
+	double		scaling_matrix[4][4]; // adjusts the sphere's radius
+	double		transform_matrix[4][4]; // combines the 2
 }				t_sphere;
 
 typedef struct s_plane
@@ -112,25 +119,35 @@ typedef	struct s_mlx
 	int		end;
 }	t_mlx;
 
-typedef struct s_projectile
+typedef struct s_ray
 {
-	t_tuple	position; // point
-	t_tuple	velocity; // vector
-}	t_projectile;
+	t_tuple	origin;
+	t_tuple	direction;
+}	t_ray;
 
-
-typedef struct s_environment
+typedef struct s_object
 {
-	t_tuple gravity; // vector
-	t_tuple wind; // vector
-}	t_environment;
+	int	type;
+	t_tuple	position;
+	t_tuple	orientation;
+	double	radius;
+	double	diametre;
+	double	height;
+	double	rotation_matrix[4][4];
+	double	translation_matrix[4][4];
+	double	transform_matrix[4][4];
+	double	determinant;
+	t_color	color;
+}	t_object;
 
 typedef struct s_scene
 {
+	int		obj_count;
 	t_list		*lines;
 	t_ambient	ambient;
 	t_cam		camera;
 	t_light		light;
+	t_object	*objects;
 	t_sphere	*spheres;
 	int			nb_sp;
 	int			nb_cy;
@@ -158,9 +175,10 @@ void	print_list(t_list *lines);
 //--DRAW--//
 void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour);
 int		render_image(t_scene *scene);
+int	rgb_to_int(t_color colour, double light_scalar);
 
 //---PARSING TYPE---//
-int		parse_element_line(char *line, t_scene *scene);
+int		parse_element_line(char *line, t_scene *scene, int *sphere_count);
 
 //--INIT MLX--//
 void	initialise_mlx(t_scene *scene);
@@ -172,4 +190,26 @@ t_vector	vec3_add(t_vector a, t_vector b);
 t_vector	vec3_subtract(t_vector a, t_vector b);
 t_vector vec3_normalize(t_vector a);
 t_vector	vec3_scale(t_vector a, double scale);
+
+//-- TUPLE --//
+//
+t_tuple	tuple(double x, double y, double z, double w);
+t_tuple	point(double x, double y, double z);
+t_tuple vector(double x, double y, double z);
+int	tuple_is_equal(t_tuple a, t_tuple b);
+t_tuple	add_tuple(t_tuple a, t_tuple b);
+t_tuple	subtract_tuple(t_tuple a, t_tuple b);
+t_tuple	negate_tuple(t_tuple a);
+t_tuple	scale_tuple(t_tuple a, double scale);
+double	magnitude(t_tuple a);
+t_tuple	normalize_tuple(t_tuple a);
+double dot_tuple(t_tuple a, t_tuple b);
+t_tuple	cross_tuple(t_tuple a, t_tuple b);
+
+//-- MATRIX --//
+int	matrix_are_equal(double **a, double **b, int size);
+
+// RAY
+t_ray	new_ray(t_tuple origin, t_tuple direction);
+t_tuple	position(t_ray ray, double distance);
 #endif

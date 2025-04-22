@@ -23,6 +23,7 @@ t_tuple	tuple(double x, double y, double z, double w)
 	return (new);
 }
 
+// create a new point (w is 1)
 t_tuple	point(double x, double y, double z)
 {
 	t_tuple new;
@@ -31,6 +32,7 @@ t_tuple	point(double x, double y, double z)
 	return (new);
 }
 
+// create a new vector (w is 0)
 t_tuple vector(double x, double y, double z)
 {
 	t_tuple new;
@@ -102,13 +104,13 @@ double	magnitude(t_tuple a)
 
 t_tuple	normalize_tuple(t_tuple a)
 {
-	double	magnitude;
+	double	mag;
 
-	magnitude = magnitude(a);
-	a.x /= magnitude;
-	a.y /= magnitude;
-	a.z /= magnitude;
-	a.w /= magnitude;
+	mag = magnitude(a);
+	a.x /= mag;
+	a.y /= mag;
+	a.z /= mag;
+	a.w /= mag;
 	return (a);
 }
 
@@ -118,7 +120,7 @@ t_tuple	normalize_tuple(t_tuple a)
 // to be used on VECTORS only, not POINTS
 double dot_tuple(t_tuple a, t_tuple b)
 {
-	return ((a.x * b.x) + (a.y * b*y) + (a.z * b.z) + (a.w * b.w));
+	return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w));
 }
 
 // returns a vector that is perpendicular to both of the original vectors
@@ -128,9 +130,8 @@ t_tuple	cross_tuple(t_tuple a, t_tuple b)
 	double y;
 	double z;
 
-	x = a.y * b.z - a.z & b.y;
+	x = a.y * b.z - a.z * b.y;
 	y = a.z * b.x - a.x * b.z;
 	z = a.x * b.y - a.y * b.x;
 	return (vector(x, y, z));
 }
-

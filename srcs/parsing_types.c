@@ -58,11 +58,14 @@ static int	update_color(t_color *color, char *line)
 	if ((color->r < 0 || color->r > 255) || (color->g < 0 || color->r > 255) ||
 		(color->b < 0 || color->b > 255))
 		return (free_split(rgb), ft_putstr_fd("Error: Color isn't in a valid range.\n", 2), 0);
+	color->r /= (double)255.0;
+	color->g /= (double)255.0;
+	color->b /= (double)255.0;
 	free_split(rgb);
 	return (1);
 }
 
-static int	update_vector(t_vector *vector, char *line)
+static int	update_tuple(t_tuple *tuple, char *line, double w)
 {
 	char	**coords = NULL;
 
@@ -73,9 +76,10 @@ static int	update_vector(t_vector *vector, char *line)
 		return (free_split(coords), ft_putstr_fd("Error Nb of elements isn't valid.\n", 2), 0);
 	if (!is_valid_double(coords[0]) || !is_valid_double(coords[1]) || !is_valid_double(coords[2]))
 		return (free_split(coords), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	vector->x = ft_atof(coords[0]);
-	vector->y = ft_atol(coords[1]);
-	vector->z = ft_atol(coords[2]);
+	tuple->x = ft_atof(coords[0]);
+	tuple->y = ft_atof(coords[1]);
+	tuple->z = ft_atof(coords[2]);
+	tuple->w = w;
 	free_split(coords);
 	return (1);
 }
@@ -115,9 +119,9 @@ static int	check_camera(char *line, t_scene *scene)
 	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of camera isn't valid.\n", 2), 0);
-	if (!update_vector(&scene->camera.position, elements[1]))
+	if (!update_tuple(&scene->camera.position, elements[1], 1))
 		return (free_split(elements), 0);
-	if (!update_vector(&scene->camera.orientation, elements[2]))
+	if (!update_tuple(&scene->camera.orientation, elements[2], 0))
 		return (free_split(elements), 0);
 	if ((scene->camera.orientation.x < -1 || scene->camera.orientation.x > 1) || (scene->camera.orientation.y < -1 || scene->camera.orientation.y > 1) ||
 		(scene->camera.orientation.x < -1 || scene->camera.orientation.x > 1))
@@ -142,7 +146,7 @@ static int	check_light(char *line, t_scene *scene)
 	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of light isn't valid.\n", 2), 0);
-	if (!update_vector(&scene->light.position, elements[1]))
+	if (!update_tuple(&scene->light.position, elements[1], 1))
 		return (free_split(elements), 0);
 	if (!is_valid_double(elements[2]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
@@ -155,10 +159,9 @@ static int	check_light(char *line, t_scene *scene)
 	return (1);
 }
 
-static int	check_sphere(char *line, t_scene *scene)
+static int	check_sphere(char *line, t_object *sphere)
 {
 	char	**elements = NULL;
-	t_sphere	new_sp;
 
 	elements = ft_split_set(line, " ");
 	if (!elements)
@@ -167,23 +170,20 @@ static int	check_sphere(char *line, t_scene *scene)
 	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of sphere isn't valid.\n", 2), 0);
-	if (!update_vector(&new_sp.center, elements[1]))
+	if (!update_tuple(&sphere->position, elements[1], 1))
 		return (free_split(elements), 0);
 	if (!is_valid_double(elements[2]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	new_sp.diametre = ft_atof(elements[2]);
-	if (!update_color(&new_sp.color, elements[3]))
+	sphere->diametre = ft_atof(elements[2]);
+	if (!update_color(&sphere->color, elements[3]))
 		return (free_split(elements), 0);
 	free_split(elements);
-	if (scene->nb_sp > MAX_SP)
-		return (ft_putstr_fd("Error: Too many spheres in the scene.\n", 2), 0);
-	scene->spheres[scene->nb_sp] = new_sp;
-	scene->nb_sp++;
+	sphere->type = SPHERE;
 	return (1);
 }
 
 //Function for parse elements of type line by line
-int	parse_element_line(char *line, t_scene *scene)
+int	parse_element_line(char *line, t_scene *scene, int *i)
 {
 	if (ft_strncmp(line, "A", 1) == 0)
 	{
@@ -202,8 +202,9 @@ int	parse_element_line(char *line, t_scene *scene)
 	}
 	if (ft_strncmp(line, "sp", 2) == 0)
 	{
-		if (!check_sphere(line, scene))
+		if (!check_sphere(line, &scene->objects[*i]))
 			return (0);
+		*i = *i + 1;
 	}
 	//add function for others types of elements
 	return (1);

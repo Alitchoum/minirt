@@ -9,14 +9,6 @@ float	get_discriminant(double a, double b, double c)
 	return ((b * b) - (4 * a * c));
 }
 
-// transofrming rgb to final int colour (taking into account light scalar)
-int	rgb_to_int(t_color colour, double light_scalar)
-{
-	colour.r *= light_scalar;
-	colour.g *= light_scalar;
-	colour.b *= light_scalar;
-	return (colour.r << 16 | colour.g << 8 | colour.b);
-}
 
 // returns what you need to multiply the colour by to take into account light
 // Essentially, solving the quadratic equation to find closest intersection to the camera
@@ -36,7 +28,7 @@ double	solve_min_quadratic(double a, double b, double discriminant)
 	return (-1);
 }
 
-int	get_color(t_vector ray_origin, t_vector ray_direction, t_sphere *sphere, t_scene *scene)
+int	get_color(t_ray ray, t_object *sphere, t_scene *scene)
 {
 	double		a;
 	double		b;
@@ -44,18 +36,18 @@ int	get_color(t_vector ray_origin, t_vector ray_direction, t_sphere *sphere, t_s
 	double		min_quad;
 	double		discriminant;
 	t_color		color;
-	t_vector	hit_point;
-	t_vector	normal;
-	t_vector	light_dir;
-	t_vector	diff_sphere_camera;
+	t_tuple	hit_point;
+	t_tuple	normal;
+	t_tuple	light_dir;
+	t_tuple		diff_sphere_camera;
 
 	color = sphere->color;
 
-	diff_sphere_camera = vec3_subtract(ray_origin, sphere->center);
+	diff_sphere_camera = subtract_tuple(ray.origin, sphere->position);
 
-	a = vec3_dot(ray_direction, ray_direction);
-	b = 2.0f * vec3_dot(diff_sphere_camera, ray_direction);
-	c = vec3_dot(diff_sphere_camera, diff_sphere_camera) - ((sphere->diametre * 0.5) * (sphere->diametre * 0.5));
+	a = dot_tuple(ray.direction, ray.direction);
+	b = 2.0f * dot_tuple(diff_sphere_camera, ray.direction);
+	c = dot_tuple(diff_sphere_camera, diff_sphere_camera) - (pow((sphere->diametre * 0.5), 2));
 
 	// IF NO INTERSECTION(S) WERE FOUND, return BLACK
 	discriminant = get_discriminant(a, b, c);
@@ -65,14 +57,14 @@ int	get_color(t_vector ray_origin, t_vector ray_direction, t_sphere *sphere, t_s
 	min_quad = solve_min_quadratic(a, b, discriminant);
 	if (min_quad < 0)
 		return (0);
-	hit_point = vec3_add(ray_origin, vec3_scale(ray_direction, min_quad));
-	normal = vec3_subtract(hit_point, sphere->center);
-	normal = vec3_normalize(normal);
+	hit_point = add_tuple(ray.origin, scale_tuple(ray.direction, min_quad));
+	normal = subtract_tuple(hit_point, sphere->position);
+	normal = normalize_tuple(normal);
 	
-	light_dir = vec3_subtract(scene->light.position, hit_point);
-	light_dir = vec3_normalize(light_dir);
+	light_dir = subtract_tuple(scene->light.position, hit_point);
+	light_dir = normalize_tuple(light_dir);
 	
-	double dot = vec3_dot(normal, light_dir);
+	double dot = dot_tuple(normal, light_dir);
 	if (dot < 0)
 		dot = 0;
 	double	light_scaler = dot * scene->light.ratio;
@@ -86,8 +78,9 @@ int	get_color(t_vector ray_origin, t_vector ray_direction, t_sphere *sphere, t_s
 int	render_image(t_scene *scene)
 {
 	double aspect_ratio = W_WIDTH / (double)W_HEIGHT; // to avoid distorting
-	t_vector ray_origin = scene->camera.position;
-	t_vector ray_direction;
+	t_ray	ray;
+
+	t_tuple ray_direction;
 	//t_vector camera_orientation;
 	double	normalised_row;
 	double	normalised_col;
@@ -107,24 +100,22 @@ int	render_image(t_scene *scene)
 			normalised_col = ((double)col / (double)W_WIDTH * 2 - 1);
 			normalised_row = (double)row / (double)W_HEIGHT * 2 - 1;
 
-			ray_direction.x = normalised_col * aspect_ratio * fov_scale;
-			ray_direction.y = normalised_row * fov_scale;
-			ray_direction.z = 1.0;
-			ray_direction = vec3_normalize(ray_direction);
+			// CALCULATE RAY DIRECTION
+			ray_direction = vector(normalised_col * aspect_ratio * fov_scale, normalised_row * fov_scale, 1);
 
+			// CREATE A NEW RAY (ORIGIN, DIRECTION)
+			ray = new_ray(scene->camera.position, normalize_tuple(ray_direction));
 			//FIND THE COLOUR THE PIXEL SHOULD BE
 			i = 0;
 			color = 0;
-			while (i < scene->nb_sp)
+			while (i < 2)
 			{
-				color = get_color(ray_origin, ray_direction, &scene->spheres[i], scene);
+				color = get_color(ray, &scene->objects[i], scene);
 				if (color != 0)
-					break;
+				{
+					my_mlx_pixel_put(scene, col, row, color);
+				}
 				i++;
-			}
-			if (color != 0)
-			{
-				my_mlx_pixel_put(scene, col, row, color);
 			}
 			col++;
 		}

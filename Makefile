@@ -20,6 +20,10 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)sphere.c \
 		$(SRCS_DIR)vector.c \
 		$(SRCS_DIR)maths_utils.c \
+		$(SRCS_DIR)colour_maths.c \
+		$(SRCS_DIR)tuple_utils.c \
+		$(SRCS_DIR)ray.c \
+		$(SRCS_DIR)matrix.c \
 
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)

@@ -49,7 +49,7 @@ int	create_scene_list(t_scene *scene, char *file)
 			if (ft_strchr(content, '\n'))
 				content[ft_strlen(content) - 1] = '\0';
 			//printf("apres: %s\n", content);
-			new_node = ft_lstnew(content);
+			new_node = ft_lstnew(content); //malloc
 			ft_lstadd_back(&scene->lines, new_node);
 		}
 		free(line);
@@ -62,7 +62,7 @@ int	create_scene_list(t_scene *scene, char *file)
 // 1: Check element IDs are valid (1st word)
 // 2: Check right number of elements
 // 3: Correct num parameters for each element
-int	check_type_of_scene(t_list *lines)
+int	check_type_of_scene(t_list *lines, int *obj_count)
 {
 	t_list	*current;
 	char	*line;
@@ -78,17 +78,20 @@ int	check_type_of_scene(t_list *lines)
 	{
 		line = current->content;
 		if (ft_strncmp(line, "A", 1) == 0)
-			cam++;
-		else if (ft_strncmp(line, "C", 1) == 0)
 			ambient++;
+		else if (ft_strncmp(line, "C", 1) == 0)
+			cam++;
 		else if (ft_strncmp(line, "L", 1) == 0)
 			light++;
 		else if (ft_strncmp(line, "sp", 2) != 0 && ft_strncmp(line, "pl", 2) != 0 && ft_strncmp(line, "cy", 2) != 0)
 			return (ft_putstr_fd("Error: Element(s) doesn't valid(s).\n", 2), 0);
+		else
+			*obj_count = *obj_count + 1;
 		current = current->next;
 	}
 	if (cam > 1 || ambient > 1 || light > 1)
 		return (ft_putstr_fd("Error: Nb elements doesn't valid.\n", 2), 0);
+	printf("number of objects: %i\n", *obj_count);
 	return (1);
 }
 //FUNCTION COUNT NB OF OBJECTS (SP, CY, PL) IS THE SCENE + CHECK LIMITS 
@@ -124,22 +127,23 @@ int	parse_scene(char *file, t_scene *scene)
 {
 	t_list *current;
 	char	*line;
+	int sphere_count = 0;
 	
 	if (!check_extension(file))
 		return (0);
 	if (!create_scene_list(scene, file))
 		return (ft_lstclear(&scene->lines, free), 0);
-	if (!check_type_of_scene(scene->lines))
+	if (!check_type_of_scene(scene->lines, &scene->obj_count))
 		return (ft_lstclear(&scene->lines, free), 0);
-	scene->spheres = malloc(sizeof(t_sphere) * MAX_SP);
-	if (!scene->spheres)
+	scene->objects = ft_calloc(scene->obj_count, sizeof(t_object));
+	if (!scene->objects)
 		return (ft_putstr_fd("Error: Malloc failed.\n", 2), 0);
 	current = scene->lines;
 	while (current)
 	{
 		line = current->content;
 		
-		if (!parse_element_line(line, scene))
+		if (!parse_element_line(line, scene, &sphere_count))
 			return (ft_lstclear(&scene->lines, free), 0);
 		current = current->next;
 	}
