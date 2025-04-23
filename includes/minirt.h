@@ -24,6 +24,7 @@
 # define BRIGHT_GREEN 0x00ff00
 # define RED 0xff0000
 
+# define WHITESPACE " \t\r\v\f"
 # define MAX_SP 10 //A DEFINIR
 # define MAX_CY 10 //A DEFINIR
 # define MAX_PL 10 //A DEFINIR
@@ -71,18 +72,18 @@ typedef struct s_sphere
 
 typedef struct s_plane
 {
-	t_vector	viewpoint;
-	t_vector	*orientation;
-	t_color		*color;
+	t_vector	point;
+	t_vector	orientation;
+	t_color		color;
 }				t_plane;
 
 typedef struct s_cylinder
 {
-	t_vector	*center;
-	t_vector	*orientation;
+	t_vector	center;
+	t_vector	orientation;
 	double		diametre;
 	double		height;
-	t_color		*color;
+	t_color		color;
 }				t_cylinder;
 
 typedef struct s_quadratic
@@ -109,9 +110,14 @@ typedef struct s_scene
 	t_cam		camera;
 	t_light		light;
 	t_sphere	*spheres;
+	t_plane		*planes;
+	t_cylinder	*cylinders;
 	int			nb_sp;
 	int			nb_cy;
 	int			nb_pl;
+	int			index_sp;
+	int			index_cy;
+	int			index_pl;
 	t_mlx		mlx_data;
 	void		*win_ptr;
 	void		*mlx_ptr;
@@ -131,16 +137,18 @@ double	ft_atof(char *s);
 int		is_valid_int(char *s);
 int		is_valid_double(char *s);
 void	print_list(t_list *lines);
+void	print_tab(char **s);
+int		is_valid_orientation_range(t_vector vector);
+int		count_line_tab(char **s);
 
 //--DRAW--//
 void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour);
-int		render_image(t_scene *scene);
+//int		render_image(t_scene *scene);
 
 //---PARSING TYPE---//
 int		parse_element_line(char *line, t_scene *scene);
 
 //--INIT MLX--//
 void	initialise_mlx(t_scene *scene);
-
 
 #endif

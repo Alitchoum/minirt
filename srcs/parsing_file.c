@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alize <alize@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 12:06:39 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/20 18:38:32 by alize            ###   ########.fr       */
+/*   Updated: 2025/04/23 11:15:43 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ int	check_type_of_scene(t_list *lines)
 	while (current)
 	{
 		line = current->content;
-		if (ft_strncmp(line, "A", 1) == 0)
+		if (ft_strncmp(line, "C", 1) == 0)
 			cam++;
-		else if (ft_strncmp(line, "C", 1) == 0)
+		else if (ft_strncmp(line, "A", 1) == 0)
 			ambient++;
 		else if (ft_strncmp(line, "L", 1) == 0)
 			light++;
@@ -91,26 +91,28 @@ int	check_type_of_scene(t_list *lines)
 		return (ft_putstr_fd("Error: Nb elements doesn't valid.\n", 2), 0);
 	return (1);
 }
-//FUNCTION COUNT NB OF OBJECTS (SP, CY, PL) IS THE SCENE + CHECK LIMITS 
-// int	count_scene_objects(t_list *lines, t_scene *scene)
-// {
-// 	t_list	*current;
 
-// 	current = lines;
-// 	while (current)
-// 	{
-// 		if (ft_strncmp(current->content, "sp", 2) == 0)
-// 			scene->nb_sp++;
-// 		else if (ft_strncmp(current->content, "cy", 2) == 0)
-// 			scene->nb_cy++;
-// 		else if (ft_strncmp(current->content, "pl", 2) == 0)
-// 			scene->nb_pl++;
-// 		current = current->next;
-// 	}
-// 	if (scene->nb_sp > MAX_SP || scene->nb_cy >MAX_CY || scene->nb_pl > MAX_PL)
-// 		return (ft_putstr_fd("Error: Too many objects in the scene.\n", 2), 0);
-// 	return (1);
-// }
+//FUNCTION COUNT NB OF OBJECTS (SP, CY, PL) IS THE SCENE + CHECK LIMITS 
+void	count_scene_objects(t_list *lines, t_scene *scene)
+{
+	t_list	*current;
+
+	current = lines;
+	while (current)
+	{
+		if (ft_strncmp(current->content, "sp", 2) == 0)
+			scene->nb_sp++;
+		else if (ft_strncmp(current->content, "cy", 2) == 0)
+			scene->nb_cy++;
+		else if (ft_strncmp(current->content, "pl", 2) == 0)
+			scene->nb_pl++;
+		current = current->next;
+	}
+	if (scene->nb_sp > MAX_SP || scene->nb_cy >MAX_CY || scene->nb_pl > MAX_PL)
+		return (ft_putstr_fd("Error: Too many objects in the scene.\n", 2), 0);// A ENLEVER ??
+	return (1);
+}
+
 //Function parsing global
 //A: Check Valid Inputs
 // 1: Check file extension
@@ -131,8 +133,11 @@ int	parse_scene(char *file, t_scene *scene)
 		return (ft_lstclear(&scene->lines, free), 0);
 	if (!check_type_of_scene(scene->lines))
 		return (ft_lstclear(&scene->lines, free), 0);
-	scene->spheres = malloc(sizeof(t_sphere) * MAX_SP);
-	if (!scene->spheres)
+	count_scene_objects(scene->lines, scene);
+	scene->spheres = malloc(sizeof(t_sphere) * scene->nb_sp);
+	scene->planes = malloc(sizeof(t_plane) * scene->nb_pl);
+	scene->cylinders = malloc(sizeof(t_cylinder) * scene->nb_cy);
+	if (!scene->spheres || !scene->planes || !scene->cylinders)
 		return (ft_putstr_fd("Error: Malloc failed.\n", 2), 0);
 	current = scene->lines;
 	while (current)

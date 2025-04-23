@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:37:58 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/21 12:59:06 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:39:14 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,6 @@
 
 //Verifier si float plusieurs "." -> OK
 //Pour overflow ajouter verif direct dans atoi et atof putot que pour chaque données??
-
-//Fonction for count nb of lines of array of strings
-static int	count_line_tab(char **s)
-{
-	int	count;
-
-	count = 0;
-	while (s[count] != NULL)
-		count++;
-	return (count);
-}
-
-static void	print_tab(char **s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		printf("[%s]\n", s[i]);
-		i++;
-	}	
-}
 
 //create & return a struct with code color RGB
 //CHECKS: int overflow; isdigit; split with isspace
@@ -85,7 +62,7 @@ static int	check_ambient(char *line, t_scene *scene)
 {
 	char	**elements = NULL;
 	
-	elements = ft_split_set(line, " \t\r\v\f");
+	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 			return (ft_putstr_fd("Error: Split ambient failed.\n", 2), 0);
 	if (count_line_tab(elements) != 3)
@@ -108,7 +85,7 @@ static int	check_camera(char *line, t_scene *scene)
 {
 	char	**elements = NULL;
 
-	elements = ft_split_set(line, " ");// corriger split_set
+	elements = ft_split_set(line, WHITESPACE);// corriger split_set
 	if (!elements)
 		return (ft_putstr_fd("Error: Split camera failed.\n", 2), 0);
 	printf("split camera elements:\n");
@@ -119,8 +96,7 @@ static int	check_camera(char *line, t_scene *scene)
 		return (free_split(elements), 0);
 	if (!update_vector(&scene->camera.orientation, elements[2]))
 		return (free_split(elements), 0);
-	if ((scene->camera.orientation.x < -1 || scene->camera.orientation.x > 1) || (scene->camera.orientation.y < -1 || scene->camera.orientation.y > 1) ||
-		(scene->camera.orientation.x < -1 || scene->camera.orientation.x > 1))
+	if (!is_valid_orientation_range(scene->camera.orientation))
 		return (free_split(elements), ft_putstr_fd("Error: Cam orientation isn't in a valid range.\n", 2), 0);
 	if (!is_valid_int(elements[3]))
 		return (free_split(elements), 0);
@@ -135,7 +111,7 @@ static int	check_light(char *line, t_scene *scene)
 {
 	char	**elements = NULL;
 
-	elements = ft_split_set(line, " ");
+	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 		return (ft_putstr_fd("Error: Split light failed.\n", 2), 0);
 	printf("split light elements:\n");
@@ -157,10 +133,10 @@ static int	check_light(char *line, t_scene *scene)
 
 static int	check_sphere(char *line, t_scene *scene)
 {
-	char	**elements = NULL;
+	char		**elements = NULL;
 	t_sphere	new_sp;
 
-	elements = ft_split_set(line, " ");
+	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 		return (ft_putstr_fd("Error: Split sphere failed.\n", 2), 0);
 	printf("split sphere elements:\n");
@@ -175,10 +151,68 @@ static int	check_sphere(char *line, t_scene *scene)
 	if (!update_color(&new_sp.color, elements[3]))
 		return (free_split(elements), 0);
 	free_split(elements);
-	if (scene->nb_sp > MAX_SP)
-		return (ft_putstr_fd("Error: Too many spheres in the scene.\n", 2), 0);
-	scene->spheres[scene->nb_sp] = new_sp;
-	scene->nb_sp++;
+	if (scene->index_sp < scene->nb_sp)
+	{
+		scene->spheres[scene->index_sp] = new_sp;
+		scene->index_sp++;
+	}
+	return (1);
+}
+
+static int	check_plane(char *line, t_scene *scene)
+{
+	char	**elements = NULL;
+	t_plane	new_pl;
+
+	elements = ft_split_set(line, WHITESPACE);
+	if (!elements)
+		return (ft_putstr_fd("Error: Split plane failed.\n", 2), 0);
+	if (count_line_tab(elements) != 4)
+		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of plane isn't valid.\n", 2), 0);
+	if (!update_vector(&new_pl.point, elements[1]))
+		return (free_split(elements), 0);
+	if (!update_vector(&new_pl.orientation, elements[2]))
+		return (free_split(elements), 0);
+	if (!is_valid_orientation_range(new_pl.orientation))
+		return (free_split(elements), ft_putstr_fd("Error: Plane ratio isn't in a valid range.\n", 2), 0);
+	if (!update_color(&new_pl.color, elements[3]))
+		return (free_split(elements), 0);
+	if (scene->index_pl < scene->nb_pl)
+	{
+		scene->planes[scene->index_pl] = new_pl;
+		scene->index_pl++;
+	}
+	return (1);
+}
+int static	check_cylinder(char *line, t_scene *scene)
+{
+	char	**elements = NULL;
+	t_cylinder	new_cy;
+	
+	elements = ft_split_set(line, WHITESPACE);
+	if (!elements)
+		return (ft_putstr_fd("Error: Split cylinder failed.\n", 2), 0);
+	if (count_line_tab(elements) != 6)
+		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of cylinder isn't valid.\n", 2), 0);
+	if (!update_vector(&new_cy.center, elements[1]))
+		return (free_split(elements), 0);
+	if (!update_vector(&new_cy.orientation, elements[2]))
+		return (free_split(elements), 0);
+	if (!is_valid_orientation_range(new_cy.orientation))
+		return (free_split(elements), ft_putstr_fd("Error: Cylinder ratio isn't in a valid range.\n", 2), 0);
+	if (!is_valid_double(elements[3]))
+		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
+	new_cy.diametre = ft_atof(elements[3]);
+	if (!is_valid_double(elements[4]))
+		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
+	new_cy.height = ft_atof(elements[4]);
+	if (!update_color(&new_cy.color, elements[5]))
+		return (free_split(elements), 0);
+	if (scene->index_cy < scene->nb_cy)
+	{
+		scene->cylinders[scene->index_cy] = new_cy;
+		scene->index_cy++;
+	}
 	return (1);
 }
 
@@ -190,21 +224,30 @@ int	parse_element_line(char *line, t_scene *scene)
 		if (!check_ambient(line, scene))
 			return (0);
 	}
-	if (ft_strncmp(line, "C", 1) == 0)
+	else if (ft_strncmp(line, "C", 1) == 0)
 	{
 		if (!check_camera(line, scene))
 			return (0);
 	}
-	if (ft_strncmp(line, "L", 1) == 0)
+	else if (ft_strncmp(line, "L", 1) == 0)
 	{
 		if (!check_light(line, scene))
 			return (0);
 	}
-	if (ft_strncmp(line, "sp", 2) == 0)
+	else if (ft_strncmp(line, "sp", 2) == 0)
 	{
 		if (!check_sphere(line, scene))
 			return (0);
 	}
-	//add function for others types of elements
+	else if (ft_strncmp(line, "pl", 2) == 0)
+	{
+		if (!check_plane(line, scene))
+			return (0);
+	}
+	else if (ft_strncmp(line, "cy", 2) == 0)
+	{
+		if (!check_cylinder(line, scene))
+			return (0);
+	}
 	return (1);
 }

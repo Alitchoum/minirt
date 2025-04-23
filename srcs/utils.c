@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 14:46:17 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/21 13:04:06 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:17:48 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,18 @@ void	print_list(t_list *lines)
 	{
 		printf("[%s]\n", (char *)current->content);
 		current = current->next;
+	}	
+}
+
+void	print_tab(char **s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		printf("[%s]\n", s[i]);
+		i++;
 	}	
 }
 
@@ -91,4 +103,21 @@ int	is_valid_double(char *s)
 		i++;
 	}
 	return (1);
+}
+
+int	is_valid_orientation_range(t_vector vector)
+{
+	return ((vector.x < -1 || vector.x > 1) ||
+			(vector.y < -1 || vector.y > 1) ||
+			(vector.z < -1 || vector.z > 1));
+}
+//Fonction for count nb of lines of array of strings
+int	count_line_tab(char **s)
+{
+	int	count;
+
+	count = 0;
+	while (s[count] != NULL)
+		count++;
+	return (count);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alize <alize@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 11:13:47 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/20 17:25:40 by alize            ###   ########.fr       */
+/*   Updated: 2025/04/23 10:15:56 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int ac, char **av)
 	initialise_mlx(&scene);
 
 	// DRAW THE IMAGE
-	render_image(&scene);
+	//render_image(&scene);
 	
 	// PUT IT TO THE WINDOW
 	mlx_put_image_to_window(scene.mlx_ptr, scene.win_ptr, scene.img, 0, 0);

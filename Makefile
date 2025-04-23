@@ -17,7 +17,6 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)utils.c \
 		$(SRCS_DIR)init_mlx.c \
 		$(SRCS_DIR)draw.c \
-		$(SRCS_DIR)sphere.c
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
 
