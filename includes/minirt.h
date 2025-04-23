@@ -213,9 +213,22 @@ double dot_tuple(t_tuple a, t_tuple b);
 t_tuple	cross_tuple(t_tuple a, t_tuple b);
 
 //-- MATRIX --//
+t_matrix	new_matrix(int size);
 int	matrix_are_equal(t_matrix a,t_matrix b);
+void	mat4_multiply(t_matrix *result, t_matrix a, t_matrix b);
+t_tuple	mat4_multiply_tuple(t_matrix matrix, t_tuple tup);
+void	set_identity_matrix(t_matrix *matrix);
+void	transpose_matrix(t_matrix *matrix, t_matrix *result);
+double	determinant_mat2(t_matrix *matrix);
+void	submatrix(t_matrix *from, t_matrix *to, int row_del, int col_del);
+double	minor(t_matrix *old, int row, int col);
+double	cofactor(t_matrix *matrix, int row, int col);
+double	determinant(t_matrix *matrix);
+int	inverse(t_matrix *matrix, t_matrix *result);
+void	run_matrix_tests(void);
 
 // RAY
 t_ray	new_ray(t_tuple origin, t_tuple direction);
 t_tuple	position(t_ray ray, double distance);
+int	matrix_are_equal(t_matrix a, t_matrix b);
 #endif

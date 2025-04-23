@@ -1,5 +1,14 @@
 #include "minirt.h"
 
+t_matrix	new_matrix(int size)
+{
+	t_matrix	new;
+
+	ft_bzero(&new, sizeof(t_matrix));
+	new.size = size;
+	return (new);
+}
+
 int	matrix_are_equal(t_matrix a, t_matrix b)
 {
 	int	i;
@@ -116,10 +125,14 @@ void	submatrix(t_matrix *from, t_matrix *to, int row_del, int col_del)
 
 	r = 0;
 	i = 0;
+	to->size = from->size - 1;
 	while (i < from->size)
 	{
 		if (i == row_del)
+		{
+			i++;
 			continue;
+		}	
 		c = 0;
 		j = 0;
 		while (j < from->size)
@@ -136,27 +149,73 @@ void	submatrix(t_matrix *from, t_matrix *to, int row_del, int col_del)
 		r++;
 		i++;
 	}
-	to->size = from->size - 1;
 }
 
-double	minor_mat3(t_matrix *old, int row, int col)
+// Generic works for all up to 4x4 ?
+double	minor(t_matrix *old, int row, int col)
 {
 	t_matrix	new;
 
+	new = new_matrix(old->size - 1);
 	submatrix(old, &new, row, col);
-	return (determinant_mat2(&new));
+	return (determinant(&new));
 }
+
 
 // COFACTOR CALCULATIONS, 3 X 3
 // +  -  +
 // -  +  -
 // +  -  +
-double	cofactor_mat3(t_matrix *matrix, int row, int col)
+double	cofactor(t_matrix *matrix, int row, int col)
 {
 	if ((row + col) % 2 != 0) // if row + column is odd, change the sign of the minor
-		return (-minor_mat3(matrix, row, col));
+		return (-minor(matrix, row, col));
 	else
-		return (minor_mat3(matrix, row, col));
+		return (minor(matrix, row, col));
 }
 
-//double	determinant_generic(double matrix[3][3])
+double	determinant(t_matrix *matrix)
+{
+	double result;
+	int	col;
+
+	col = 0;
+	result = 0;
+	if (matrix->size == 2)
+		return (determinant_mat2(matrix));
+	while (col < matrix->size)
+	{
+		result = result + matrix->m[0][col] * cofactor(matrix, 0, col);
+		col++;
+	}
+	return (result);
+}
+
+// INVERSIONS: IF DETERMINANT IS 0, THE MATRIX IS NOT INVERTIBLE
+int	inverse(t_matrix *matrix, t_matrix *result)
+{
+	int	row;
+	int	col;
+	double	det;
+	double	c;
+
+	det = determinant(matrix);
+	c = 0;
+	// if the matrix is not invertible, return fail
+	if (is_equal(det, 0))
+		return (0);
+	row = 0;
+	while (row < matrix->size)
+	{
+		col = 0;
+		while (col < matrix->size)
+		{
+			c = cofactor(matrix, row, col);
+			result->m[col][row] = c / det;
+			col++;
+		}
+		row++;
+	}
+	result->size = matrix->size;
+	return (1);
+}

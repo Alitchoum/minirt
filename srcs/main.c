@@ -23,6 +23,7 @@ int	main(int ac, char **av)
 	if (!parse_scene(av[1], &scene))
 		return (EXIT_FAILURE);
 
+	run_matrix_tests();
 	// INITIALISE MLX
 	initialise_mlx(&scene);
 
