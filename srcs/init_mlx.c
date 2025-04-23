@@ -1,6 +1,7 @@
 
 #include "minirt.h"
 
+// temporary function
 void	initialise_mlx(t_scene *scene)
 {
 	scene->mlx_ptr = mlx_init();

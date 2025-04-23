@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:37:58 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/23 11:39:14 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:51:24 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,14 @@ static int	update_color(t_color *color, char *line)
 	if ((color->r < 0 || color->r > 255) || (color->g < 0 || color->r > 255) ||
 		(color->b < 0 || color->b > 255))
 		return (free_split(rgb), ft_putstr_fd("Error: Color isn't in a valid range.\n", 2), 0);
+	color->r /= (double)255.0;
+	color->g /= (double)255.0;
+	color->b /= (double)255.0;
 	free_split(rgb);
 	return (1);
 }
 
-static int	update_vector(t_vector *vector, char *line)
+static int	update_tuple(t_tuple *tuple, char *line, double w)
 {
 	char	**coords = NULL;
 
@@ -50,9 +53,10 @@ static int	update_vector(t_vector *vector, char *line)
 		return (free_split(coords), ft_putstr_fd("Error Nb of elements isn't valid.\n", 2), 0);
 	if (!is_valid_double(coords[0]) || !is_valid_double(coords[1]) || !is_valid_double(coords[2]))
 		return (free_split(coords), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	vector->x = ft_atof(coords[0]);
-	vector->y = ft_atol(coords[1]);
-	vector->z = ft_atol(coords[2]);
+	tuple->x = ft_atof(coords[0]);
+	tuple->y = ft_atof(coords[1]);
+	tuple->z = ft_atof(coords[2]);
+	tuple->w = w;
 	free_split(coords);
 	return (1);
 }
@@ -92,9 +96,9 @@ static int	check_camera(char *line, t_scene *scene)
 	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of camera isn't valid.\n", 2), 0);
-	if (!update_vector(&scene->camera.position, elements[1]))
+	if (!update_tuple(&scene->camera.position, elements[1], 1))
 		return (free_split(elements), 0);
-	if (!update_vector(&scene->camera.orientation, elements[2]))
+	if (!update_tuple(&scene->camera.orientation, elements[2], 0))
 		return (free_split(elements), 0);
 	if (!is_valid_orientation_range(scene->camera.orientation))
 		return (free_split(elements), ft_putstr_fd("Error: Cam orientation isn't in a valid range.\n", 2), 0);
@@ -118,7 +122,7 @@ static int	check_light(char *line, t_scene *scene)
 	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of light isn't valid.\n", 2), 0);
-	if (!update_vector(&scene->light.position, elements[1]))
+	if (!update_tuple(&scene->light.position, elements[1], 1))
 		return (free_split(elements), 0);
 	if (!is_valid_double(elements[2]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
@@ -143,7 +147,7 @@ static int	check_sphere(char *line, t_scene *scene)
 	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of sphere isn't valid.\n", 2), 0);
-	if (!update_vector(&new_sp.center, elements[1]))
+	if (!update_tuple(&new_sp.center, elements[1], 1))
 		return (free_split(elements), 0);
 	if (!is_valid_double(elements[2]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
@@ -167,11 +171,13 @@ static int	check_plane(char *line, t_scene *scene)
 	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 		return (ft_putstr_fd("Error: Split plane failed.\n", 2), 0);
+	printf("split plane elements:\n");
+	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of plane isn't valid.\n", 2), 0);
-	if (!update_vector(&new_pl.point, elements[1]))
+	if (!update_tuple(&new_pl.point, elements[1], 1))
 		return (free_split(elements), 0);
-	if (!update_vector(&new_pl.orientation, elements[2]))
+	if (!update_tuple(&new_pl.orientation, elements[2], 1))
 		return (free_split(elements), 0);
 	if (!is_valid_orientation_range(new_pl.orientation))
 		return (free_split(elements), ft_putstr_fd("Error: Plane ratio isn't in a valid range.\n", 2), 0);
@@ -192,11 +198,13 @@ int static	check_cylinder(char *line, t_scene *scene)
 	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 		return (ft_putstr_fd("Error: Split cylinder failed.\n", 2), 0);
+	printf("split cylinder elements:\n");
+	print_tab(elements);
 	if (count_line_tab(elements) != 6)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of cylinder isn't valid.\n", 2), 0);
-	if (!update_vector(&new_cy.center, elements[1]))
+	if (!update_tuple(&new_cy.center, elements[1], 1))
 		return (free_split(elements), 0);
-	if (!update_vector(&new_cy.orientation, elements[2]))
+	if (!update_tuple(&new_cy.orientation, elements[2], 1))
 		return (free_split(elements), 0);
 	if (!is_valid_orientation_range(new_cy.orientation))
 		return (free_split(elements), ft_putstr_fd("Error: Cylinder ratio isn't in a valid range.\n", 2), 0);

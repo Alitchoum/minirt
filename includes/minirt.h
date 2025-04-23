@@ -10,6 +10,7 @@
 # include <math.h>
 # include <limits.h>
 
+#define  WHITESPACE " \t\f" //a completer
 # define W_WIDTH 800
 # define W_HEIGHT 800
 
@@ -24,10 +25,29 @@
 # define BRIGHT_GREEN 0x00ff00
 # define RED 0xff0000
 
-# define WHITESPACE " \t\r\v\f"
 # define MAX_SP 10 //A DEFINIR
 # define MAX_CY 10 //A DEFINIR
 # define MAX_PL 10 //A DEFINIR
+
+# define EPSILON 0.00001
+
+# define SPHERE 0
+# define CYLINDER 1
+# define PLANE 2
+
+typedef struct s_tuple
+{
+	double	x;
+	double	y;
+	double	z;
+	double	w;
+}	t_tuple;
+
+typedef struct s_matrix
+{
+	int size;
+	double m[4][4];
+}	t_matrix;
 
 typedef struct s_vector
 {
@@ -38,9 +58,9 @@ typedef struct s_vector
 
 typedef struct s_color
 {
-	int		r;
-	int		g;
-	int		b;
+	double		r;
+	double		g;
+	double		b;
 }			t_color;
 
 typedef struct s_ambient
@@ -51,36 +71,39 @@ typedef struct s_ambient
 
 typedef struct s_cam
 {
-	t_vector	position;
-	t_vector	orientation;
+	t_tuple		position;
+	t_tuple		orientation;
 	int			fov;
 }				t_cam;
 
 typedef struct s_light
 {
-	t_vector	position;
+	t_tuple		position;
 	double		ratio;
 	t_color		color;
 }				t_light;
 
 typedef struct s_sphere
 {
-	t_vector	center;
+	t_tuple		center;
 	double		diametre;
 	t_color		color;
+	t_matrix		translation_matrix; //moves to the correct position
+	t_matrix		scaling_matrix[4][4]; // adjusts the sphere's radius
+	t_matrix		transform_matrix[4][4]; // combines the 2
 }				t_sphere;
 
 typedef struct s_plane
 {
-	t_vector	point;
-	t_vector	orientation;
+	t_tuple		point;
+	t_tuple		orientation;
 	t_color		color;
 }				t_plane;
 
 typedef struct s_cylinder
 {
-	t_vector	center;
-	t_vector	orientation;
+	t_tuple		center;
+	t_tuple	orientation;
 	double		diametre;
 	double		height;
 	t_color		color;
@@ -103,12 +126,35 @@ typedef	struct s_mlx
 	int		end;
 }	t_mlx;
 
+typedef struct s_ray
+{
+	t_tuple	origin;
+	t_tuple	direction;
+}	t_ray;
+
+typedef struct s_object
+{
+	int	type;
+	t_tuple	position;
+	t_tuple	orientation;
+	double	radius;
+	double	diametre;
+	double	height;
+	double	rotation_matrix[4][4];
+	double	translation_matrix[4][4];
+	double	transform_matrix[4][4];
+	double	determinant;
+	t_color	color;
+}	t_object;
+
 typedef struct s_scene
 {
+	int		obj_count;
 	t_list		*lines;
 	t_ambient	ambient;
 	t_cam		camera;
 	t_light		light;
+	t_object	*objects;
 	t_sphere	*spheres;
 	t_plane		*planes;
 	t_cylinder	*cylinders;
@@ -138,12 +184,13 @@ int		is_valid_int(char *s);
 int		is_valid_double(char *s);
 void	print_list(t_list *lines);
 void	print_tab(char **s);
-int		is_valid_orientation_range(t_vector vector);
+int		is_valid_orientation_range(t_tuple vector);
 int		count_line_tab(char **s);
 
 //--DRAW--//
 void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour);
-//int		render_image(t_scene *scene);
+int		render_image(t_scene *scene);
+int	rgb_to_int(t_color colour, double light_scalar);
 
 //---PARSING TYPE---//
 int		parse_element_line(char *line, t_scene *scene);
@@ -151,4 +198,33 @@ int		parse_element_line(char *line, t_scene *scene);
 //--INIT MLX--//
 void	initialise_mlx(t_scene *scene);
 
+//--MATHS_UTILS--//
+int			is_equal(double a, double b);
+double		vec3_dot(t_vector a, t_vector b);
+t_vector	vec3_add(t_vector a, t_vector b);
+t_vector	vec3_subtract(t_vector a, t_vector b);
+t_vector	vec3_normalize(t_vector a);
+t_vector	vec3_scale(t_vector a, double scale);
+
+//-- TUPLE --//
+//
+t_tuple	tuple(double x, double y, double z, double w);
+t_tuple	point(double x, double y, double z);
+t_tuple vector(double x, double y, double z);
+int	tuple_is_equal(t_tuple a, t_tuple b);
+t_tuple	add_tuple(t_tuple a, t_tuple b);
+t_tuple	subtract_tuple(t_tuple a, t_tuple b);
+t_tuple	negate_tuple(t_tuple a);
+t_tuple	scale_tuple(t_tuple a, double scale);
+double	magnitude(t_tuple a);
+t_tuple	normalize_tuple(t_tuple a);
+double dot_tuple(t_tuple a, t_tuple b);
+t_tuple	cross_tuple(t_tuple a, t_tuple b);
+
+//-- MATRIX --//
+int	matrix_are_equal(t_matrix a, t_matrix b);
+
+// RAY
+t_ray	new_ray(t_tuple origin, t_tuple direction);
+t_tuple	position(t_ray ray, double distance);
 #endif

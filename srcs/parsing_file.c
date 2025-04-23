@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 12:06:39 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/23 11:15:43 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:45:54 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	create_scene_list(t_scene *scene, char *file)
 			if (ft_strchr(content, '\n'))
 				content[ft_strlen(content) - 1] = '\0';
 			//printf("apres: %s\n", content);
-			new_node = ft_lstnew(content);
+			new_node = ft_lstnew(content); //malloc
 			ft_lstadd_back(&scene->lines, new_node);
 		}
 		free(line);
@@ -62,7 +62,7 @@ int	create_scene_list(t_scene *scene, char *file)
 // 1: Check element IDs are valid (1st word)
 // 2: Check right number of elements
 // 3: Correct num parameters for each element
-int	check_type_of_scene(t_list *lines)
+int	check_type_of_scene(t_list *lines, int *obj_count)
 {
 	t_list	*current;
 	char	*line;
@@ -77,18 +77,21 @@ int	check_type_of_scene(t_list *lines)
 	while (current)
 	{
 		line = current->content;
-		if (ft_strncmp(line, "C", 1) == 0)
-			cam++;
-		else if (ft_strncmp(line, "A", 1) == 0)
+		if (ft_strncmp(line, "A", 1) == 0)
 			ambient++;
+		else if (ft_strncmp(line, "C", 1) == 0)
+			cam++;
 		else if (ft_strncmp(line, "L", 1) == 0)
 			light++;
 		else if (ft_strncmp(line, "sp", 2) != 0 && ft_strncmp(line, "pl", 2) != 0 && ft_strncmp(line, "cy", 2) != 0)
 			return (ft_putstr_fd("Error: Element(s) doesn't valid(s).\n", 2), 0);
+		else
+			*obj_count = *obj_count + 1;
 		current = current->next;
 	}
 	if (cam > 1 || ambient > 1 || light > 1)
 		return (ft_putstr_fd("Error: Nb elements doesn't valid.\n", 2), 0);
+	printf("number of objects: %i\n", *obj_count);
 	return (1);
 }
 
@@ -108,9 +111,6 @@ void	count_scene_objects(t_list *lines, t_scene *scene)
 			scene->nb_pl++;
 		current = current->next;
 	}
-	if (scene->nb_sp > MAX_SP || scene->nb_cy >MAX_CY || scene->nb_pl > MAX_PL)
-		return (ft_putstr_fd("Error: Too many objects in the scene.\n", 2), 0);// A ENLEVER ??
-	return (1);
 }
 
 //Function parsing global
@@ -126,12 +126,13 @@ int	parse_scene(char *file, t_scene *scene)
 {
 	t_list *current;
 	char	*line;
+
 	
 	if (!check_extension(file))
 		return (0);
 	if (!create_scene_list(scene, file))
 		return (ft_lstclear(&scene->lines, free), 0);
-	if (!check_type_of_scene(scene->lines))
+	if (!check_type_of_scene(scene->lines, &scene->obj_count))
 		return (ft_lstclear(&scene->lines, free), 0);
 	count_scene_objects(scene->lines, scene);
 	scene->spheres = malloc(sizeof(t_sphere) * scene->nb_sp);

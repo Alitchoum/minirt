@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 14:46:17 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/23 11:17:48 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:37:19 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,13 @@ int	is_valid_double(char *s)
 	return (1);
 }
 
-int	is_valid_orientation_range(t_vector vector)
+int	is_valid_orientation_range(t_tuple orientation)
 {
-	return ((vector.x < -1 || vector.x > 1) ||
-			(vector.y < -1 || vector.y > 1) ||
-			(vector.z < -1 || vector.z > 1));
+	if ((orientation.x < -1 || orientation.x > 1) ||
+		(orientation.y < -1 || orientation.y > 1) ||
+		(orientation.z < -1 || orientation.z > 1))
+		return (0);
+	return (1);
 }
 //Fonction for count nb of lines of array of strings
 int	count_line_tab(char **s)
