@@ -42,6 +42,12 @@ typedef struct s_tuple
 	double	w;
 }	t_tuple;
 
+typedef struct s_matrix
+{
+	int size;
+	double m[4][4];
+}	t_matrix;
+
 typedef struct s_vector
 {
 	double		x;
@@ -81,9 +87,9 @@ typedef struct s_sphere
 	t_tuple		center;
 	double		diametre;
 	t_color		color;
-	double		translation_matrix[4][4]; //moves to the correct position
-	double		scaling_matrix[4][4]; // adjusts the sphere's radius
-	double		transform_matrix[4][4]; // combines the 2
+	t_matrix		translation_matrix; //moves to the correct position
+	t_matrix		scaling_matrix[4][4]; // adjusts the sphere's radius
+	t_matrix		transform_matrix[4][4]; // combines the 2
 }				t_sphere;
 
 typedef struct s_plane
@@ -133,9 +139,9 @@ typedef struct s_object
 	double	radius;
 	double	diametre;
 	double	height;
-	double	rotation_matrix[4][4];
-	double	translation_matrix[4][4];
-	double	transform_matrix[4][4];
+	t_matrix	rotation_matrix;
+	t_matrix	translation_matrix;
+	t_matrix	transform_matrix;
 	double	determinant;
 	t_color	color;
 }	t_object;
@@ -207,7 +213,7 @@ double dot_tuple(t_tuple a, t_tuple b);
 t_tuple	cross_tuple(t_tuple a, t_tuple b);
 
 //-- MATRIX --//
-int	matrix_are_equal(double **a, double **b, int size);
+int	matrix_are_equal(t_matrix a,t_matrix b);
 
 // RAY
 t_ray	new_ray(t_tuple origin, t_tuple direction);
