@@ -29,7 +29,7 @@ int	matrix_are_equal(t_matrix a, t_matrix b)
 	return (1);
 }
 
-void	mat4_multiply(t_matrix *result, t_matrix a, t_matrix b)
+t_matrix	mat4_multiply(t_matrix *result, t_matrix a, t_matrix b)
 {
 	int	row;
 	int	col;
@@ -52,7 +52,7 @@ void	mat4_multiply(t_matrix *result, t_matrix a, t_matrix b)
 		}
 		row++;
 	}
-
+	return (*result);
 }
 
 t_tuple	mat4_multiply_tuple(t_matrix matrix, t_tuple tup)
@@ -90,23 +90,50 @@ void	set_identity_matrix(t_matrix *matrix)
 	}
 }
 
+t_matrix	get_identity_matrix(void)
+{
+	t_matrix	new;
+	int	i;
+	int	j;
+
+	new.size = 4;
+	i = 0;
+	while (i < 4)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			if (i == j)
+				new.m[i][j] = 1.0;
+			else
+				new.m[i][j] = 0.0;
+			j++;
+		}
+		i++;
+	}
+	return (new);
+}
+
 // TRANSPPOSE MATRIX --> columns become rows
-void	transpose_matrix(t_matrix *matrix, t_matrix *result)
+t_matrix	transpose_matrix(t_matrix *matrix)
 {
 	int	row;
 	int	col;
+	t_matrix	new;
 
+	new.size = 4;
 	row = 0;
 	while (row < 4)
 	{
 		col = 0;
 		while (col < 4)
 		{
-			result->m[col][row] = matrix->m[row][col];
+			new.m[col][row] = matrix->m[row][col];
 			col++;
 		}
 		row++;
 	}
+	return (new);
 }
 
 
@@ -116,16 +143,17 @@ double	determinant_mat2(t_matrix *matrix)
 	return ((matrix->m[0][0] * matrix->m[1][1]) - (matrix->m[0][1] * matrix->m[1][0]));
 }
 
-void	submatrix(t_matrix *from, t_matrix *to, int row_del, int col_del)
+t_matrix	submatrix(t_matrix *from, int row_del, int col_del)
 {
 	int	r;
 	int	c;
 	int	i;
 	int	j;
+	t_matrix	to;
 
 	r = 0;
 	i = 0;
-	to->size = from->size - 1;
+	to.size = from->size - 1;
 	while (i < from->size)
 	{
 		if (i == row_del)
@@ -142,13 +170,14 @@ void	submatrix(t_matrix *from, t_matrix *to, int row_del, int col_del)
 				j++;
 				continue;
 			}
-			to->m[r][c] = from->m[i][j];
+			to.m[r][c] = from->m[i][j];
 			c++;
 			j++;
 		}
 		r++;
 		i++;
 	}
+	return (to);
 }
 
 // Generic works for all up to 4x4 ?
@@ -156,8 +185,7 @@ double	minor(t_matrix *old, int row, int col)
 {
 	t_matrix	new;
 
-	new = new_matrix(old->size - 1);
-	submatrix(old, &new, row, col);
+	new = submatrix(old, row, col);
 	return (determinant(&new));
 }
 
@@ -185,7 +213,7 @@ double	determinant(t_matrix *matrix)
 		return (determinant_mat2(matrix));
 	while (col < matrix->size)
 	{
-		result = result + matrix->m[0][col] * cofactor(matrix, 0, col);
+		result = result + (matrix->m[0][col] * cofactor(matrix, 0, col));
 		col++;
 	}
 	return (result);

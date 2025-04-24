@@ -215,17 +215,23 @@ t_tuple	cross_tuple(t_tuple a, t_tuple b);
 //-- MATRIX --//
 t_matrix	new_matrix(int size);
 int	matrix_are_equal(t_matrix a,t_matrix b);
-void	mat4_multiply(t_matrix *result, t_matrix a, t_matrix b);
+t_matrix	mat4_multiply(t_matrix *result, t_matrix a, t_matrix b);
 t_tuple	mat4_multiply_tuple(t_matrix matrix, t_tuple tup);
 void	set_identity_matrix(t_matrix *matrix);
-void	transpose_matrix(t_matrix *matrix, t_matrix *result);
+t_matrix	get_identity_matrix(void);
+t_matrix	transpose_matrix(t_matrix *matrix);
 double	determinant_mat2(t_matrix *matrix);
-void	submatrix(t_matrix *from, t_matrix *to, int row_del, int col_del);
+t_matrix	submatrix(t_matrix *from, int row_del, int col_del);
 double	minor(t_matrix *old, int row, int col);
 double	cofactor(t_matrix *matrix, int row, int col);
 double	determinant(t_matrix *matrix);
 int	inverse(t_matrix *matrix, t_matrix *result);
 void	run_matrix_tests(void);
+
+//-- MATRIX TRANSFORMATIONS --//
+void	run_transformation_tests(void);
+t_matrix	translation(double x, double y, double z);
+t_matrix	scaling(double x, double y, double z);
 
 // RAY
 t_ray	new_ray(t_tuple origin, t_tuple direction);

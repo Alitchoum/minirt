@@ -25,6 +25,7 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)ray.c \
 		$(SRCS_DIR)matrix.c \
 		$(SRCS_DIR)matrix_tests.c \
+		$(SRCS_DIR)matrix_transformations.c \
 
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
