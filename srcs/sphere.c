@@ -4,7 +4,7 @@
 // RETURNS DOT PRODUCT OF TWO VECTORS
 // Multiplies the matching variables together then adds them up
 
-float	get_discriminant(double a, double b, double c)
+static float	get_discriminant(double a, double b, double c)
 {
 	return ((b * b) - (4 * a * c));
 }
@@ -28,18 +28,18 @@ double	solve_min_quadratic(double a, double b, double discriminant)
 	return (-1);
 }
 
-int	get_color(t_ray ray, t_sphere *sphere, t_scene *scene)
+static int	get_color(t_ray ray, t_sphere *sphere, t_scene *scene)
 {
-	double		a;
-	double		b;
-	double		c;
-	double		min_quad;
-	double		discriminant;
-	t_color		color;
+	double	a;
+	double	b;
+	double	c;
+	double	dist;
+	double	discriminant;
+	t_color	color;
 	t_tuple	hit_point;
 	t_tuple	normal;
 	t_tuple	light_dir;
-	t_tuple		diff_sphere_camera;
+	t_tuple	diff_sphere_camera;
 
 	color = sphere->color;
 
@@ -49,17 +49,15 @@ int	get_color(t_ray ray, t_sphere *sphere, t_scene *scene)
 	b = 2.0f * dot_tuple(diff_sphere_camera, ray.direction);
 	c = dot_tuple(diff_sphere_camera, diff_sphere_camera) - (pow((sphere->diametre * 0.5), 2));
 
-
 	// IF NO INTERSECTION(S) WERE FOUND, return BLACK
 	discriminant = get_discriminant(a, b, c);
 	if (discriminant < 0.0)
 		return (0);
 	// ELSE, SOlVE THE EQUATION TO GET THE CLOSEST POINT OF INTERSECTION TO THE CAMERA
-	min_quad = solve_min_quadratic(a, b, discriminant);
-	if (min_quad < 0)
+	dist = solve_min_quadratic(a, b, discriminant);
+	if (dist < 0)
 		return (0);
-
-	hit_point = add_tuple(ray.origin, scale_tuple(ray.direction, min_quad));
+	hit_point = add_tuple(ray.origin, scale_tuple(ray.direction, dist));
 	normal = subtract_tuple(hit_point, sphere->center);
 	normal = normalize_tuple(normal);
 
@@ -77,8 +75,7 @@ int	get_color(t_ray ray, t_sphere *sphere, t_scene *scene)
 	return (rgb_to_int(color, light_scaler));
 }
 
-
-int	render_image(t_scene *scene)
+int	render_image_sphere(t_scene *scene)
 {
 	double aspect_ratio = W_WIDTH / (double)W_HEIGHT; // to avoid distorting
 	t_ray	ray;
@@ -87,9 +84,7 @@ int	render_image(t_scene *scene)
 	//t_vector camera_orientation;
 	double	normalised_row;
 	double	normalised_col;
-	printf("POINT 0\n");
 	double	fov_scale = tan((scene->camera.fov * 0.5) * M_PI / 180.0);
-	printf("POINT 1\n");
 	int	col = 0;
 	int	row = 0;
 	int	i;
@@ -117,7 +112,7 @@ int	render_image(t_scene *scene)
 				color = get_color(ray, &scene->spheres[i], scene);
 				if (color != 0)
 				{
-					printf("color is : %i\n", color);
+					//printf("color is : %i\n", color);
 					my_mlx_pixel_put(scene, col, row, color);
 				}
 				i++;
@@ -128,3 +123,27 @@ int	render_image(t_scene *scene)
 	}
 	return (0);
 }
+
+// double	intersection_sphere(t_object *objet, t_ray ray)
+// {
+// 	t_tuple	diff_sphere_camera;
+// 	t_sphere sphere;
+// 	double	a;
+// 	double	b;
+// 	double	c;
+// 	double	distance;
+// 	double	discriminant;
+
+// 	//sphere = 
+// 	//color = sphere->color;
+// 	diff_sphere_camera = subtract_tuple(ray.origin, sphere->center);
+// 	a = dot_tuple(ray.direction, ray.direction);
+// 	b = 2.0f * dot_tuple(diff_sphere_camera, ray.direction);
+// 	c = dot_tuple(diff_sphere_camera, diff_sphere_camera) - (pow((sphere->diametre * 0.5), 2));
+
+// 	discriminant = get_discriminant(a, b, c);
+// 	if (discriminant < 0.0)
+// 		return (-1);
+// 	distance = solve_min_quadratic(a, b, discriminant);
+// 	return (distance);
+// }

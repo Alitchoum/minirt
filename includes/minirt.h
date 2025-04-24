@@ -88,15 +88,15 @@ typedef struct s_sphere
 	t_tuple		center;
 	double		diametre;
 	t_color		color;
-	t_matrix		translation_matrix; //moves to the correct position
-	t_matrix		scaling_matrix[4][4]; // adjusts the sphere's radius
-	t_matrix		transform_matrix[4][4]; // combines the 2
+	t_matrix	translation_matrix; //moves to the correct position
+	t_matrix	scaling_matrix[4][4]; // adjusts the sphere's radius
+	t_matrix	transform_matrix[4][4]; // combines the 2
 }				t_sphere;
 
 typedef struct s_plane
 {
-	t_tuple		point;
-	t_tuple		orientation;
+	t_tuple		plane_point;
+	t_tuple		normal;
 	t_color		color;
 }				t_plane;
 
@@ -189,7 +189,10 @@ int		count_line_tab(char **s);
 
 //--DRAW--//
 void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour);
-int		render_image(t_scene *scene);
+
+int	render_image_sphere(t_scene *scene);
+int render_image_plane(t_scene *scene);
+
 int	rgb_to_int(t_color colour, double light_scalar);
 
 //---PARSING TYPE---//

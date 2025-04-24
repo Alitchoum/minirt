@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alize <alize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 11:13:47 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/23 15:51:51 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:40:14 by alize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,12 @@ int	main(int ac, char **av)
 	// INITIALISE MLX
 	initialise_mlx(&scene);
 
-	// DRAW THE IMAGE
-	render_image(&scene);
-	
+	// DRAW THE PLANE
+	render_image_plane(&scene);
+
+	// DRAW THE PLANE
+	//render_image_sphere(&scene);
+		
 	// PUT IT TO THE WINDOW
 	mlx_put_image_to_window(scene.mlx_ptr, scene.win_ptr, scene.img, 0, 0);
 

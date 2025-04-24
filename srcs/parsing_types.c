@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_types.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alize <alize@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:37:58 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/23 15:51:24 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:54:35 by alize            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,11 +175,11 @@ static int	check_plane(char *line, t_scene *scene)
 	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of plane isn't valid.\n", 2), 0);
-	if (!update_tuple(&new_pl.point, elements[1], 1))
+	if (!update_tuple(&new_pl.plane_point, elements[1], 1))
 		return (free_split(elements), 0);
-	if (!update_tuple(&new_pl.orientation, elements[2], 1))
+	if (!update_tuple(&new_pl.normal, elements[2], 1))
 		return (free_split(elements), 0);
-	if (!is_valid_orientation_range(new_pl.orientation))
+	if (!is_valid_orientation_range(new_pl.normal))
 		return (free_split(elements), ft_putstr_fd("Error: Plane ratio isn't in a valid range.\n", 2), 0);
 	if (!update_color(&new_pl.color, elements[3]))
 		return (free_split(elements), 0);
@@ -190,7 +190,8 @@ static int	check_plane(char *line, t_scene *scene)
 	}
 	return (1);
 }
-int static	check_cylinder(char *line, t_scene *scene)
+
+static int	check_cylinder(char *line, t_scene *scene)
 {
 	char	**elements = NULL;
 	t_cylinder	new_cy;
