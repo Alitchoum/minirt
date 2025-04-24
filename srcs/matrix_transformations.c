@@ -49,3 +49,55 @@ t_matrix	scaling(double x, double y, double z)
 	new.m[2][2] = z;
 	return (new);
 }
+
+// ROTATION
+// will rotate that tuple around an axis
+double	radians(double degrees)
+{
+	return ((degrees / 180) * M_PI);
+}
+
+t_matrix	rotation_x(double radians)
+{
+	t_matrix new;
+
+	new = get_identity_matrix();
+	new.m[1][1] = cos(radians);
+	new.m[1][2] = -sin(radians);
+	new.m[2][1] = sin(radians);
+	new.m[2][2] = cos(radians);
+	return (new);
+}
+
+t_matrix	rotation_y(double radians)
+{
+	t_matrix new;
+
+	new = get_identity_matrix();
+	new.m[0][0] = cos(radians);
+	new.m[0][2] = sin(radians);
+	new.m[2][0] = -sin(radians);
+	new.m[2][2] = cos(radians);
+	return (new);
+}
+
+t_matrix	rotation_z(double radians)
+{
+	t_matrix new;
+
+	new = get_identity_matrix();
+	new.m[0][0] = cos(radians);
+	new.m[0][1] = -sin(radians);
+	new.m[1][0] = sin(radians);
+	new.m[1][1] = cos(radians);
+	return (new);
+}
+
+// CHAINING TRANSFORMATIONS
+// A: rotation
+// B: scale
+// C: translation
+// must do it in reverse order
+// point = (C * (B * (A * point)));
+// multiply all the transformation matrices together, than multiply it by the point to get the final transformed point
+// matrices must be done in reverse order. (translation, scaling, rotation)

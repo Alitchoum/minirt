@@ -33,7 +33,7 @@ int	get_color(t_ray ray, t_object *sphere, t_scene *scene)
 	double		a;
 	double		b;
 	double		c;
-	double		min_quad;
+	double		distance;
 	double		discriminant;
 	t_color		color;
 	t_tuple	hit_point;
@@ -54,10 +54,11 @@ int	get_color(t_ray ray, t_object *sphere, t_scene *scene)
 	if (discriminant < 0.0)
 		return (0);
 	// ELSE, SOlVE THE EQUATION TO GET THE CLOSEST POINT OF INTERSECTION TO THE CAMERA
-	min_quad = solve_min_quadratic(a, b, discriminant);
-	if (min_quad < 0)
+	distance = solve_min_quadratic(a, b, discriminant);
+	if (distance < 0)
 		return (0);
-	hit_point = add_tuple(ray.origin, scale_tuple(ray.direction, min_quad));
+	// hit point = ray origin + ray direction * t(distance);
+	hit_point = position(ray, distance);
 	normal = subtract_tuple(hit_point, sphere->position);
 	normal = normalize_tuple(normal);
 	
@@ -84,7 +85,7 @@ int	render_image(t_scene *scene)
 	//t_vector camera_orientation;
 	double	normalised_row;
 	double	normalised_col;
-	double	fov_scale = tan((scene->camera.fov * 0.5) * M_PI / 180.0);
+	double	fov_scale = tan(radians((scene->camera.fov * 0.5)));
 
 	int	col = 0;
 	int	row = 0;

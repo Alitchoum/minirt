@@ -75,12 +75,29 @@ void	run_transformation_tests(void)
 //	t_tuple final = mat4_multiply_tuple(transform, v);
 //	print_tuple(final);
 
-	t_matrix transform = scaling(-1, 1, 1);
-	t_tuple p = point(2, 3, 4);
-	t_tuple final = mat4_multiply_tuple(transform, p);
+//	t_matrix transform = scaling(-1, 1, 1);
+//	t_tuple p = point(2, 3, 4);
+//	t_tuple final = mat4_multiply_tuple(transform, p);
+//
+//	print_tuple(final);
+//
+//	t_tuple p = point(0, 1, 0);
+//	t_matrix half_quarter = rotation_x(M_PI / 4);
+//	t_matrix inv = new_matrix(4);
+//	inverse(&half_quarter, &inv);
+//	t_tuple final = mat4_multiply_tuple(inv, p);
+//	print_tuple(final);
+	
+	t_tuple p = point(1, 0, 1);
+	t_matrix a = rotation_x(M_PI / 2);
+	t_matrix b = scaling(5, 5, 5);
+	t_matrix c = translation(10, 5, 7);
 
+	t_matrix t = new_matrix(4);
+	mat4_multiply(&t, c, b);
+	mat4_multiply(&t, t, a);
+	t_tuple final = mat4_multiply_tuple(t, p);
 	print_tuple(final);
-
 }
 void	run_matrix_tests(void)
 {

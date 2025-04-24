@@ -146,6 +146,11 @@ typedef struct s_object
 	t_color	color;
 }	t_object;
 
+typedef struct s_intersection
+{
+
+}
+
 typedef struct s_scene
 {
 	int		obj_count;
@@ -196,6 +201,7 @@ t_vector	vec3_add(t_vector a, t_vector b);
 t_vector	vec3_subtract(t_vector a, t_vector b);
 t_vector vec3_normalize(t_vector a);
 t_vector	vec3_scale(t_vector a, double scale);
+double	radians(double degrees);
 
 //-- TUPLE --//
 //
@@ -232,6 +238,9 @@ void	run_matrix_tests(void);
 void	run_transformation_tests(void);
 t_matrix	translation(double x, double y, double z);
 t_matrix	scaling(double x, double y, double z);
+t_matrix	rotation_x(double radians);
+t_matrix	rotation_y(double radians);
+t_matrix	rotation_z(double radians);
 
 // RAY
 t_ray	new_ray(t_tuple origin, t_tuple direction);
