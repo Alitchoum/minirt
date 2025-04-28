@@ -159,7 +159,7 @@ static int	check_light(char *line, t_scene *scene)
 	return (1);
 }
 
-static int	check_sphere(char *line, t_object *sphere)
+static int	check_sphere(char *line, t_object *sphere, int *object_index)
 {
 	char	**elements = NULL;
 
@@ -179,33 +179,95 @@ static int	check_sphere(char *line, t_object *sphere)
 		return (free_split(elements), 0);
 	free_split(elements);
 	sphere->type = SPHERE;
+	*object_index += 1;
+	return (1);
+}
+static int	check_plane(char *line, t_object *plane, int *object_index)
+{
+	char	**elements = NULL;
+
+	elements = ft_split_set(line, WHITESPACE);
+	if (!elements)
+		return (ft_putstr_fd("Error: Split plane failed.\n", 2), 0);
+	printf("split plane elements:\n");
+	print_tab(elements);
+	if (count_line_tab(elements) != 4)
+		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of plane isn't valid.\n", 2), 0);
+	if (!update_tuple(&plane->point, elements[1], 1))
+		return (free_split(elements), 0);
+	if (!update_tuple(&plane->normal, elements[2], 1))
+		return (free_split(elements), 0);
+	if (!is_valid_orientation_range(plane->normal))
+		return (free_split(elements), ft_putstr_fd("Error: Plane ratio isn't in a valid range.\n", 2), 0);
+	if (!update_color(&plane->color, elements[3]))
+		return (free_split(elements), 0);
+	plane->type = PLANE;
+	*object_index += 1;
+	return (1);
+}
+
+int static	check_cylinder(char *line, t_object *cylinder, int *object_index)
+{
+	char	**elements = NULL;
+	
+	elements = ft_split_set(line, WHITESPACE);
+	if (!elements)
+		return (ft_putstr_fd("Error: Split cylinder failed.\n", 2), 0);
+	printf("split cylinder elements:\n");
+	print_tab(elements);
+	if (count_line_tab(elements) != 6)
+		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of cylinder isn't valid.\n", 2), 0);
+	if (!update_tuple(&cylinder->position, elements[1], 1))
+		return (free_split(elements), 0);
+	if (!update_tuple(&cylinder->orientation, elements[2], 1))
+		return (free_split(elements), 0);
+	if (!is_valid_orientation_range(cylinder->orientation))
+		return (free_split(elements), ft_putstr_fd("Error: Cylinder ratio isn't in a valid range.\n", 2), 0);
+	if (!is_valid_double(elements[3]))
+		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
+	cylinder->diametre = ft_atof(elements[3]);
+	if (!is_valid_double(elements[4]))
+		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
+	cylinder->height = ft_atof(elements[4]);
+	if (!update_color(&cylinder->color, elements[5]))
+		return (free_split(elements), 0);
+	cylinder->type = CYLINDER;
+	*object_index += 1;
 	return (1);
 }
 
 //Function for parse elements of type line by line
-int	parse_element_line(char *line, t_scene *scene, int *i)
+int	parse_element_line(char *line, t_scene *scene, int *element_index)
 {
 	if (ft_strncmp(line, "A", 1) == 0)
 	{
 		if (!check_ambient(line, scene))
 			return (0);
 	}
-	if (ft_strncmp(line, "C", 1) == 0)
+	else if (ft_strncmp(line, "C", 1) == 0)
 	{
 		if (!check_camera(line, scene))
 			return (0);
 	}
-	if (ft_strncmp(line, "L", 1) == 0)
+	else if (ft_strncmp(line, "L", 1) == 0)
 	{
 		if (!check_light(line, scene))
 			return (0);
 	}
-	if (ft_strncmp(line, "sp", 2) == 0)
+	else if (ft_strncmp(line, "sp", 2) == 0)
 	{
-		if (!check_sphere(line, &scene->objects[*i]))
+		if (!check_sphere(line, &scene->objects[*element_index], element_index))
 			return (0);
-		*i = *i + 1;
 	}
-	//add function for others types of elements
+	else if (ft_strncmp(line, "pl", 2) == 0)
+	{
+		if (!check_plane(line, &scene->objects[*element_index], element_index))
+			return (0);
+	}
+	else if (ft_strncmp(line, "cy", 2) == 0)
+	{
+		if (!check_cylinder(line, &scene->objects[*element_index], element_index))
+			return (0);
+	}
 	return (1);
 }

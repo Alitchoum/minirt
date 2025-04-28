@@ -12,8 +12,10 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 
-# define W_WIDTH 800
-# define W_HEIGHT 800
+# define W_WIDTH 1000
+# define W_HEIGHT 1000
+
+#define  WHITESPACE " \t\f" //a completer00
 
 # define PURPLE 0x4b0082
 # define WHITE 0xffffff
@@ -139,7 +141,9 @@ typedef struct s_object
 {
 	int	type;
 	t_tuple	position;
+	t_tuple	point;
 	t_tuple	orientation;
+	t_tuple	normal;
 	double	radius;
 	double	diametre;
 	double	height;
@@ -190,6 +194,7 @@ double	ft_atof(char *s);
 int		is_valid_int(char *s);
 int		is_valid_double(char *s);
 void	print_list(t_list *lines);
+int	is_valid_orientation_range(t_tuple orientation);
 
 //--DRAW--//
 void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour);
@@ -204,6 +209,7 @@ void	initialise_mlx(t_scene *scene);
 
 //--INTERSECTIONS--//
 void	prep_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
+double	intersection_plane(t_ray ray, t_object *plane);
 
 //--MATHS_UTILS--//
 int	is_equal(double a, double b);

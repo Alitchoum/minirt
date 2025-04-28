@@ -1,5 +1,23 @@
 
 #include "minirt.h"
+double	specular_reflect(t_tuple hit_point, t_tuple normal, t_tuple light_dir, t_scene *scene)
+{
+	t_tuple		cam_dir;
+	t_tuple		reflect_dir;
+	double		dot_reflect_cam; // multi entre direction reflection et direction de la camera
+	double		specular;
+	double		coeff = 0.7;
+	double		shininess = 30;
+
+	cam_dir = normalize_tuple(subtract_tuple(scene->camera.position, hit_point));
+	reflect_dir = subtract_tuple(scale_tuple(normal, 2.0 * dot_tuple(normal, light_dir)),light_dir);
+	reflect_dir = normalize_tuple(reflect_dir);
+	dot_reflect_cam = dot_tuple(reflect_dir, cam_dir);
+	if (dot_reflect_cam < 0)
+		dot_reflect_cam = 0;
+	specular = coeff * scene->light.ratio * pow(dot_reflect_cam, shininess);
+	return (specular);
+}
 
 void	prep_sphere_quadratic(t_quadratic *quadratic, t_ray ray, t_object *sphere)
 {
@@ -25,10 +43,25 @@ void	prep_quadratic(t_quadratic *quadratic, t_ray ray, t_object *object)
 
 t_intersection	finalize_hit_data(t_ray ray, t_intersection intersection)
 {
-	ray.origin = subtract_tuple(ray.origin, intersection.object->position);
+	//t_tuple centre = intersection.object->position;
+	//t_matrix m = translation(centre.x, centre.y, centre.z);
+	//t_ray r2 = transform(ray, m);
+	//ray.origin = mat4_multiply_tuple(m, ray.origin);
 	intersection.world_position = position(ray, intersection.hit_distance);
-	intersection.world_normal = normalize_tuple(intersection.world_position);
-	intersection.world_position = add_tuple(intersection.world_position, intersection.object->position);
+	if (intersection.object->type == PLANE)
+	{
+		intersection.world_normal = intersection.object->normal;
+		ray.origin = subtract_tuple(ray.origin, intersection.object->point);
+
+	}
+	else
+	{
+		ray.origin = subtract_tuple(ray.origin, intersection.object->position);
+		intersection.world_normal = normalize_tuple(subtract_tuple(intersection.world_position, intersection.object->position));
+		intersection.world_position = add_tuple(intersection.world_position, intersection.object->position);
+
+	}
+	//intersection.world_normal = normalize_tuple(intersection.world_position);
 	return (intersection);
 }
 
@@ -44,6 +77,17 @@ t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *obj
 
 	while(i < scene->obj_count)
 	{
+		if (objects[i].type == PLANE)
+		{
+			current_distance = intersection_plane(ray, &objects[i]);
+			if ((current_distance < closest_intersection.hit_distance) && (current_distance >= 0))
+			{
+				closest_intersection.hit_distance = current_distance;
+				closest_shape = &objects[i];
+			}
+			i++;
+			continue;
+		}
 		prep_sphere_quadratic(&q, ray, &objects[i]);
 		if (q.discriminant > 0.0)
 		{
@@ -119,6 +163,7 @@ void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color)
 			dot = 0;
 		light_scalar = dot * scene->light.ratio;
 		light_scalar += scene->ambient.ratio;
+		light_scalar += specular_reflect(hit->world_position, hit->world_normal, light_direction, scene);
 		if (light_scalar > 1.0)
 			light_scalar = 1;
 	}

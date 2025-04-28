@@ -81,3 +81,12 @@ int	is_valid_double(char *s)
 	}
 	return (1);
 }
+
+int	is_valid_orientation_range(t_tuple orientation)
+{
+	if ((orientation.x < -1 || orientation.x > 1) ||
+		(orientation.y < -1 || orientation.y > 1) ||
+		(orientation.z < -1 || orientation.z > 1))
+		return (0);
+	return (1);
+}

@@ -65,12 +65,12 @@ int	do_keypress(int keysym, t_scene *scene)
 	else if (keysym == 65362)
 	{
 		printf("Up arrow pressed (translate up)\n");
-		scene->objects[0].position.y += 0.1;
+		scene->objects[0].position.y -= 0.1;
 	}
 	else if (keysym == 65364)
 	{
 		printf("Down arrow pressed (translate down)\n");
-		scene->objects[0].position.y -= 0.1;
+		scene->objects[0].position.y += 0.1;
 	}
 	else if (keysym == 98)
 	{

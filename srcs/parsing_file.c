@@ -127,7 +127,7 @@ int	parse_scene(char *file, t_scene *scene)
 {
 	t_list *current;
 	char	*line;
-	int sphere_count = 0;
+	int element_count = 0;
 	
 	if (!check_extension(file))
 		return (0);
@@ -143,7 +143,7 @@ int	parse_scene(char *file, t_scene *scene)
 	{
 		line = current->content;
 		
-		if (!parse_element_line(line, scene, &sphere_count))
+		if (!parse_element_line(line, scene, &element_count))
 			return (ft_lstclear(&scene->lines, free), 0);
 		current = current->next;
 	}
