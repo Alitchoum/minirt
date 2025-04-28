@@ -33,7 +33,7 @@ SRCS = $(SRCS_DIR)main.c \
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
 
 run: all
-	./minirt scene/plane_test.rt
+	./minirt scene/scene1.rt
 
 all: $(NAME)
 

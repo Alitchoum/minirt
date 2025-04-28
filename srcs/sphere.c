@@ -116,29 +116,18 @@ double	distance(t_tuple a, t_tuple b)
 	return (distance);
 }
 
-int	is_in_shadow(t_scene *scene, t_tuple hit_position, t_tuple light_position, t_object *hit_object)
+int	is_in_shadow(t_scene *scene, t_tuple hit_position, t_tuple light_position)
 {
 	t_ray shadow_ray;
 	t_intersection shadow_intersection;
+	double	light_distance;
 
-	t_tuple direction = subtract_tuple(light_position, hit_position);
 	shadow_ray.origin = hit_position;
-	shadow_ray.direction = normalize_tuple(direction);
-
-	int i = 0;
-	while (i < scene->obj_count)
-	{
-		if (&scene->objects[i] != hit_object)
-		{
-			shadow_intersection = get_closest_intersection(scene, shadow_ray, scene->objects);
-			if (shadow_intersection.hit_distance >= 0)
-			{
-				if (shadow_intersection.hit_distance < distance(hit_position, light_position))
-					return (1);
-			}
-		}
-		i++;
-	}
+	shadow_ray.direction = normalize_tuple(subtract_tuple(light_position, hit_position));
+	light_distance = distance(hit_position, light_position);
+	shadow_intersection = get_closest_intersection(scene, shadow_ray, scene->objects);
+	if (shadow_intersection.hit_distance >= 0 && shadow_intersection.hit_distance < light_distance)
+		return (1);
 	return (0);
 }
 
@@ -152,7 +141,7 @@ void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color)
 	light_direction = subtract_tuple(scene->light.position, hit->world_position);
 	light_direction = normalize_tuple(light_direction);
 
-	if (is_in_shadow(scene, hit->world_position, scene->light.position, hit->object))
+	if (is_in_shadow(scene, hit->world_position, scene->light.position))
 	{
 		light_scalar = scene->ambient.ratio;
 	}

@@ -112,7 +112,7 @@ static int	check_camera(char *line, t_scene *scene)
 {
 	char	**elements = NULL;
 
-	elements = ft_split_set(line, " ");// corriger split_set
+	elements = ft_split_set(line, WHITESPACE);// corriger split_set
 	if (!elements)
 		return (ft_putstr_fd("Error: Split camera failed.\n", 2), 0);
 	printf("split camera elements:\n");
@@ -139,7 +139,7 @@ static int	check_light(char *line, t_scene *scene)
 {
 	char	**elements = NULL;
 
-	elements = ft_split_set(line, " ");
+	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 		return (ft_putstr_fd("Error: Split light failed.\n", 2), 0);
 	printf("split light elements:\n");
@@ -163,7 +163,7 @@ static int	check_sphere(char *line, t_object *sphere, int *object_index)
 {
 	char	**elements = NULL;
 
-	elements = ft_split_set(line, " ");
+	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 		return (ft_putstr_fd("Error: Split sphere failed.\n", 2), 0);
 	printf("split sphere elements:\n");
@@ -206,7 +206,7 @@ static int	check_plane(char *line, t_object *plane, int *object_index)
 	return (1);
 }
 
-int static	check_cylinder(char *line, t_object *cylinder, int *object_index)
+static int	check_cylinder(char *line, t_object *cylinder, int *object_index)
 {
 	char	**elements = NULL;
 	

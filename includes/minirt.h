@@ -15,7 +15,7 @@
 # define W_WIDTH 1000
 # define W_HEIGHT 1000
 
-#define  WHITESPACE " \t\f" //a completer00
+#define  WHITESPACE " \t" //a completer00
 
 # define PURPLE 0x4b0082
 # define WHITE 0xffffff
