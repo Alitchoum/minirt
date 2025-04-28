@@ -83,14 +83,21 @@ typedef struct s_light
 	t_color		color;
 }				t_light;
 
+typedef struct s_material
+{
+	double		coeff_specular; // coefficient de réflexion spéculaire (0.0 à 1.0)
+	double		shininess; // La brillance (plus il est élevé, plus le reflet est concentré)
+}				t_material;
+
 typedef struct s_sphere
 {
 	t_tuple		center;
 	double		diametre;
 	t_color		color;
-	t_matrix		translation_matrix; //moves to the correct position
-	t_matrix		scaling_matrix[4][4]; // adjusts the sphere's radius
-	t_matrix		transform_matrix[4][4]; // combines the 2
+	t_matrix	translation_matrix; //moves to the correct position
+	t_matrix	scaling_matrix[4][4]; // adjusts the sphere's radius
+	t_matrix	transform_matrix[4][4]; // combines the 2
+	t_material	material;
 }				t_sphere;
 
 typedef struct s_plane
