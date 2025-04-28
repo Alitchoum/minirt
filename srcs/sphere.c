@@ -7,7 +7,7 @@ double	specular_reflect(t_tuple hit_point, t_tuple normal, t_tuple light_dir, t_
 	double		dot_reflect_cam; // multi entre direction reflection et direction de la camera
 	double		specular;
 	double		coeff = 0.7;
-	double		shininess = 30;
+	double		shininess = 100;
 
 	cam_dir = normalize_tuple(subtract_tuple(scene->camera.position, hit_point));
 	reflect_dir = subtract_tuple(scale_tuple(normal, 2.0 * dot_tuple(normal, light_dir)),light_dir);
