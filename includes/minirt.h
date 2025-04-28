@@ -9,6 +9,8 @@
 # include "libft/libft.h"
 # include <math.h>
 # include <limits.h>
+# include <X11/X.h>
+# include <X11/keysym.h>
 
 # define W_WIDTH 800
 # define W_HEIGHT 800
@@ -87,7 +89,7 @@ typedef struct s_sphere
 	t_tuple		center;
 	double		diametre;
 	t_color		color;
-	t_matrix		translation_matrix; //moves to the correct position
+	t_matrix		translation_matrix[4][4]; //moves to the correct position
 	t_matrix		scaling_matrix[4][4]; // adjusts the sphere's radius
 	t_matrix		transform_matrix[4][4]; // combines the 2
 }				t_sphere;
@@ -110,7 +112,9 @@ typedef struct s_cylinder
 
 typedef struct s_quadratic
 {
-	double	solutions[2];
+	double	a;
+	double	b;
+	double	c;
 	double	discriminant;
 }	t_quadratic;
 
@@ -146,10 +150,6 @@ typedef struct s_object
 	t_color	color;
 }	t_object;
 
-typedef struct s_intersection
-{
-
-}
 
 typedef struct s_scene
 {
@@ -173,7 +173,15 @@ typedef struct s_scene
 	int			end;
 }				t_scene;
 
-int		main(int ac, char **av);
+typedef struct s_intersection
+{
+	double		hit_distance;
+	t_tuple		point;
+	t_object 	*object;
+	t_tuple		world_normal;
+	t_tuple		world_position;
+}	t_intersection;
+
 int		parse_scene(char *file, t_scene *scene);
 
 //---FUNCTIONS UTILS---//
@@ -194,6 +202,9 @@ int		parse_element_line(char *line, t_scene *scene, int *sphere_count);
 //--INIT MLX--//
 void	initialise_mlx(t_scene *scene);
 
+//--INTERSECTIONS--//
+void	prep_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
+
 //--MATHS_UTILS--//
 int	is_equal(double a, double b);
 double	vec3_dot(t_vector a, t_vector b);
@@ -202,6 +213,7 @@ t_vector	vec3_subtract(t_vector a, t_vector b);
 t_vector vec3_normalize(t_vector a);
 t_vector	vec3_scale(t_vector a, double scale);
 double	radians(double degrees);
+float	get_discriminant(double a, double b, double c);
 
 //-- TUPLE --//
 //

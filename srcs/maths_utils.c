@@ -16,3 +16,8 @@ int	is_equal(double a, double b)
 {
 	return (fabs(a - b) < EPSILON);
 }
+
+float	get_discriminant(double a, double b, double c)
+{
+	return ((b * b) - (4 * a * c));
+}

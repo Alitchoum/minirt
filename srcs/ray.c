@@ -4,6 +4,7 @@ t_ray	new_ray(t_tuple origin, t_tuple direction)
 {
 	t_ray	new;
 
+	ft_bzero(&new, sizeof(t_ray));
 	new.origin = origin;
 	new.direction = direction;
 	return (new);

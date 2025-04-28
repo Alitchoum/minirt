@@ -1,80 +1,145 @@
 
 #include "minirt.h"
 
-// RETURNS DOT PRODUCT OF TWO VECTORS
-// Multiplies the matching variables together then adds them up
-
-float	get_discriminant(double a, double b, double c)
+void	prep_sphere_quadratic(t_quadratic *quadratic, t_ray ray, t_object *sphere)
 {
-	return ((b * b) - (4 * a * c));
-}
-
-
-// returns what you need to multiply the colour by to take into account light
-// Essentially, solving the quadratic equation to find closest intersection to the camera
-// between 0 and 1
-double	solve_min_quadratic(double a, double b, double discriminant)
-{
-	double	t0;
-	double	t1_closest;
-
-	t0 = (-b + sqrt(discriminant)) / (2.0 * a);
-	t1_closest = (-b - sqrt(discriminant)) / (2.0 * a);
-
-	if (t0 > 0 && (t1_closest < 0 || t0 < t1_closest))
-		return (t0);
-	if (t1_closest > 0)
-		return (t1_closest);
-	return (-1);
-}
-
-int	get_color(t_ray ray, t_object *sphere, t_scene *scene)
-{
-	double		a;
-	double		b;
-	double		c;
-	double		distance;
-	double		discriminant;
-	t_color		color;
-	t_tuple	hit_point;
-	t_tuple	normal;
-	t_tuple	light_dir;
-	t_tuple		diff_sphere_camera;
-
-	color = sphere->color;
+	t_tuple	diff_sphere_camera;
 
 	diff_sphere_camera = subtract_tuple(ray.origin, sphere->position);
-
-	a = dot_tuple(ray.direction, ray.direction);
-	b = 2.0f * dot_tuple(diff_sphere_camera, ray.direction);
-	c = dot_tuple(diff_sphere_camera, diff_sphere_camera) - (pow((sphere->diametre * 0.5), 2));
-
-	// IF NO INTERSECTION(S) WERE FOUND, return BLACK
-	discriminant = get_discriminant(a, b, c);
-	if (discriminant < 0.0)
-		return (0);
-	// ELSE, SOlVE THE EQUATION TO GET THE CLOSEST POINT OF INTERSECTION TO THE CAMERA
-	distance = solve_min_quadratic(a, b, discriminant);
-	if (distance < 0)
-		return (0);
-	// hit point = ray origin + ray direction * t(distance);
-	hit_point = position(ray, distance);
-	normal = subtract_tuple(hit_point, sphere->position);
-	normal = normalize_tuple(normal);
-	
-	light_dir = subtract_tuple(scene->light.position, hit_point);
-	light_dir = normalize_tuple(light_dir);
-	
-	double dot = dot_tuple(normal, light_dir);
-	if (dot < 0)
-		dot = 0;
-	double	light_scaler = dot * scene->light.ratio;
-	light_scaler += scene->ambient.ratio;
-	if (light_scaler > 1.0)
-		light_scaler = 1;
-	return (rgb_to_int(color, light_scaler));
+	quadratic->a = dot_tuple(ray.direction, ray.direction);
+	quadratic->b = 2.0f * dot_tuple(diff_sphere_camera, ray.direction);
+	quadratic->c = dot_tuple(diff_sphere_camera, diff_sphere_camera) - (pow((sphere->diametre * 0.5), 2));
+	quadratic->discriminant = get_discriminant(quadratic->a, quadratic->b, quadratic->c);
 }
 
+void	prep_quadratic(t_quadratic *quadratic, t_ray ray, t_object *object)
+{
+	if (object->type == SPHERE)
+		prep_sphere_quadratic(quadratic, ray, object);
+	//else if (object->type == CYLINDER)
+	//	prep_cylinder_quadratic(quadratic, ray, object);
+	//else if (object->type == PLANE)
+	//	prep_plane_quadratic(quadratic, ray, object);
+	return ;
+}
+
+t_intersection	finalize_hit_data(t_ray ray, t_intersection intersection)
+{
+	ray.origin = subtract_tuple(ray.origin, intersection.object->position);
+	intersection.world_position = position(ray, intersection.hit_distance);
+	intersection.world_normal = normalize_tuple(intersection.world_position);
+	intersection.world_position = add_tuple(intersection.world_position, intersection.object->position);
+	return (intersection);
+}
+
+t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects)
+{
+	t_intersection	closest_intersection;
+	t_object	*closest_shape = NULL;
+	double	current_distance;
+	int	i = 0;
+	t_quadratic q;
+	
+	closest_intersection.hit_distance = INT_MAX;
+
+	while(i < scene->obj_count)
+	{
+		prep_sphere_quadratic(&q, ray, &objects[i]);
+		if (q.discriminant > 0.0)
+		{
+			current_distance = (-q.b - sqrt(q.discriminant)) / (2.0 * q.a);
+			if ((current_distance < closest_intersection.hit_distance) && (current_distance >= 0))
+			{
+				closest_intersection.hit_distance = current_distance;
+				closest_shape = &objects[i];
+			}
+		}
+		i++;
+	}
+	if (closest_shape == NULL)
+	{
+		closest_intersection.hit_distance = -1;
+		return (closest_intersection);
+	}
+	closest_intersection.object = closest_shape;
+	return (finalize_hit_data(ray, closest_intersection));
+}
+
+double	distance(t_tuple a, t_tuple b)
+{
+	t_tuple c = subtract_tuple(a, b);
+	double distance = magnitude(c);
+	return (distance);
+}
+
+int	is_in_shadow(t_scene *scene, t_tuple hit_position, t_tuple light_position, t_object *hit_object)
+{
+	t_ray shadow_ray;
+	t_intersection shadow_intersection;
+
+	t_tuple direction = subtract_tuple(light_position, hit_position);
+	shadow_ray.origin = hit_position;
+	shadow_ray.direction = normalize_tuple(direction);
+
+	int i = 0;
+	while (i < scene->obj_count)
+	{
+		if (&scene->objects[i] != hit_object)
+		{
+			shadow_intersection = get_closest_intersection(scene, shadow_ray, scene->objects);
+			if (shadow_intersection.hit_distance >= 0)
+			{
+				if (shadow_intersection.hit_distance < distance(hit_position, light_position))
+					return (1);
+			}
+		}
+		i++;
+	}
+	return (0);
+}
+
+// Doesn't take into account colour of the light
+void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color)
+{
+	t_tuple	light_direction;
+	double	dot;
+	double	light_scalar;
+
+	light_direction = subtract_tuple(scene->light.position, hit->world_position);
+	light_direction = normalize_tuple(light_direction);
+
+	if (is_in_shadow(scene, hit->world_position, scene->light.position, hit->object))
+	{
+		light_scalar = scene->ambient.ratio;
+	}
+	else
+	{
+		dot = dot_tuple(hit->world_normal, light_direction);
+		if (dot < 0)
+			dot = 0;
+		light_scalar = dot * scene->light.ratio;
+		light_scalar += scene->ambient.ratio;
+		if (light_scalar > 1.0)
+			light_scalar = 1;
+	}
+	*final_color = rgb_to_int(hit->object->color, light_scalar);
+}
+
+// need to understand how to manage shadows...
+int	get_pixel_color(t_scene *scene, t_ray ray, t_object *objects)
+{
+	int	final_color;
+	t_intersection	closest_intersection;
+
+	final_color = 0;
+	closest_intersection = get_closest_intersection(scene, ray, objects);
+	if (closest_intersection.hit_distance < 0)
+		return (final_color); // but could also just be a shadow??...
+	apply_lighting(scene, &closest_intersection, &final_color);
+	//apply_shadow(scene, &closest_intersection, ray, &final_color);
+	
+	return (final_color);
+}
 
 int	render_image(t_scene *scene)
 {
@@ -89,7 +154,6 @@ int	render_image(t_scene *scene)
 
 	int	col = 0;
 	int	row = 0;
-	int	i;
 	int	color;
 	// PUT A COLOUR ON EACH PIXEL OF THE SCREEN
 	while (row < W_HEIGHT)
@@ -100,27 +164,14 @@ int	render_image(t_scene *scene)
 			// NORMALIZE THE PIXEL BETWEEN -1 AND 1
 			normalised_col = ((double)col / (double)W_WIDTH * 2 - 1);
 			normalised_row = (double)row / (double)W_HEIGHT * 2 - 1;
-
-			// CALCULATE RAY DIRECTION
 			ray_direction = vector(normalised_col * aspect_ratio * fov_scale, normalised_row * fov_scale, 1);
-
-			// CREATE A NEW RAY (ORIGIN, DIRECTION)
 			ray = new_ray(scene->camera.position, normalize_tuple(ray_direction));
-			//FIND THE COLOUR THE PIXEL SHOULD BE
-			i = 0;
-			color = 0;
-			while (i < 2)
-			{
-				color = get_color(ray, &scene->objects[i], scene);
-				if (color != 0)
-				{
-					my_mlx_pixel_put(scene, col, row, color);
-				}
-				i++;
-			}
+			color = get_pixel_color(scene, ray, scene->objects);
+			my_mlx_pixel_put(scene, col, row, color);
 			col++;
 		}
 		row++;
 	}
+	printf("Finished render\n");
 	return (0);
 }
