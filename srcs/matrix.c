@@ -220,18 +220,24 @@ double	determinant(t_matrix *matrix)
 }
 
 // INVERSIONS: IF DETERMINANT IS 0, THE MATRIX IS NOT INVERTIBLE
-int	inverse(t_matrix *matrix, t_matrix *result)
+t_matrix	inverse(t_matrix *matrix)
 {
 	int	row;
 	int	col;
 	double	det;
 	double	c;
+	t_matrix	result;
 
+	result = new_matrix(4);
 	det = determinant(matrix);
 	c = 0;
 	// if the matrix is not invertible, return fail
 	if (is_equal(det, 0))
-		return (0);
+	{
+		//printf("not intertaible\n");
+		return (get_identity_matrix());
+
+	}
 	row = 0;
 	while (row < matrix->size)
 	{
@@ -239,11 +245,11 @@ int	inverse(t_matrix *matrix, t_matrix *result)
 		while (col < matrix->size)
 		{
 			c = cofactor(matrix, row, col);
-			result->m[col][row] = c / det;
+			result.m[col][row] = c / det;
 			col++;
 		}
 		row++;
 	}
-	result->size = matrix->size;
-	return (1);
+	//result->size = matrix->size;
+	return (result);
 }

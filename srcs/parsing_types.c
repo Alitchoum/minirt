@@ -179,6 +179,7 @@ static int	check_sphere(char *line, t_object *sphere, int *object_index)
 		return (free_split(elements), 0);
 	free_split(elements);
 	sphere->type = SPHERE;
+	sphere->transform_matrix = get_identity_matrix();
 	*object_index += 1;
 	return (1);
 }

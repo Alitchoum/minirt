@@ -140,6 +140,12 @@ void	run_matrix_tests(void)
 	printf("C * inverse(B) = A\n");
 	print_matrix(&final);
 
+	t_ray r = new_ray(point(1, 2, 3), vector(0, 1, 0));
+	t_matrix m = translation(3, 4, 5);
+	
+	t_ray r2 = transform(r, m);
+	print_tuple(r2.origin);
+	print_tuple(r2.direction);
 	exit(1);
 }
 

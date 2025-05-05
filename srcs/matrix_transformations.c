@@ -101,3 +101,16 @@ t_matrix	rotation_z(double radians)
 // point = (C * (B * (A * point)));
 // multiply all the transformation matrices together, than multiply it by the point to get the final transformed point
 // matrices must be done in reverse order. (translation, scaling, rotation)
+t_ray	transform(t_ray ray, t_matrix matrix)
+{
+	t_ray	new_ray;
+
+	new_ray.origin = mat4_multiply_tuple(matrix, ray.origin);
+	new_ray.direction = mat4_multiply_tuple(matrix, ray.direction);
+	return (new_ray);
+}
+
+void	set_transform(t_object *shape, t_matrix matrix)
+{
+	shape->transform_matrix = matrix;
+}

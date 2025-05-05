@@ -118,6 +118,7 @@ typedef struct s_quadratic
 	double	b;
 	double	c;
 	double	discriminant;
+	double	t[2];
 }	t_quadratic;
 
 typedef	struct s_mlx
@@ -147,9 +148,9 @@ typedef struct s_object
 	double	radius;
 	double	diametre;
 	double	height;
+	t_matrix	transform_matrix;
 	t_matrix	rotation_matrix;
 	t_matrix	translation_matrix;
-	t_matrix	transform_matrix;
 	double	determinant;
 	t_color	color;
 }	t_object;
@@ -210,6 +211,11 @@ void	initialise_mlx(t_scene *scene);
 //--INTERSECTIONS--//
 void	prep_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
 double	intersection_plane(t_ray ray, t_object *plane);
+t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects);
+void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color);
+int	is_in_shadow(t_scene *scene, t_tuple hit_position, t_tuple light_position);
+double	specular_reflect(t_tuple hit_point, t_tuple normal, t_tuple light_dir, t_scene *scene);
+void	prep_quadratic(t_quadratic *quadratic, t_ray ray, t_object *object);
 
 //--MATHS_UTILS--//
 int	is_equal(double a, double b);
@@ -235,6 +241,7 @@ double	magnitude(t_tuple a);
 t_tuple	normalize_tuple(t_tuple a);
 double dot_tuple(t_tuple a, t_tuple b);
 t_tuple	cross_tuple(t_tuple a, t_tuple b);
+double	distance(t_tuple a, t_tuple b);
 
 //-- MATRIX --//
 t_matrix	new_matrix(int size);
@@ -249,8 +256,11 @@ t_matrix	submatrix(t_matrix *from, int row_del, int col_del);
 double	minor(t_matrix *old, int row, int col);
 double	cofactor(t_matrix *matrix, int row, int col);
 double	determinant(t_matrix *matrix);
-int	inverse(t_matrix *matrix, t_matrix *result);
+t_matrix	inverse(t_matrix *matrix);
 void	run_matrix_tests(void);
+t_ray	transform(t_ray ray, t_matrix matrix);
+void	set_transform(t_object *shape, t_matrix matrix);
+void	print_matrix(t_matrix *m);
 
 //-- MATRIX TRANSFORMATIONS --//
 void	run_transformation_tests(void);

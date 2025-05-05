@@ -28,12 +28,15 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)matrix_transformations.c \
 		$(SRCS_DIR)cylinder.c \
 		$(SRCS_DIR)plane.c \
+		$(SRCS_DIR)light.c \
+		$(SRCS_DIR)shadow.c \
+		$(SRCS_DIR)intersections.c \
 
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
 
 run: all
-	./minirt scene/scene1.rt
+	./minirt scene/sphere.rt
 
 all: $(NAME)
 

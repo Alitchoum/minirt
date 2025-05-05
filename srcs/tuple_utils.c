@@ -12,6 +12,13 @@
 
 #include "minirt.h"
 
+double	distance(t_tuple a, t_tuple b)
+{
+	t_tuple c = subtract_tuple(a, b);
+	double distance = magnitude(c);
+	return (distance);
+}
+
 t_tuple	tuple(double x, double y, double z, double w)
 {
 	t_tuple	new;
@@ -134,4 +141,12 @@ t_tuple	cross_tuple(t_tuple a, t_tuple b)
 	y = a.z * b.x - a.x * b.z;
 	z = a.x * b.y - a.y * b.x;
 	return (vector(x, y, z));
+}
+
+t_tuple	reflect(t_tuple in, t_tuple normal)
+{
+	t_tuple	result;
+
+	result = subtract_tuple(in, normal);
+
 }
