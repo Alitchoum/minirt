@@ -143,10 +143,3 @@ t_tuple	cross_tuple(t_tuple a, t_tuple b)
 	return (vector(x, y, z));
 }
 
-t_tuple	reflect(t_tuple in, t_tuple normal)
-{
-	t_tuple	result;
-
-	result = subtract_tuple(in, normal);
-
-}

@@ -209,7 +209,11 @@ int		parse_element_line(char *line, t_scene *scene, int *sphere_count);
 void	initialise_mlx(t_scene *scene);
 
 //--INTERSECTIONS--//
+t_intersection	intersect(t_object *shape, t_ray ray);
+t_intersection	intersect_cylinder(t_object *cylinder, t_ray ray);
 void	prep_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
+void	prep_sphere_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
+t_intersection	intersect_sphere(t_object *shape, t_ray ray);
 double	intersection_plane(t_ray ray, t_object *plane);
 t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects);
 void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color);

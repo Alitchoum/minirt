@@ -24,7 +24,6 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)tuple_utils.c \
 		$(SRCS_DIR)ray.c \
 		$(SRCS_DIR)matrix.c \
-		$(SRCS_DIR)matrix_tests.c \
 		$(SRCS_DIR)matrix_transformations.c \
 		$(SRCS_DIR)cylinder.c \
 		$(SRCS_DIR)plane.c \

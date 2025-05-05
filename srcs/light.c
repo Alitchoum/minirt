@@ -10,12 +10,12 @@ void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color)
 	light_direction = subtract_tuple(scene->light.position, hit->world_position);
 	light_direction = normalize_tuple(light_direction);
 
-	if (is_in_shadow(scene, hit->world_position, scene->light.position))
-	{
-		light_scalar = scene->ambient.ratio;
-	}
-	else
-	{
+	//if (is_in_shadow(scene, hit->world_position, scene->light.position))
+	//{
+	//	light_scalar = scene->ambient.ratio;
+	//}
+	//else
+	//{
 		dot = dot_tuple(hit->world_normal, light_direction);
 		if (dot < 0)
 			dot = 0;
@@ -24,7 +24,7 @@ void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color)
 		light_scalar += specular_reflect(hit->world_position, hit->world_normal, light_direction, scene);
 		if (light_scalar > 1.0)
 			light_scalar = 1;
-	}
+	//}
 	*final_color = rgb_to_int(hit->object->color, light_scalar);
 }
 
