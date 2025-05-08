@@ -37,7 +37,7 @@ int	render_image(t_scene *scene)
 		{
 			// NORMALIZE THE PIXEL BETWEEN -1 AND 1
 			normalised_col = ((double)col / (double)W_WIDTH * 2 - 1);
-			normalised_row = (double)row / (double)W_HEIGHT * 2 - 1;
+			normalised_row = -((double)row / (double)W_HEIGHT * 2 - 1);
 			ray_direction = vector(normalised_col * aspect_ratio * fov_scale, normalised_row * fov_scale, 1);
 			ray = new_ray(scene->camera.position, normalize_tuple(ray_direction));
 			color = get_pixel_color(scene, ray, scene->objects);
@@ -57,7 +57,7 @@ int	get_pixel_color(t_scene *scene, t_ray ray, t_object *objects)
 	t_intersection	closest_intersection;
 
 	final_color = 0;
-	closest_intersection = get_closest_intersection(scene, ray, objects);
+	closest_intersection = get_closest_intersection(scene, ray, objects, NULL);
 	if (closest_intersection.hit_distance < 0)
 		return (0); // but could also just be a shadow??...
 	apply_lighting(scene, &closest_intersection, &final_color);

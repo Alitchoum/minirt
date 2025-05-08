@@ -12,22 +12,26 @@
 
 #include "minirt.h"
 
-double	intersection_plane(t_ray ray, t_object *plane)
+t_intersection	intersection_plane(t_ray ray, t_object *plane)
 {
 	t_tuple	diff;
 	double	denominator;
 	double	numerator;
 	double	dist;
+	t_intersection xs;
+
+	xs.hit_distance = -1;
 
 	denominator = dot_tuple(plane->normal, ray.direction);
 	if (is_equal(denominator, 0.0))
-		return	(-1);
+		return	(xs);
 	diff = subtract_tuple(plane->point, ray.origin);
 	numerator = dot_tuple(plane->normal, diff);
 	dist = numerator / denominator;
 	if (dist < EPSILON)
-		return (-1);
-	return (dist);
+		return (xs);
+	xs.hit_distance = dist;
+	return (xs);
 }
 
 /*static int get_color_plane(t_ray ray, t_plane *plane, t_scene *scene)

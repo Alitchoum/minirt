@@ -32,7 +32,7 @@
 # define MAX_CY 10 //A DEFINIR
 # define MAX_PL 10 //A DEFINIR
 
-# define EPSILON 0.00001
+# define EPSILON 0.000001
 
 # define SPHERE 0
 # define CYLINDER 1
@@ -214,10 +214,10 @@ t_intersection	intersect_cylinder(t_object *cylinder, t_ray ray);
 void	prep_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
 void	prep_sphere_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
 t_intersection	intersect_sphere(t_object *shape, t_ray ray);
-double	intersection_plane(t_ray ray, t_object *plane);
-t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects);
+t_intersection	intersection_plane(t_ray ray, t_object *plane);
+t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects, t_object *current);
 void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color);
-int	is_in_shadow(t_scene *scene, t_tuple hit_position, t_tuple light_position);
+int	is_in_shadow(t_scene *scene, t_tuple hit_position, t_tuple light_position, t_object *object, t_tuple hit_normal);
 double	specular_reflect(t_tuple hit_point, t_tuple normal, t_tuple light_dir, t_scene *scene);
 void	prep_quadratic(t_quadratic *quadratic, t_ray ray, t_object *object);
 
