@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tuple_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caburges <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:56:05 by caburges          #+#    #+#             */
-/*   Updated: 2025/04/21 18:56:07 by caburges         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:33:44 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ t_tuple	normalize_tuple(t_tuple a)
 // 1 means the vectors are identical
 // -1 means they point in opposite directions
 // to be used on VECTORS only, not POINTS
-double dot_tuple(t_tuple a, t_tuple b)
+double	dot_tuple(t_tuple a, t_tuple b)
 {
 	return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w));
 }
@@ -143,3 +143,25 @@ t_tuple	cross_tuple(t_tuple a, t_tuple b)
 	return (vector(x, y, z));
 }
 
+t_tuple rotate_tuple(t_tuple a, int axe, double angle)
+{
+	t_tuple	rotate;
+		
+	rotate = a;
+	if (axe == X)
+	{
+		rotate.y = a.y * cos(angle) - a.z * sin(angle);
+		rotate.z = a.y * sin(angle) + a.z * cos(angle);
+	}
+	else if (axe == Y)
+	{
+		rotate.x = a.x * cos(angle) + a.z * sin(angle);
+		rotate.z = -a.x * sin(angle) + a.z *cos(angle);
+	}
+	else if (axe == Z)
+	{
+		rotate.x = a.x * cos(angle) - a.y * sin(angle);
+		rotate.y = a.x * sin(angle) + a.y *cos(angle);
+	}
+	return (normalize_tuple(rotate));
+}

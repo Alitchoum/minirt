@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_types.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alize <alize@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:37:58 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/20 18:40:58 by alize            ###   ########.fr       */
+/*   Updated: 2025/05/12 18:26:49 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ static int	check_plane(char *line, t_object *plane, int *object_index)
 	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of plane isn't valid.\n", 2), 0);
-	if (!update_tuple(&plane->point, elements[1], 1))
+	if (!update_tuple(&plane->position, elements[1], 1))
 		return (free_split(elements), 0);
 	if (!update_tuple(&plane->normal, elements[2], 1))
 		return (free_split(elements), 0);

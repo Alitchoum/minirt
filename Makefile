@@ -32,11 +32,10 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)intersections.c \
 		$(SRCS_DIR)keyboard.c \
 
-
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
 
 run: all
-	./minirt scene/sphere.rt
+	./minirt scene/plane_test.rt
 
 all: $(NAME)
 

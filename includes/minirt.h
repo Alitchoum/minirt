@@ -15,7 +15,7 @@
 # define W_WIDTH 1000
 # define W_HEIGHT 1000
 
-#define  WHITESPACE " \t" //a completer00
+# define  WHITESPACE " \t\v\f\r"
 
 # define PURPLE 0x4b0082
 # define WHITE 0xffffff
@@ -31,6 +31,10 @@
 # define MAX_SP 10 //A DEFINIR
 # define MAX_CY 10 //A DEFINIR
 # define MAX_PL 10 //A DEFINIR
+
+# define X 0
+# define Y 1
+# define Z 2
 
 # define EPSILON 0.000001
 
@@ -142,7 +146,6 @@ typedef struct s_object
 {
 	int	type;
 	t_tuple	position;
-	t_tuple	point;
 	t_tuple	orientation;
 	t_tuple	normal;
 	double	radius;
@@ -246,6 +249,7 @@ t_tuple	normalize_tuple(t_tuple a);
 double dot_tuple(t_tuple a, t_tuple b);
 t_tuple	cross_tuple(t_tuple a, t_tuple b);
 double	distance(t_tuple a, t_tuple b);
+t_tuple rotate_tuple(t_tuple a, int axe, double angle);
 
 //-- MATRIX --//
 t_matrix	new_matrix(int size);
