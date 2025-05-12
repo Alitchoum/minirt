@@ -25,7 +25,7 @@ t_intersection	intersection_plane(t_ray ray, t_object *plane)
 	denominator = dot_tuple(plane->normal, ray.direction);
 	if (is_equal(denominator, 0.0))
 		return	(xs);
-	diff = subtract_tuple(plane->point, ray.origin);
+	diff = subtract_tuple(plane->position, ray.origin);
 	numerator = dot_tuple(plane->normal, diff);
 	dist = numerator / denominator;
 	if (dist < EPSILON)

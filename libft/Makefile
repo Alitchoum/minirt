@@ -65,7 +65,7 @@ SRCS = ft_isalpha.c \
        ft_free.c
 
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -pg -g -Wall -Wextra -Werror
 
 all: $(NAME)
 

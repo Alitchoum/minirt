@@ -54,8 +54,6 @@ t_intersection	finalize_hit_data(t_ray ray, t_intersection intersection)
 	if (intersection.object->type == PLANE)
 	{
 		intersection.world_normal = intersection.object->normal;
-		ray.origin = subtract_tuple(ray.origin, intersection.object->point);
-
 	}
 	else if (intersection.object->type == SPHERE)
 	{
@@ -64,5 +62,6 @@ t_intersection	finalize_hit_data(t_ray ray, t_intersection intersection)
 		intersection.world_position = add_tuple(intersection.world_position, intersection.object->position);
 
 	}
+
 	return (intersection);
 }

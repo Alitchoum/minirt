@@ -1,0 +1,699 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 28.57      0.02     0.02  1049541     0.00     0.00  get_closest_intersection
+ 14.29      0.03     0.01  1296954     0.00     0.00  magnitude
+ 14.29      0.04     0.01  1000000     0.00     0.00  vector
+ 14.29      0.05     0.01    49833     0.00     0.00  finalize_hit_data
+ 14.29      0.06     0.01        1    10.00    60.00  render_image
+ 14.29      0.07     0.01                             _init
+  0.00      0.07     0.00  6296370     0.00     0.00  dot_tuple
+  0.00      0.07     0.00  2049541     0.00     0.00  get_discriminant
+  0.00      0.07     0.00  2049541     0.00     0.00  intersect
+  0.00      0.07     0.00  2049541     0.00     0.00  intersect_sphere
+  0.00      0.07     0.00  2049541     0.00     0.00  prep_sphere_quadratic
+  0.00      0.07     0.00  1247413     0.00     0.00  normalize_tuple
+  0.00      0.07     0.00  1000000     0.00     0.00  get_pixel_color
+  0.00      0.07     0.00  1000000     0.00     0.00  my_mlx_pixel_put
+  0.00      0.07     0.00  1000000     0.00     0.00  new_ray
+  0.00      0.07     0.00  1000000     0.00     0.00  tuple
+  0.00      0.07     0.00   346787     0.00     0.00  subtract_tuple
+  0.00      0.07     0.00    99374     0.00     0.00  add_tuple
+  0.00      0.07     0.00    98790     0.00     0.00  scale_tuple
+  0.00      0.07     0.00    49833     0.00     0.00  position
+  0.00      0.07     0.00    49541     0.00     0.00  apply_lighting
+  0.00      0.07     0.00    49541     0.00     0.00  distance
+  0.00      0.07     0.00    49541     0.00     0.00  is_in_shadow
+  0.00      0.07     0.00    49541     0.00     0.00  rgb_to_int
+  0.00      0.07     0.00    49249     0.00     0.00  specular_reflect
+  0.00      0.07     0.00      392     0.00     0.00  ft_strlen
+  0.00      0.07     0.00      287     0.00     0.00  ft_strchr
+  0.00      0.07     0.00      144     0.00     0.00  ft_isdigit
+  0.00      0.07     0.00       46     0.00     0.00  ft_strlcpy
+  0.00      0.07     0.00       46     0.00     0.00  ft_substr
+  0.00      0.07     0.00       46     0.00     0.00  real_len
+  0.00      0.07     0.00       33     0.00     0.00  ft_strncmp
+  0.00      0.07     0.00       27     0.00     0.00  count_word_len
+  0.00      0.07     0.00       24     0.00     0.00  ft_bzero
+  0.00      0.07     0.00       23     0.00     0.00  ft_calloc
+  0.00      0.07     0.00       19     0.00     0.00  count_word_len
+  0.00      0.07     0.00       19     0.00     0.00  fractional_part
+  0.00      0.07     0.00       19     0.00     0.00  ft_atof
+  0.00      0.07     0.00       19     0.00     0.00  is_space
+  0.00      0.07     0.00       19     0.00     0.00  is_valid_double
+  0.00      0.07     0.00       14     0.00     0.00  count_line_tab
+  0.00      0.07     0.00       14     0.00     0.00  free_split
+  0.00      0.07     0.00       13     0.00     0.00  ft_atoi
+  0.00      0.07     0.00       13     0.00     0.00  is_space
+  0.00      0.07     0.00       13     0.00     0.00  is_valid_int
+  0.00      0.07     0.00        9     0.00     0.00  count_words
+  0.00      0.07     0.00        9     0.00     0.00  ft_split
+  0.00      0.07     0.00        9     0.00     0.00  print_tab
+  0.00      0.07     0.00        7     0.00     0.00  ft_strcpy
+  0.00      0.07     0.00        6     0.00     0.00  ft_extract_line
+  0.00      0.07     0.00        6     0.00     0.00  get_next_line
+  0.00      0.07     0.00        5     0.00     0.00  count_words
+  0.00      0.07     0.00        5     0.00     0.00  ft_linelen
+  0.00      0.07     0.00        5     0.00     0.00  ft_lstadd_back
+  0.00      0.07     0.00        5     0.00     0.00  ft_lstdelone
+  0.00      0.07     0.00        5     0.00     0.00  ft_lstnew
+  0.00      0.07     0.00        5     0.00     0.00  ft_set_new_start
+  0.00      0.07     0.00        5     0.00     0.00  ft_split_set
+  0.00      0.07     0.00        5     0.00     0.00  ft_strdup
+  0.00      0.07     0.00        5     0.00     0.00  parse_element_line
+  0.00      0.07     0.00        5     0.00     0.00  update_tuple
+  0.00      0.07     0.00        4     0.00     0.00  ft_lstlast
+  0.00      0.07     0.00        4     0.00     0.00  update_color
+  0.00      0.07     0.00        2     0.00     0.00  check_sphere
+  0.00      0.07     0.00        2     0.00     0.00  ft_fill_vault
+  0.00      0.07     0.00        2     0.00     0.00  get_identity_matrix
+  0.00      0.07     0.00        1     0.00     0.00  check_ambient
+  0.00      0.07     0.00        1     0.00     0.00  check_camera
+  0.00      0.07     0.00        1     0.00     0.00  check_extension
+  0.00      0.07     0.00        1     0.00     0.00  check_light
+  0.00      0.07     0.00        1     0.00     0.00  check_type_of_scene
+  0.00      0.07     0.00        1     0.00     0.00  create_scene_list
+  0.00      0.07     0.00        1     0.00     0.00  do_keypress
+  0.00      0.07     0.00        1     0.00     0.00  ft_join_buffers
+  0.00      0.07     0.00        1     0.00     0.00  ft_lstclear
+  0.00      0.07     0.00        1     0.00     0.00  initialise_mlx
+  0.00      0.07     0.00        1     0.00     0.00  parse_scene
+  0.00      0.07     0.00        1     0.00     0.00  radians
+  0.00      0.07     0.00        1     0.00     0.00  shut_down
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 14.29% of 0.07 seconds
+
+index % time    self  children    called     name
+                0.01    0.05       1/1           main [2]
+[1]     85.7    0.01    0.05       1         render_image [1]
+                0.00    0.03 1000000/1000000     get_pixel_color [3]
+                0.01    0.00 1000000/1000000     vector [7]
+                0.00    0.01 1000000/1247413     normalize_tuple [9]
+                0.00    0.00 1000000/1000000     new_ray [20]
+                0.00    0.00 1000000/1000000     my_mlx_pixel_put [19]
+                0.00    0.00       1/1           radians [79]
+-----------------------------------------------
+                                                 <spontaneous>
+[2]     85.7    0.00    0.06                 main [2]
+                0.01    0.05       1/1           render_image [1]
+                0.00    0.00       1/24          ft_bzero [35]
+                0.00    0.00       1/1           parse_scene [78]
+                0.00    0.00       1/1           initialise_mlx [77]
+-----------------------------------------------
+                0.00    0.03 1000000/1000000     render_image [1]
+[3]     46.1    0.00    0.03 1000000         get_pixel_color [3]
+                0.02    0.01 1000000/1049541     get_closest_intersection [4]
+                0.00    0.00   49541/49541       apply_lighting [10]
+-----------------------------------------------
+                0.00    0.00   49541/1049541     is_in_shadow [11]
+                0.02    0.01 1000000/1049541     get_pixel_color [3]
+[4]     43.4    0.02    0.01 1049541         get_closest_intersection [4]
+                0.01    0.00   49833/49833       finalize_hit_data [5]
+                0.00    0.00 2049541/2049541     intersect [16]
+-----------------------------------------------
+                0.01    0.00   49833/49833       get_closest_intersection [4]
+[5]     14.8    0.01    0.00   49833         finalize_hit_data [5]
+                0.00    0.00   49833/1247413     normalize_tuple [9]
+                0.00    0.00   99666/346787      subtract_tuple [22]
+                0.00    0.00   49833/49833       position [25]
+                0.00    0.00   49833/99374       add_tuple [23]
+-----------------------------------------------
+                0.00    0.00   49541/1296954     distance [13]
+                0.01    0.00 1247413/1296954     normalize_tuple [9]
+[6]     14.3    0.01    0.00 1296954         magnitude [6]
+-----------------------------------------------
+                0.01    0.00 1000000/1000000     render_image [1]
+[7]     14.3    0.01    0.00 1000000         vector [7]
+                0.00    0.00 1000000/1000000     tuple [21]
+-----------------------------------------------
+                                                 <spontaneous>
+[8]     14.3    0.01    0.00                 _init [8]
+-----------------------------------------------
+                0.00    0.00   49541/1247413     apply_lighting [10]
+                0.00    0.00   49541/1247413     is_in_shadow [11]
+                0.00    0.00   49833/1247413     finalize_hit_data [5]
+                0.00    0.00   98498/1247413     specular_reflect [12]
+                0.00    0.01 1000000/1247413     render_image [1]
+[9]     13.7    0.00    0.01 1247413         normalize_tuple [9]
+                0.01    0.00 1247413/1296954     magnitude [6]
+-----------------------------------------------
+                0.00    0.00   49541/49541       get_pixel_color [3]
+[10]     4.8    0.00    0.00   49541         apply_lighting [10]
+                0.00    0.00   49541/49541       is_in_shadow [11]
+                0.00    0.00   49249/49249       specular_reflect [12]
+                0.00    0.00   49541/1247413     normalize_tuple [9]
+                0.00    0.00   49541/346787      subtract_tuple [22]
+                0.00    0.00   49541/49541       rgb_to_int [26]
+                0.00    0.00   49249/6296370     dot_tuple [14]
+-----------------------------------------------
+                0.00    0.00   49541/49541       apply_lighting [10]
+[11]     3.1    0.00    0.00   49541         is_in_shadow [11]
+                0.00    0.00   49541/1049541     get_closest_intersection [4]
+                0.00    0.00   49541/49541       distance [13]
+                0.00    0.00   49541/1247413     normalize_tuple [9]
+                0.00    0.00   49541/98790       scale_tuple [24]
+                0.00    0.00   49541/99374       add_tuple [23]
+                0.00    0.00   49541/346787      subtract_tuple [22]
+-----------------------------------------------
+                0.00    0.00   49249/49249       apply_lighting [10]
+[12]     1.1    0.00    0.00   49249         specular_reflect [12]
+                0.00    0.00   98498/1247413     normalize_tuple [9]
+                0.00    0.00   98498/346787      subtract_tuple [22]
+                0.00    0.00   98498/6296370     dot_tuple [14]
+                0.00    0.00   49249/98790       scale_tuple [24]
+-----------------------------------------------
+                0.00    0.00   49541/49541       is_in_shadow [11]
+[13]     0.5    0.00    0.00   49541         distance [13]
+                0.00    0.00   49541/1296954     magnitude [6]
+                0.00    0.00   49541/346787      subtract_tuple [22]
+-----------------------------------------------
+                0.00    0.00   49249/6296370     apply_lighting [10]
+                0.00    0.00   98498/6296370     specular_reflect [12]
+                0.00    0.00 6148623/6296370     prep_sphere_quadratic [18]
+[14]     0.0    0.00    0.00 6296370         dot_tuple [14]
+-----------------------------------------------
+                0.00    0.00 2049541/2049541     prep_sphere_quadratic [18]
+[15]     0.0    0.00    0.00 2049541         get_discriminant [15]
+-----------------------------------------------
+                0.00    0.00 2049541/2049541     get_closest_intersection [4]
+[16]     0.0    0.00    0.00 2049541         intersect [16]
+                0.00    0.00 2049541/2049541     intersect_sphere [17]
+-----------------------------------------------
+                0.00    0.00 2049541/2049541     intersect [16]
+[17]     0.0    0.00    0.00 2049541         intersect_sphere [17]
+                0.00    0.00 2049541/2049541     prep_sphere_quadratic [18]
+-----------------------------------------------
+                0.00    0.00 2049541/2049541     intersect_sphere [17]
+[18]     0.0    0.00    0.00 2049541         prep_sphere_quadratic [18]
+                0.00    0.00 6148623/6296370     dot_tuple [14]
+                0.00    0.00 2049541/2049541     get_discriminant [15]
+-----------------------------------------------
+                0.00    0.00 1000000/1000000     render_image [1]
+[19]     0.0    0.00    0.00 1000000         my_mlx_pixel_put [19]
+-----------------------------------------------
+                0.00    0.00 1000000/1000000     render_image [1]
+[20]     0.0    0.00    0.00 1000000         new_ray [20]
+-----------------------------------------------
+                0.00    0.00 1000000/1000000     vector [7]
+[21]     0.0    0.00    0.00 1000000         tuple [21]
+-----------------------------------------------
+                0.00    0.00   49541/346787      distance [13]
+                0.00    0.00   49541/346787      apply_lighting [10]
+                0.00    0.00   49541/346787      is_in_shadow [11]
+                0.00    0.00   98498/346787      specular_reflect [12]
+                0.00    0.00   99666/346787      finalize_hit_data [5]
+[22]     0.0    0.00    0.00  346787         subtract_tuple [22]
+-----------------------------------------------
+                0.00    0.00   49541/99374       is_in_shadow [11]
+                0.00    0.00   49833/99374       finalize_hit_data [5]
+[23]     0.0    0.00    0.00   99374         add_tuple [23]
+-----------------------------------------------
+                0.00    0.00   49249/98790       specular_reflect [12]
+                0.00    0.00   49541/98790       is_in_shadow [11]
+[24]     0.0    0.00    0.00   98790         scale_tuple [24]
+-----------------------------------------------
+                0.00    0.00   49833/49833       finalize_hit_data [5]
+[25]     0.0    0.00    0.00   49833         position [25]
+-----------------------------------------------
+                0.00    0.00   49541/49541       apply_lighting [10]
+[26]     0.0    0.00    0.00   49541         rgb_to_int [26]
+-----------------------------------------------
+                0.00    0.00       1/392         check_extension [70]
+                0.00    0.00       2/392         ft_join_buffers [75]
+                0.00    0.00       5/392         create_scene_list [73]
+                0.00    0.00       5/392         ft_strdup [60]
+                0.00    0.00      46/392         ft_substr [31]
+                0.00    0.00      46/392         ft_strlcpy [30]
+                0.00    0.00     287/392         ft_strchr [28]
+[27]     0.0    0.00    0.00     392         ft_strlen [27]
+-----------------------------------------------
+                0.00    0.00       3/287         ft_fill_vault [66]
+                0.00    0.00       5/287         create_scene_list [73]
+                0.00    0.00       5/287         ft_set_new_start [58]
+                0.00    0.00       6/287         get_next_line [52]
+                0.00    0.00      33/287         ft_split_set [59]
+                0.00    0.00     101/287         count_word_len [37]
+                0.00    0.00     134/287         count_words [53]
+[28]     0.0    0.00    0.00     287         ft_strchr [28]
+                0.00    0.00     287/392         ft_strlen [27]
+-----------------------------------------------
+                0.00    0.00       4/144         fractional_part [38]
+                0.00    0.00      22/144         is_valid_double [41]
+                0.00    0.00      33/144         is_valid_int [46]
+                0.00    0.00      39/144         ft_atof [39]
+                0.00    0.00      46/144         ft_atoi [44]
+[29]     0.0    0.00    0.00     144         ft_isdigit [29]
+-----------------------------------------------
+                0.00    0.00      46/46          ft_substr [31]
+[30]     0.0    0.00    0.00      46         ft_strlcpy [30]
+                0.00    0.00      46/392         ft_strlen [27]
+-----------------------------------------------
+                0.00    0.00      19/46          ft_split_set [59]
+                0.00    0.00      27/46          ft_split [48]
+[31]     0.0    0.00    0.00      46         ft_substr [31]
+                0.00    0.00      46/392         ft_strlen [27]
+                0.00    0.00      46/46          real_len [32]
+                0.00    0.00      46/46          ft_strlcpy [30]
+-----------------------------------------------
+                0.00    0.00      46/46          ft_substr [31]
+[32]     0.0    0.00    0.00      46         real_len [32]
+-----------------------------------------------
+                0.00    0.00       5/33          create_scene_list [73]
+                0.00    0.00      14/33          check_type_of_scene [72]
+                0.00    0.00      14/33          parse_element_line [61]
+[33]     0.0    0.00    0.00      33         ft_strncmp [33]
+-----------------------------------------------
+                0.00    0.00      27/27          ft_split [48]
+[34]     0.0    0.00    0.00      27         count_word_len [34]
+-----------------------------------------------
+                0.00    0.00       1/24          main [2]
+                0.00    0.00      23/24          ft_calloc [36]
+[35]     0.0    0.00    0.00      24         ft_bzero [35]
+-----------------------------------------------
+                0.00    0.00       1/23          parse_scene [78]
+                0.00    0.00       1/23          get_next_line [52]
+                0.00    0.00       2/23          ft_fill_vault [66]
+                0.00    0.00       5/23          ft_split_set [59]
+                0.00    0.00       5/23          ft_extract_line [51]
+                0.00    0.00       9/23          ft_split [48]
+[36]     0.0    0.00    0.00      23         ft_calloc [36]
+                0.00    0.00      23/24          ft_bzero [35]
+-----------------------------------------------
+                0.00    0.00      19/19          ft_split_set [59]
+[37]     0.0    0.00    0.00      19         count_word_len [37]
+                0.00    0.00     101/287         ft_strchr [28]
+-----------------------------------------------
+                0.00    0.00      19/19          ft_atof [39]
+[38]     0.0    0.00    0.00      19         fractional_part [38]
+                0.00    0.00       4/144         ft_isdigit [29]
+-----------------------------------------------
+                0.00    0.00       1/19          check_ambient [68]
+                0.00    0.00       1/19          check_light [71]
+                0.00    0.00       2/19          check_sphere [65]
+                0.00    0.00      15/19          update_tuple [62]
+[39]     0.0    0.00    0.00      19         ft_atof [39]
+                0.00    0.00      39/144         ft_isdigit [29]
+                0.00    0.00      19/19          is_space [40]
+                0.00    0.00      19/19          fractional_part [38]
+-----------------------------------------------
+                0.00    0.00      19/19          ft_atof [39]
+[40]     0.0    0.00    0.00      19         is_space [40]
+-----------------------------------------------
+                0.00    0.00       1/19          check_ambient [68]
+                0.00    0.00       1/19          check_light [71]
+                0.00    0.00       2/19          check_sphere [65]
+                0.00    0.00      15/19          update_tuple [62]
+[41]     0.0    0.00    0.00      19         is_valid_double [41]
+                0.00    0.00      22/144         ft_isdigit [29]
+-----------------------------------------------
+                0.00    0.00       1/14          check_ambient [68]
+                0.00    0.00       1/14          check_camera [69]
+                0.00    0.00       1/14          check_light [71]
+                0.00    0.00       2/14          check_sphere [65]
+                0.00    0.00       4/14          update_color [64]
+                0.00    0.00       5/14          update_tuple [62]
+[42]     0.0    0.00    0.00      14         count_line_tab [42]
+-----------------------------------------------
+                0.00    0.00       1/14          check_ambient [68]
+                0.00    0.00       1/14          check_camera [69]
+                0.00    0.00       1/14          check_light [71]
+                0.00    0.00       2/14          check_sphere [65]
+                0.00    0.00       4/14          update_color [64]
+                0.00    0.00       5/14          update_tuple [62]
+[43]     0.0    0.00    0.00      14         free_split [43]
+-----------------------------------------------
+                0.00    0.00       1/13          check_camera [69]
+                0.00    0.00      12/13          update_color [64]
+[44]     0.0    0.00    0.00      13         ft_atoi [44]
+                0.00    0.00      46/144         ft_isdigit [29]
+                0.00    0.00      13/13          is_space [45]
+-----------------------------------------------
+                0.00    0.00      13/13          ft_atoi [44]
+[45]     0.0    0.00    0.00      13         is_space [45]
+-----------------------------------------------
+                0.00    0.00       1/13          check_camera [69]
+                0.00    0.00      12/13          update_color [64]
+[46]     0.0    0.00    0.00      13         is_valid_int [46]
+                0.00    0.00      33/144         ft_isdigit [29]
+-----------------------------------------------
+                0.00    0.00       9/9           ft_split [48]
+[47]     0.0    0.00    0.00       9         count_words [47]
+-----------------------------------------------
+                0.00    0.00       4/9           update_color [64]
+                0.00    0.00       5/9           update_tuple [62]
+[48]     0.0    0.00    0.00       9         ft_split [48]
+                0.00    0.00      27/27          count_word_len [34]
+                0.00    0.00      27/46          ft_substr [31]
+                0.00    0.00       9/9           count_words [47]
+                0.00    0.00       9/23          ft_calloc [36]
+-----------------------------------------------
+                0.00    0.00       1/9           check_ambient [68]
+                0.00    0.00       1/9           check_camera [69]
+                0.00    0.00       1/9           check_light [71]
+                0.00    0.00       2/9           check_sphere [65]
+                0.00    0.00       4/9           update_color [64]
+[49]     0.0    0.00    0.00       9         print_tab [49]
+-----------------------------------------------
+                0.00    0.00       2/7           ft_join_buffers [75]
+                0.00    0.00       5/7           ft_set_new_start [58]
+[50]     0.0    0.00    0.00       7         ft_strcpy [50]
+-----------------------------------------------
+                0.00    0.00       6/6           get_next_line [52]
+[51]     0.0    0.00    0.00       6         ft_extract_line [51]
+                0.00    0.00       5/5           ft_linelen [54]
+                0.00    0.00       5/23          ft_calloc [36]
+-----------------------------------------------
+                0.00    0.00       6/6           create_scene_list [73]
+[52]     0.0    0.00    0.00       6         get_next_line [52]
+                0.00    0.00       6/287         ft_strchr [28]
+                0.00    0.00       6/6           ft_extract_line [51]
+                0.00    0.00       5/5           ft_set_new_start [58]
+                0.00    0.00       2/2           ft_fill_vault [66]
+                0.00    0.00       1/23          ft_calloc [36]
+-----------------------------------------------
+                0.00    0.00       5/5           ft_split_set [59]
+[53]     0.0    0.00    0.00       5         count_words [53]
+                0.00    0.00     134/287         ft_strchr [28]
+-----------------------------------------------
+                0.00    0.00       5/5           ft_extract_line [51]
+[54]     0.0    0.00    0.00       5         ft_linelen [54]
+-----------------------------------------------
+                0.00    0.00       5/5           create_scene_list [73]
+[55]     0.0    0.00    0.00       5         ft_lstadd_back [55]
+                0.00    0.00       4/4           ft_lstlast [63]
+-----------------------------------------------
+                0.00    0.00       5/5           ft_lstclear [76]
+[56]     0.0    0.00    0.00       5         ft_lstdelone [56]
+-----------------------------------------------
+                0.00    0.00       5/5           create_scene_list [73]
+[57]     0.0    0.00    0.00       5         ft_lstnew [57]
+-----------------------------------------------
+                0.00    0.00       5/5           get_next_line [52]
+[58]     0.0    0.00    0.00       5         ft_set_new_start [58]
+                0.00    0.00       5/287         ft_strchr [28]
+                0.00    0.00       5/7           ft_strcpy [50]
+-----------------------------------------------
+                0.00    0.00       1/5           check_ambient [68]
+                0.00    0.00       1/5           check_camera [69]
+                0.00    0.00       1/5           check_light [71]
+                0.00    0.00       2/5           check_sphere [65]
+[59]     0.0    0.00    0.00       5         ft_split_set [59]
+                0.00    0.00      33/287         ft_strchr [28]
+                0.00    0.00      19/19          count_word_len [37]
+                0.00    0.00      19/46          ft_substr [31]
+                0.00    0.00       5/5           count_words [53]
+                0.00    0.00       5/23          ft_calloc [36]
+-----------------------------------------------
+                0.00    0.00       5/5           create_scene_list [73]
+[60]     0.0    0.00    0.00       5         ft_strdup [60]
+                0.00    0.00       5/392         ft_strlen [27]
+-----------------------------------------------
+                0.00    0.00       5/5           parse_scene [78]
+[61]     0.0    0.00    0.00       5         parse_element_line [61]
+                0.00    0.00      14/33          ft_strncmp [33]
+                0.00    0.00       2/2           check_sphere [65]
+                0.00    0.00       1/1           check_ambient [68]
+                0.00    0.00       1/1           check_camera [69]
+                0.00    0.00       1/1           check_light [71]
+-----------------------------------------------
+                0.00    0.00       1/5           check_light [71]
+                0.00    0.00       2/5           check_camera [69]
+                0.00    0.00       2/5           check_sphere [65]
+[62]     0.0    0.00    0.00       5         update_tuple [62]
+                0.00    0.00      15/19          is_valid_double [41]
+                0.00    0.00      15/19          ft_atof [39]
+                0.00    0.00       5/9           ft_split [48]
+                0.00    0.00       5/14          count_line_tab [42]
+                0.00    0.00       5/14          free_split [43]
+-----------------------------------------------
+                0.00    0.00       4/4           ft_lstadd_back [55]
+[63]     0.0    0.00    0.00       4         ft_lstlast [63]
+-----------------------------------------------
+                0.00    0.00       1/4           check_ambient [68]
+                0.00    0.00       1/4           check_light [71]
+                0.00    0.00       2/4           check_sphere [65]
+[64]     0.0    0.00    0.00       4         update_color [64]
+                0.00    0.00      12/13          is_valid_int [46]
+                0.00    0.00      12/13          ft_atoi [44]
+                0.00    0.00       4/9           ft_split [48]
+                0.00    0.00       4/14          count_line_tab [42]
+                0.00    0.00       4/9           print_tab [49]
+                0.00    0.00       4/14          free_split [43]
+-----------------------------------------------
+                0.00    0.00       2/2           parse_element_line [61]
+[65]     0.0    0.00    0.00       2         check_sphere [65]
+                0.00    0.00       2/5           ft_split_set [59]
+                0.00    0.00       2/9           print_tab [49]
+                0.00    0.00       2/14          count_line_tab [42]
+                0.00    0.00       2/5           update_tuple [62]
+                0.00    0.00       2/19          is_valid_double [41]
+                0.00    0.00       2/19          ft_atof [39]
+                0.00    0.00       2/4           update_color [64]
+                0.00    0.00       2/14          free_split [43]
+                0.00    0.00       2/2           get_identity_matrix [67]
+-----------------------------------------------
+                0.00    0.00       2/2           get_next_line [52]
+[66]     0.0    0.00    0.00       2         ft_fill_vault [66]
+                0.00    0.00       3/287         ft_strchr [28]
+                0.00    0.00       2/23          ft_calloc [36]
+                0.00    0.00       1/1           ft_join_buffers [75]
+-----------------------------------------------
+                0.00    0.00       2/2           check_sphere [65]
+[67]     0.0    0.00    0.00       2         get_identity_matrix [67]
+-----------------------------------------------
+                0.00    0.00       1/1           parse_element_line [61]
+[68]     0.0    0.00    0.00       1         check_ambient [68]
+                0.00    0.00       1/5           ft_split_set [59]
+                0.00    0.00       1/14          count_line_tab [42]
+                0.00    0.00       1/9           print_tab [49]
+                0.00    0.00       1/19          is_valid_double [41]
+                0.00    0.00       1/19          ft_atof [39]
+                0.00    0.00       1/4           update_color [64]
+                0.00    0.00       1/14          free_split [43]
+-----------------------------------------------
+                0.00    0.00       1/1           parse_element_line [61]
+[69]     0.0    0.00    0.00       1         check_camera [69]
+                0.00    0.00       2/5           update_tuple [62]
+                0.00    0.00       1/5           ft_split_set [59]
+                0.00    0.00       1/9           print_tab [49]
+                0.00    0.00       1/14          count_line_tab [42]
+                0.00    0.00       1/13          is_valid_int [46]
+                0.00    0.00       1/13          ft_atoi [44]
+                0.00    0.00       1/14          free_split [43]
+-----------------------------------------------
+                0.00    0.00       1/1           parse_scene [78]
+[70]     0.0    0.00    0.00       1         check_extension [70]
+                0.00    0.00       1/392         ft_strlen [27]
+-----------------------------------------------
+                0.00    0.00       1/1           parse_element_line [61]
+[71]     0.0    0.00    0.00       1         check_light [71]
+                0.00    0.00       1/5           ft_split_set [59]
+                0.00    0.00       1/9           print_tab [49]
+                0.00    0.00       1/14          count_line_tab [42]
+                0.00    0.00       1/5           update_tuple [62]
+                0.00    0.00       1/19          is_valid_double [41]
+                0.00    0.00       1/19          ft_atof [39]
+                0.00    0.00       1/4           update_color [64]
+                0.00    0.00       1/14          free_split [43]
+-----------------------------------------------
+                0.00    0.00       1/1           parse_scene [78]
+[72]     0.0    0.00    0.00       1         check_type_of_scene [72]
+                0.00    0.00      14/33          ft_strncmp [33]
+-----------------------------------------------
+                0.00    0.00       1/1           parse_scene [78]
+[73]     0.0    0.00    0.00       1         create_scene_list [73]
+                0.00    0.00       6/6           get_next_line [52]
+                0.00    0.00       5/33          ft_strncmp [33]
+                0.00    0.00       5/5           ft_strdup [60]
+                0.00    0.00       5/287         ft_strchr [28]
+                0.00    0.00       5/392         ft_strlen [27]
+                0.00    0.00       5/5           ft_lstnew [57]
+                0.00    0.00       5/5           ft_lstadd_back [55]
+-----------------------------------------------
+                0.00    0.00       1/1           mlx_loop [137]
+[74]     0.0    0.00    0.00       1         do_keypress [74]
+                0.00    0.00       1/1           shut_down [80]
+-----------------------------------------------
+                0.00    0.00       1/1           ft_fill_vault [66]
+[75]     0.0    0.00    0.00       1         ft_join_buffers [75]
+                0.00    0.00       2/392         ft_strlen [27]
+                0.00    0.00       2/7           ft_strcpy [50]
+-----------------------------------------------
+                0.00    0.00       1/1           parse_scene [78]
+[76]     0.0    0.00    0.00       1         ft_lstclear [76]
+                0.00    0.00       5/5           ft_lstdelone [56]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[77]     0.0    0.00    0.00       1         initialise_mlx [77]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[78]     0.0    0.00    0.00       1         parse_scene [78]
+                0.00    0.00       5/5           parse_element_line [61]
+                0.00    0.00       1/1           check_extension [70]
+                0.00    0.00       1/1           create_scene_list [73]
+                0.00    0.00       1/1           check_type_of_scene [72]
+                0.00    0.00       1/23          ft_calloc [36]
+                0.00    0.00       1/1           ft_lstclear [76]
+-----------------------------------------------
+                0.00    0.00       1/1           render_image [1]
+[79]     0.0    0.00    0.00       1         radians [79]
+-----------------------------------------------
+                0.00    0.00       1/1           do_keypress [74]
+[80]     0.0    0.00    0.00       1         shut_down [80]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [8] _init                  [29] ft_isdigit             [45] is_space (ft_atoi.c)
+  [23] add_tuple              [75] ft_join_buffers        [40] is_space (ft_atof.c)
+  [10] apply_lighting         [54] ft_linelen (get_next_line.c) [41] is_valid_double
+  [68] check_ambient (parsing_types.c) [55] ft_lstadd_back [46] is_valid_int
+  [69] check_camera (parsing_types.c) [76] ft_lstclear     [6] magnitude
+  [70] check_extension (parsing_file.c) [56] ft_lstdelone [19] my_mlx_pixel_put
+  [71] check_light (parsing_types.c) [63] ft_lstlast      [20] new_ray
+  [65] check_sphere (parsing_types.c) [57] ft_lstnew       [9] normalize_tuple
+  [72] check_type_of_scene    [58] ft_set_new_start (get_next_line.c) [61] parse_element_line
+  [42] count_line_tab (parsing_types.c) [48] ft_split     [78] parse_scene
+  [34] count_word_len (ft_split.c) [59] ft_split_set      [25] position
+  [37] count_word_len (ft_split_set.c) [28] ft_strchr     [18] prep_sphere_quadratic
+  [47] count_words (ft_split.c) [50] ft_strcpy            [49] print_tab (parsing_types.c)
+  [53] count_words (ft_split_set.c) [60] ft_strdup        [79] radians
+  [73] create_scene_list      [30] ft_strlcpy             [32] real_len (ft_substr.c)
+  [13] distance               [27] ft_strlen               [1] render_image
+  [74] do_keypress            [33] ft_strncmp             [26] rgb_to_int
+  [14] dot_tuple              [31] ft_substr              [24] scale_tuple
+   [5] finalize_hit_data       [4] get_closest_intersection [80] shut_down
+  [38] fractional_part        [15] get_discriminant       [12] specular_reflect
+  [43] free_split             [67] get_identity_matrix    [22] subtract_tuple
+  [39] ft_atof                [52] get_next_line          [21] tuple
+  [44] ft_atoi                 [3] get_pixel_color        [64] update_color (parsing_types.c)
+  [35] ft_bzero               [77] initialise_mlx         [62] update_tuple (parsing_types.c)
+  [36] ft_calloc              [16] intersect               [7] vector
+  [51] ft_extract_line (get_next_line.c) [17] intersect_sphere
+  [66] ft_fill_vault (get_next_line.c) [11] is_in_shadow

@@ -12,8 +12,8 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 
-# define W_WIDTH 1000
-# define W_HEIGHT 1000
+# define W_WIDTH 800
+# define W_HEIGHT 800
 
 #define  WHITESPACE " \t" //a completer00
 

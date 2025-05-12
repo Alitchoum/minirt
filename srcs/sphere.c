@@ -7,7 +7,7 @@ t_intersection	intersect_sphere(t_object *shape, t_ray ray)
 	t_quadratic	q;
 	t_intersection	xs;
 
-	//set_transform(shape, translation(2, 0, 0));
+	//set_transform(shape, translation(0, 0, 0));
 	//ray2 = transform(ray, inverse(&shape->transform_matrix));
 	prep_sphere_quadratic(&q, ray, shape);
 	if (q.discriminant < 0)
