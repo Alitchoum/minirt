@@ -122,6 +122,8 @@ typedef struct s_quadratic
 	double	b;
 	double	c;
 	double	discriminant;
+	double	root_discriminant;
+	double	two_a;
 	double	t[2];
 }	t_quadratic;
 
@@ -149,12 +151,8 @@ typedef struct s_object
 	t_tuple	orientation;
 	t_tuple	normal;
 	double	radius;
-	double	diametre;
+	double	radius_squared;
 	double	height;
-	t_matrix	transform_matrix;
-	t_matrix	rotation_matrix;
-	t_matrix	translation_matrix;
-	double	determinant;
 	t_color	color;
 }	t_object;
 
@@ -218,7 +216,7 @@ void	prep_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
 void	prep_sphere_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
 t_intersection	intersect_sphere(t_object *shape, t_ray ray);
 t_intersection	intersection_plane(t_ray ray, t_object *plane);
-t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects, t_object *current);
+t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects);
 void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color);
 int	is_in_shadow(t_scene *scene, t_tuple hit_position, t_tuple light_position, t_object *object, t_tuple hit_normal);
 double	specular_reflect(t_tuple hit_point, t_tuple normal, t_tuple light_dir, t_scene *scene);

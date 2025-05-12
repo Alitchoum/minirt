@@ -110,7 +110,7 @@ t_ray	transform(t_ray ray, t_matrix matrix)
 	return (new_ray);
 }
 
-void	set_transform(t_object *shape, t_matrix matrix)
+/*void	set_transform(t_object *shape, t_matrix matrix)
 {
 	shape->transform_matrix = matrix;
-}
+}*/

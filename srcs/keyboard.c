@@ -27,9 +27,9 @@ void	camera_control(int keysym, t_scene *scene)
 	else if (keysym == 101) // e -> orientation droite (Y)
 		scene->camera.orientation = rotate_tuple(scene->camera.orientation, Y, -0.1);
 	else if (keysym == 116) // t -> orientation haut (X)
-		scene->camera.orientation = rotate_tuple(scene->camera.orientation, X, 0.1);
-	else if (keysym == 103) // g -> orientation bas (X)
 		scene->camera.orientation = rotate_tuple(scene->camera.orientation, X, -0.1);
+	else if (keysym == 103) // g -> orientation bas (X)
+		scene->camera.orientation = rotate_tuple(scene->camera.orientation, X, 0.1);
 }
 
 int	do_keypress(int keysym, t_scene *scene)

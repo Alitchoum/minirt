@@ -174,12 +174,14 @@ static int	check_sphere(char *line, t_object *sphere, int *object_index)
 		return (free_split(elements), 0);
 	if (!is_valid_double(elements[2]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	sphere->diametre = ft_atof(elements[2]);
+	// Changed for radius instead of diameter
+	sphere->radius = ft_atof(elements[2]) / 2;
 	if (!update_color(&sphere->color, elements[3]))
 		return (free_split(elements), 0);
 	free_split(elements);
+	// pre_computing the radius squared at beginning (if changed need to update radius squared in render)
+	sphere->radius_squared = sphere->radius * sphere->radius;
 	sphere->type = SPHERE;
-	sphere->transform_matrix = get_identity_matrix();
 	*object_index += 1;
 	return (1);
 }
@@ -226,12 +228,13 @@ static int	check_cylinder(char *line, t_object *cylinder, int *object_index)
 		return (free_split(elements), ft_putstr_fd("Error: Cylinder ratio isn't in a valid range.\n", 2), 0);
 	if (!is_valid_double(elements[3]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	cylinder->diametre = ft_atof(elements[3]);
+	cylinder->radius = ft_atof(elements[3]) / 2;
 	if (!is_valid_double(elements[4]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
 	cylinder->height = ft_atof(elements[4]);
 	if (!update_color(&cylinder->color, elements[5]))
 		return (free_split(elements), 0);
+	cylinder->radius_squared = cylinder->radius * cylinder->radius;
 	cylinder->type = CYLINDER;
 	*object_index += 1;
 	return (1);

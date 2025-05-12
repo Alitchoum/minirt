@@ -10,27 +10,20 @@ t_intersection	intersect(t_object *shape, t_ray ray)
 		return (intersect_cylinder(shape, ray));
 	else
 		return (intersection_plane(ray, shape));
-	return (intersect_cylinder(shape, ray));
 }
 
-
-t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects, t_object *shadow)
+t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects)
 {
 	t_intersection	current_intersection;
 	t_intersection	closest_intersection;
-	t_object	*closest_shape = NULL;
+	t_object	*closest_shape;
+	int	i;
 	
-	int	i = 0;
-
+	closest_shape = NULL;
 	closest_intersection.hit_distance = INT_MAX;
-
+	i = 0;
 	while(i < scene->obj_count)
 	{
-		if (shadow == &objects[i])
-		{
-			i++;
-			continue;
-		}
 		current_intersection = intersect(&objects[i], ray);
 		if ((current_intersection.hit_distance < closest_intersection.hit_distance) && (current_intersection.hit_distance >= 0))
 		{
@@ -52,10 +45,7 @@ t_intersection	finalize_hit_data(t_ray ray, t_intersection intersection)
 {
 	intersection.world_position = position(ray, intersection.hit_distance);
 	if (intersection.object->type == PLANE)
-	{
 		intersection.world_normal = intersection.object->normal;
-		//ray.origin = subtract_tuple(ray.origin, intersection.object->position);
-	}
 	else if (intersection.object->type == SPHERE)
 	{
 		ray.origin = subtract_tuple(ray.origin, intersection.object->position);

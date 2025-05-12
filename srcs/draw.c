@@ -45,8 +45,8 @@ int	render_image(t_scene *scene)
 		while (col < W_WIDTH)
 		{
             // NORMALIZE THE PIXEL BETWEEN -1 AND 1
-			normalised_col = ((double)col / (double)W_WIDTH * 2 - 1);
-			normalised_row = ((double)row / (double)W_HEIGHT * 2 - 1);
+			normalised_col = -((double)col / (double)W_WIDTH * 2 - 1);
+			normalised_row = -((double)row / (double)W_HEIGHT * 2 - 1);
 
             // Calculate the direction of the ray based on the pixel
 			t_tuple offset_right = scale_tuple(horizontal, normalised_col * aspect_ratio * fov_scale);
@@ -67,19 +67,17 @@ int	render_image(t_scene *scene)
 	printf("Finished render\n");
 	return (0);
 }
-// need to understand how to manage shadows...
+
 int	get_pixel_color(t_scene *scene, t_ray ray, t_object *objects)
 {
 	int	final_color;
 	t_intersection	closest_intersection;
 
 	final_color = 0;
-	closest_intersection = get_closest_intersection(scene, ray, objects, NULL);
+	closest_intersection = get_closest_intersection(scene, ray, objects);
 	if (closest_intersection.hit_distance < 0)
-		return (0); // but could also just be a shadow??...
+		return (0);
 	apply_lighting(scene, &closest_intersection, &final_color);
-	//apply_shadow(scene, &closest_intersection, ray, &final_color);
-	
 	return (final_color);
 }
 

@@ -4,7 +4,6 @@ t_intersection	intersect_cap(t_object *cylinder, t_ray ray, double hit_z)
 {
 	t_intersection	xs;
 	double	t;
-	double	radius = cylinder->diametre / 2.0;
 
 	xs.hit_distance = -1;
 
@@ -19,7 +18,7 @@ t_intersection	intersect_cap(t_object *cylinder, t_ray ray, double hit_z)
 	if (t >= 0)
 	{
 		xs.point = position(ray, t);
-		if (pow(xs.point.x, 2) + pow(xs.point.y, 2) <= pow(radius, 2))
+		if (pow(xs.point.x, 2) + pow(xs.point.y, 2) <= pow(cylinder->radius, 2))
 			xs.hit_distance = t;
 	}
 	return (xs);
@@ -68,8 +67,10 @@ t_intersection	intersect_cylinder(t_object *cylinder, t_ray ray)
 	prep_cylinder_quadratic(&q, ray, cylinder);
 	if (q.discriminant < 0)
 		return (xs);
-	q.t[0] = (-q.b - sqrt(q.discriminant)) / (2.0 * q.a);
-	q.t[1] = (-q.b + sqrt(q.discriminant)) / (2.0 * q.a);
+	q.root_discriminant = sqrt(q.discriminant);
+	q.two_a = 2 * q.a;
+	q.t[0] = (-q.b - q.root_discriminant) / q.two_a;
+	q.t[1] = (-q.b + q.root_discriminant) / (q.two_a);
 
 	// check if the point is within the height of the cylinder
 	if (q.t[0] >= 0)
@@ -131,6 +132,6 @@ void	prep_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder)
 
 	q->a = ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y;
 	q->b = 2.0f * ((ray.origin.x * ray.direction.x) + (ray.origin.y * ray.direction.y));
-	q->c = (ray.origin.x * ray.origin.x) + (ray.origin.y * ray.origin.y) - pow((cylinder->diametre * 0.5), 2);
+	q->c = (ray.origin.x * ray.origin.x) + (ray.origin.y * ray.origin.y) - cylinder->radius_squared;
 	q->discriminant = get_discriminant(q->a, q->b, q->c);
 }
