@@ -144,6 +144,13 @@ typedef struct s_ray
 	t_tuple	direction;
 }	t_ray;
 
+typedef struct s_local
+{
+	t_tuple	up;
+	t_tuple	right;
+	t_tuple	forward;
+}	t_local;
+
 typedef struct s_object
 {
 	int	type;
@@ -153,7 +160,9 @@ typedef struct s_object
 	double	radius;
 	double	radius_squared;
 	double	height;
+	double	half_height;
 	t_color	color;
+	t_local basis;
 }	t_object;
 
 
@@ -186,7 +195,10 @@ typedef struct s_intersection
 	t_object 	*object;
 	t_tuple		world_normal;
 	t_tuple		world_position;
+	t_tuple		local_position;
+	t_tuple		local_normal;
 }	t_intersection;
+
 
 int		parse_scene(char *file, t_scene *scene);
 
@@ -205,6 +217,7 @@ int	rgb_to_int(t_color colour, double light_scalar);
 
 //---PARSING TYPE---//
 int		parse_element_line(char *line, t_scene *scene, int *sphere_count);
+void	prepare_initial_computations(t_object *shapes, int obj_count);
 
 //--INIT MLX--//
 void	initialise_mlx(t_scene *scene);
@@ -212,7 +225,7 @@ void	initialise_mlx(t_scene *scene);
 //--INTERSECTIONS--//
 t_intersection	intersect(t_object *shape, t_ray ray);
 t_intersection	intersect_cylinder(t_object *cylinder, t_ray ray);
-void	prep_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
+int	solve_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
 void	prep_sphere_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
 t_intersection	intersect_sphere(t_object *shape, t_ray ray);
 t_intersection	intersection_plane(t_ray ray, t_object *plane);
@@ -220,7 +233,6 @@ t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *obj
 void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color);
 int	is_in_shadow(t_scene *scene, t_tuple hit_position, t_tuple light_position, t_object *object, t_tuple hit_normal);
 double	specular_reflect(t_tuple hit_point, t_tuple normal, t_tuple light_dir, t_scene *scene);
-void	prep_quadratic(t_quadratic *quadratic, t_ray ray, t_object *object);
 
 //--MATHS_UTILS--//
 int	is_equal(double a, double b);
@@ -231,6 +243,7 @@ t_vector vec3_normalize(t_vector a);
 t_vector	vec3_scale(t_vector a, double scale);
 double	radians(double degrees);
 float	get_discriminant(double a, double b, double c);
+t_tuple	transform_normal(t_tuple local_normal, t_local basis);
 
 //-- TUPLE --//
 //
@@ -280,4 +293,5 @@ t_matrix	rotation_z(double radians);
 t_ray	new_ray(t_tuple origin, t_tuple direction);
 t_tuple	position(t_ray ray, double distance);
 int	matrix_are_equal(t_matrix a, t_matrix b);
+t_ray	rotate_ray_to_local_space(t_ray ray, t_object *shape);
 #endif

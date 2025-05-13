@@ -180,7 +180,6 @@ static int	check_sphere(char *line, t_object *sphere, int *object_index)
 		return (free_split(elements), 0);
 	free_split(elements);
 	// pre_computing the radius squared at beginning (if changed need to update radius squared in render)
-	sphere->radius_squared = sphere->radius * sphere->radius;
 	sphere->type = SPHERE;
 	*object_index += 1;
 	return (1);
@@ -234,7 +233,6 @@ static int	check_cylinder(char *line, t_object *cylinder, int *object_index)
 	cylinder->height = ft_atof(elements[4]);
 	if (!update_color(&cylinder->color, elements[5]))
 		return (free_split(elements), 0);
-	cylinder->radius_squared = cylinder->radius * cylinder->radius;
 	cylinder->type = CYLINDER;
 	*object_index += 1;
 	return (1);

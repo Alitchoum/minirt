@@ -41,6 +41,7 @@ t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *obj
 	return (finalize_hit_data(ray, closest_intersection));
 }
 
+// translates the hit (intersection) data back to world space
 t_intersection	finalize_hit_data(t_ray ray, t_intersection intersection)
 {
 	intersection.world_position = position(ray, intersection.hit_distance);

@@ -45,9 +45,9 @@ int	render_image(t_scene *scene)
 		while (col < W_WIDTH)
 		{
             // NORMALIZE THE PIXEL BETWEEN -1 AND 1
+	    //
 			normalised_col = -((double)col / (double)W_WIDTH * 2 - 1);
 			normalised_row = -((double)row / (double)W_HEIGHT * 2 - 1);
-
             // Calculate the direction of the ray based on the pixel
 			t_tuple offset_right = scale_tuple(horizontal, normalised_col * aspect_ratio * fov_scale);
 			t_tuple offset_up = scale_tuple(vertical, normalised_row * fov_scale);

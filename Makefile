@@ -31,6 +31,7 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)shadow.c \
 		$(SRCS_DIR)intersections.c \
 		$(SRCS_DIR)keyboard.c \
+		$(SRCS_DIR)prepare_initial_computations.c \
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
 
