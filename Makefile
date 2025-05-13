@@ -14,6 +14,7 @@ MLX = -L$(MLX_DIR) -lmlx -lX11 -lXext -lm
 SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)parsing_file.c \
 		$(SRCS_DIR)parsing_types.c \
+		$(SRCS_DIR)check_objs.c \
 		$(SRCS_DIR)utils.c \
 		$(SRCS_DIR)init_mlx.c \
 		$(SRCS_DIR)draw.c \
@@ -22,8 +23,9 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)maths_utils.c \
 		$(SRCS_DIR)colour_maths.c \
 		$(SRCS_DIR)tuple_utils.c \
+		$(SRCS_DIR)tuple_utils2.c \
+		$(SRCS_DIR)tuple_utils3.c \
 		$(SRCS_DIR)ray.c \
-		$(SRCS_DIR)matrix.c \
 		$(SRCS_DIR)matrix_transformations.c \
 		$(SRCS_DIR)cylinder.c \
 		$(SRCS_DIR)plane.c \
@@ -31,6 +33,7 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)shadow.c \
 		$(SRCS_DIR)intersections.c \
 		$(SRCS_DIR)keyboard.c \
+		$(SRCS_DIR)actions.c \
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
 

@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 12:31:14 by caburges          #+#    #+#             */
-/*   Updated: 2025/05/12 17:47:20 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:10:48 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	get_pixel_color(t_scene *scene, t_ray ray, t_object *objects);
 void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour);
+double	radians(double degrees);
 
 int	render_image(t_scene *scene)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alize <alize@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 14:46:17 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/20 16:56:42 by alize            ###   ########.fr       */
+/*   Updated: 2025/05/13 17:43:47 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	free_split(char **s)
 	int	i;
 
 	i = 0;
-	
 	while (s[i])
 	{
 		free(s[i]);
@@ -26,16 +25,15 @@ void	free_split(char **s)
 	free(s);
 }
 
-void	print_list(t_list *lines)
+//Fonction for count nb of lines of array of strings
+int	count_line_tab(char **s)
 {
-	t_list	*current;
+	int	count;
 
-	current = lines;
-	while (current)
-	{
-		printf("[%s]\n", (char *)current->content);
-		current = current->next;
-	}	
+	count = 0;
+	while (s[count] != NULL)
+		count++;
+	return (count);
 }
 
 int	is_valid_int(char *s)
@@ -84,9 +82,9 @@ int	is_valid_double(char *s)
 
 int	is_valid_orientation_range(t_tuple orientation)
 {
-	if ((orientation.x < -1 || orientation.x > 1) ||
-		(orientation.y < -1 || orientation.y > 1) ||
-		(orientation.z < -1 || orientation.z > 1))
+	if ((orientation.x < -1 || orientation.x > 1)
+		|| (orientation.y < -1 || orientation.y > 1)
+		|| (orientation.z < -1 || orientation.z > 1))
 		return (0);
 	return (1);
 }

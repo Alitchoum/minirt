@@ -6,37 +6,15 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:37:58 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/05/12 18:26:49 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:58:34 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 //Verifier si float plusieurs "." -> OK
-//Pour overflow ajouter verif direct dans atoi et atof putot que pour chaque données??
-
-//Fonction for count nb of lines of array of strings
-static int	count_line_tab(char **s)
-{
-	int	count;
-
-	count = 0;
-	while (s[count] != NULL)
-		count++;
-	return (count);
-}
-
-static void	print_tab(char **s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		printf("[%s]\n", s[i]);
-		i++;
-	}	
-}
+//Pour overflow ajouter verif direct dans atoi 
+//et atof putot que pour chaque données??
 
 //create & return a struct with code color RGB
 //CHECKS: int overflow; isdigit; split with isspace
@@ -49,7 +27,6 @@ static int	update_color(t_color *color, char *line)
 		return (ft_putstr_fd("Error: Split color failed.\n", 2), 0);
 	if (count_line_tab(rgb) != 3)
 		return (free_split(rgb), ft_putstr_fd("Error Nb of elements isn't valid.\n", 2), 0);
-	print_tab(rgb);
 	if (!is_valid_int(rgb[0]) || !is_valid_int(rgb[1]) || !is_valid_int(rgb[2]))
 		return (free_split(rgb), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
 	color->r = ft_atoi(rgb[0]);
@@ -91,11 +68,9 @@ static int	check_ambient(char *line, t_scene *scene)
 	
 	elements = ft_split_set(line, " \t\r\v\f");
 	if (!elements)
-			return (ft_putstr_fd("Error: Split ambient failed.\n", 2), 0);
+		return (ft_putstr_fd("Error: Split ambient failed.\n", 2), 0);
 	if (count_line_tab(elements) != 3)
-		return (free_split(elements), ft_putstr_fd("Error Nb of elements of ambient isn't valid.\n", 2), 0);
-	printf("split ambiant elements:\n");
-	print_tab(elements);
+			return (free_split(elements), ft_putstr_fd("Error Nb of elements of ambient isn't valid.\n", 2), 0);
 	if (!is_valid_double(elements[1]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
 	scene->ambient.ratio = ft_atof(elements[1]);
@@ -115,8 +90,6 @@ static int	check_camera(char *line, t_scene *scene)
 	elements = ft_split_set(line, WHITESPACE);// corriger split_set
 	if (!elements)
 		return (ft_putstr_fd("Error: Split camera failed.\n", 2), 0);
-	printf("split camera elements:\n");
-	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of camera isn't valid.\n", 2), 0);
 	if (!update_tuple(&scene->camera.position, elements[1], 1))
@@ -142,8 +115,6 @@ static int	check_light(char *line, t_scene *scene)
 	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 		return (ft_putstr_fd("Error: Split light failed.\n", 2), 0);
-	printf("split light elements:\n");
-	print_tab(elements);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of light isn't valid.\n", 2), 0);
 	if (!update_tuple(&scene->light.position, elements[1], 1))
@@ -156,84 +127,6 @@ static int	check_light(char *line, t_scene *scene)
 	if (!update_color(&scene->light.color, elements[3]))
 		return (free_split(elements), 0);
 	free_split(elements);
-	return (1);
-}
-
-static int	check_sphere(char *line, t_object *sphere, int *object_index)
-{
-	char	**elements = NULL;
-
-	elements = ft_split_set(line, WHITESPACE);
-	if (!elements)
-		return (ft_putstr_fd("Error: Split sphere failed.\n", 2), 0);
-	printf("split sphere elements:\n");
-	print_tab(elements);
-	if (count_line_tab(elements) != 4)
-		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of sphere isn't valid.\n", 2), 0);
-	if (!update_tuple(&sphere->position, elements[1], 1))
-		return (free_split(elements), 0);
-	if (!is_valid_double(elements[2]))
-		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	sphere->diametre = ft_atof(elements[2]);
-	if (!update_color(&sphere->color, elements[3]))
-		return (free_split(elements), 0);
-	free_split(elements);
-	sphere->type = SPHERE;
-	sphere->transform_matrix = get_identity_matrix();
-	*object_index += 1;
-	return (1);
-}
-static int	check_plane(char *line, t_object *plane, int *object_index)
-{
-	char	**elements = NULL;
-
-	elements = ft_split_set(line, WHITESPACE);
-	if (!elements)
-		return (ft_putstr_fd("Error: Split plane failed.\n", 2), 0);
-	printf("split plane elements:\n");
-	print_tab(elements);
-	if (count_line_tab(elements) != 4)
-		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of plane isn't valid.\n", 2), 0);
-	if (!update_tuple(&plane->position, elements[1], 1))
-		return (free_split(elements), 0);
-	if (!update_tuple(&plane->normal, elements[2], 1))
-		return (free_split(elements), 0);
-	if (!is_valid_orientation_range(plane->normal))
-		return (free_split(elements), ft_putstr_fd("Error: Plane ratio isn't in a valid range.\n", 2), 0);
-	if (!update_color(&plane->color, elements[3]))
-		return (free_split(elements), 0);
-	plane->type = PLANE;
-	*object_index += 1;
-	return (1);
-}
-
-static int	check_cylinder(char *line, t_object *cylinder, int *object_index)
-{
-	char	**elements = NULL;
-	
-	elements = ft_split_set(line, WHITESPACE);
-	if (!elements)
-		return (ft_putstr_fd("Error: Split cylinder failed.\n", 2), 0);
-	printf("split cylinder elements:\n");
-	print_tab(elements);
-	if (count_line_tab(elements) != 6)
-		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of cylinder isn't valid.\n", 2), 0);
-	if (!update_tuple(&cylinder->position, elements[1], 1))
-		return (free_split(elements), 0);
-	if (!update_tuple(&cylinder->orientation, elements[2], 1))
-		return (free_split(elements), 0);
-	if (!is_valid_orientation_range(cylinder->orientation))
-		return (free_split(elements), ft_putstr_fd("Error: Cylinder ratio isn't in a valid range.\n", 2), 0);
-	if (!is_valid_double(elements[3]))
-		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	cylinder->diametre = ft_atof(elements[3]);
-	if (!is_valid_double(elements[4]))
-		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	cylinder->height = ft_atof(elements[4]);
-	if (!update_color(&cylinder->color, elements[5]))
-		return (free_split(elements), 0);
-	cylinder->type = CYLINDER;
-	*object_index += 1;
 	return (1);
 }
 
@@ -272,3 +165,4 @@ int	parse_element_line(char *line, t_scene *scene, int *element_index)
 	}
 	return (1);
 }
+

@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sphere.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/13 17:26:57 by alsuchon          #+#    #+#             */
+/*   Updated: 2025/05/13 17:34:38 by alsuchon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minirt.h"
 
 t_intersection	intersect_sphere(t_object *shape, t_ray ray)
 {
 	//t_ray	ray2;
-	t_quadratic	q;
+	t_quadratic		q;
 	t_intersection	xs;
 
 	//set_transform(shape, translation(2, 0, 0));
@@ -16,7 +27,8 @@ t_intersection	intersect_sphere(t_object *shape, t_ray ray)
 		return (xs);
 	}
 	q.t[0] = (-q.b - sqrt(q.discriminant)) / (2.0 * q.a);
-	q.t[1] = (-q.b + sqrt(q.discriminant)) / (2.0 * q.a);
+	q.t[1] = (-q.b + sqrt(q.discriminant)) /
+		(2.0 * q.a);
 	if (q.t[0] >= 0)
 		xs.hit_distance = q.t[0];
 	else
@@ -45,6 +57,3 @@ void	prep_quadratic(t_quadratic *quadratic, t_ray ray, t_object *object)
 	//	prep_plane_quadratic(quadratic, ray, object);
 	return ;
 }
-
-
-

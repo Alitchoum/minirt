@@ -1,5 +1,5 @@
-#include "minirt.h"
 
+#include "minirt.h"
 
 // transforming rgb to final int colour (taking into account light scalar)
 // converts back from decimal between 0 - 1 to an integer ready for my_pixel_put
