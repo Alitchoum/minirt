@@ -120,5 +120,6 @@ int	parse_scene(char *file, t_scene *scene)
 		current = current->next;
 	}
 	ft_lstclear(&scene->lines, free);
+	prepare_initial_computations(scene->objects, scene->obj_count);
 	return (1);
 }

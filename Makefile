@@ -26,13 +26,13 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)tuple_utils2.c \
 		$(SRCS_DIR)tuple_utils3.c \
 		$(SRCS_DIR)ray.c \
-		$(SRCS_DIR)matrix_transformations.c \
 		$(SRCS_DIR)cylinder.c \
 		$(SRCS_DIR)plane.c \
 		$(SRCS_DIR)light.c \
 		$(SRCS_DIR)shadow.c \
 		$(SRCS_DIR)intersections.c \
 		$(SRCS_DIR)keyboard.c \
+		$(SRCS_DIR)prepare_initial_computations.c \
 		$(SRCS_DIR)actions.c \
 
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)

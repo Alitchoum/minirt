@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:29:25 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/04/16 17:31:46 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:50:18 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,22 @@ static int	is_space(int c)
 
 double	fractional_part(char *s, int *i)
 {
-	double	result;
-	double	facteur_dec;
+    double    result;
+    double    facteur_dec;
 
-	result = 0.0;
-	facteur_dec = 0.1;
-	if (s[*i] == '.')
-	{
-		(*i)++;
-		while (ft_isdigit(s[*i]))
-		{
-			result = result * 10 + (s[*i] - '0') * facteur_dec;
-			facteur_dec = facteur_dec / 10;
-			(*i)++;
-		}
-	}
-	return (result);
+    result = 0.0;
+    facteur_dec = 1.0;
+    if (s[*i] == '.')
+    {
+        (*i)++;
+        while (ft_isdigit(s[*i]))
+        {
+            result = result * 10 + (s[*i] - '0');
+            facteur_dec *= 10;
+            (*i)++;
+        }
+    }
+    return (result / facteur_dec);
 }
 
 double	ft_atof(char *s)

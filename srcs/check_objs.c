@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:53:43 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/05/13 18:00:02 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:30:03 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static int	update_tuple(t_tuple *tuple, char *line, double w)
 	free_split(coords);
 	return (1);
 }
+
 int	check_sphere(char *line, t_object *sphere, int *object_index)
 {
 	char	**elements = NULL;
@@ -67,7 +68,8 @@ int	check_sphere(char *line, t_object *sphere, int *object_index)
 		return (free_split(elements), 0);
 	if (!is_valid_double(elements[2]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	sphere->diametre = ft_atof(elements[2]);
+	// Changed for radius instead of diameter
+	sphere->radius = ft_atof(elements[2]) / 2;
 	if (!update_color(&sphere->color, elements[3]))
 		return (free_split(elements), 0);
 	free_split(elements);
@@ -109,13 +111,13 @@ int	check_cylinder(char *line, t_object *cylinder, int *object_index)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of cylinder isn't valid.\n", 2), 0);
 	if (!update_tuple(&cylinder->position, elements[1], 1))
 		return (free_split(elements), 0);
-	if (!update_tuple(&cylinder->orientation, elements[2], 1))
+	if (!update_tuple(&cylinder->orientation, elements[2], 0))
 		return (free_split(elements), 0);
 	if (!is_valid_orientation_range(cylinder->orientation))
 		return (free_split(elements), ft_putstr_fd("Error: Cylinder ratio isn't in a valid range.\n", 2), 0);
 	if (!is_valid_double(elements[3]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	cylinder->diametre = ft_atof(elements[3]);
+	cylinder->radius = ft_atof(elements[3]) / 2;
 	if (!is_valid_double(elements[4]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
 	cylinder->height = ft_atof(elements[4]);
