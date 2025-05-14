@@ -24,15 +24,17 @@ int	render_image(t_scene *scene)
 	double	normalised_col;
 	t_tuple	world_up = vector(0, 1, 0); // Default up direction
 	double	fov_scale = tan(radians((scene->camera.fov * 0.5)));
-	t_tuple	horizontal, vertical;
+	t_tuple	horizontal, vertical, forward;
+
+	forward = scene->camera.orientation;
 
 	// Change the up vector if the camera orientation is along x or z axis
 	if (fabs(scene->camera.orientation.x) < 1e-6 && fabs(scene->camera.orientation.z) < 1e-6)
 		world_up = vector(0, 0, 1); // Change to use z-up
 
 	// Calculate horizontal and vertical vectors on the fly based on the camera orientation
-	horizontal = normalize_tuple(cross_tuple(scene->camera.orientation, world_up));
-	vertical = normalize_tuple(cross_tuple(horizontal, scene->camera.orientation));
+	horizontal = normalize_tuple(cross_tuple(forward, world_up));
+	vertical = normalize_tuple(cross_tuple(horizontal, forward));
 
 	int	col = 0;
 	int	row = 0;
@@ -46,11 +48,13 @@ int	render_image(t_scene *scene)
 		{
             // NORMALIZE THE PIXEL BETWEEN -1 AND 1
 	    //
-			normalised_col = -((double)col / (double)W_WIDTH * 2 - 1);
-			normalised_row = -((double)row / (double)W_HEIGHT * 2 - 1);
+			normalised_col = -((double)col / (double)W_WIDTH * 2 - 1) * aspect_ratio * fov_scale;
+			normalised_row = -((double)row / (double)W_HEIGHT * 2 - 1) * fov_scale;
+			//normalised_col = ((2.0 * (col + 0.5) / (double)W_WIDTH - 1.0)) * aspect_ratio * fov_scale;
+			//normalised_row = ((1.0 - 2.0 * (row + 0.5) / (double)W_HEIGHT)) * fov_scale;
             // Calculate the direction of the ray based on the pixel
-			t_tuple offset_right = scale_tuple(horizontal, normalised_col * aspect_ratio * fov_scale);
-			t_tuple offset_up = scale_tuple(vertical, normalised_row * fov_scale);
+			t_tuple offset_right = scale_tuple(horizontal, normalised_col);
+			t_tuple offset_up = scale_tuple(vertical, normalised_row);
 			t_tuple combined_offset = add_tuple(offset_right, offset_up);
 			t_tuple look_at = add_tuple(scene->camera.position, scene->camera.orientation);
 			t_tuple view_dir = subtract_tuple(look_at, scene->camera.position);
@@ -85,7 +89,7 @@ void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour)
 {
 	char	*dst;
 
-	if ((x >= 0 && x < W_WIDTH) && (y > 0 && y < W_HEIGHT))
+	if ((x >= 0 && x < W_WIDTH) && (y >= 0 && y < W_HEIGHT))
 	{
 		dst = map->addr + (y * map->l_l + x * (map->bpp / 8));
 		*(unsigned int *)dst = colour;

@@ -172,6 +172,7 @@ static int	check_sphere(char *line, t_object *sphere, int *object_index)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of sphere isn't valid.\n", 2), 0);
 	if (!update_tuple(&sphere->position, elements[1], 1))
 		return (free_split(elements), 0);
+	printf("sphere position: %f, %f, %f\n", sphere->position.x, sphere->position.y, sphere->position.z);
 	if (!is_valid_double(elements[2]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
 	// Changed for radius instead of diameter

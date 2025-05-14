@@ -16,7 +16,7 @@ t_intersection	intersect_sphere(t_object *shape, t_ray ray)
 	q.two_a = 2 * q.a;
 	q.t[0] = (-q.b - q.root_discriminant) / (q.two_a);
 	q.t[1] = (-q.b + q.root_discriminant) / (q.two_a);
-	if (q.t[0] >= 0)
+	if (q.t[0] >= 0 && q.t[0] < q.t[1])
 		xs.hit_distance = q.t[0];
 	else
 		xs.hit_distance = q.t[1];

@@ -51,7 +51,7 @@ t_intersection	finalize_hit_data(t_ray ray, t_intersection intersection)
 	{
 		ray.origin = subtract_tuple(ray.origin, intersection.object->position);
 		intersection.world_normal = normalize_tuple(subtract_tuple(intersection.world_position, intersection.object->position));
-		intersection.world_position = add_tuple(intersection.world_position, intersection.object->position);
+		//intersection.world_position = add_tuple(intersection.world_position, intersection.object->position);
 
 	}
 	return (intersection);

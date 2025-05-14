@@ -23,18 +23,18 @@ double	fractional_part(char *s, int *i)
 	double	facteur_dec;
 
 	result = 0.0;
-	facteur_dec = 0.1;
+	facteur_dec = 1.0;
 	if (s[*i] == '.')
 	{
 		(*i)++;
 		while (ft_isdigit(s[*i]))
 		{
-			result = result * 10 + (s[*i] - '0') * facteur_dec;
-			facteur_dec = facteur_dec / 10;
+			result = result * 10 + (s[*i] - '0');
+			facteur_dec *= 10;
 			(*i)++;
 		}
 	}
-	return (result);
+	return (result / facteur_dec);
 }
 
 double	ft_atof(char *s)

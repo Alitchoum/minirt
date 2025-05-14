@@ -10,9 +10,6 @@ void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color)
 
 	light_direction = subtract_tuple(scene->light.position, hit->world_position);
 	light_direction = normalize_tuple(light_direction);
-    	//if (dot_tuple(hit->world_normal, light_direction) < 0)
-        //	hit->world_normal = scale_tuple(hit->world_normal, -1);
-
 	if (is_in_shadow(scene, hit->world_position, scene->light.position, hit->object, hit->world_normal))
 	{
 		light_scalar = scene->ambient.ratio;
