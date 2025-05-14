@@ -43,7 +43,12 @@ void	transform_objs_group(t_scene *scene, int object_type, int keysym)
 				rotation(&scene->objects[i].normal, keysym);
 			scaling_radius(&scene->objects[i].radius, keysym);
 			if (object_type == MODE_CYLINDER)
+			{
 				scaling_height(&scene->objects[i].height, keysym);
+				prep_initial_cylinder_computations(&scene->objects[i]);
+			}
+			if (object_type == MODE_SPHERE)
+				prep_initial_sphere_computations(&scene->objects[i]);
 		}
 		i++;
 	}

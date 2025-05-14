@@ -283,5 +283,7 @@ void	translation(t_tuple *position, int keysym);
 void	rotation(t_tuple *orientation, int keysym);
 void	scaling_radius(double *radius, int keysym);
 void	scaling_height(double *height, int keysym);
+void	prep_initial_cylinder_computations(t_object *cylinder);
+void	prep_initial_sphere_computations(t_object *sphere);
 
 #endif

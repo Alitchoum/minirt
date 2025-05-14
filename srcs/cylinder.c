@@ -27,12 +27,10 @@ t_intersection	intersect_cap(t_object *cylinder, t_ray ray, double hit_z)
 t_intersection	intersect_barrel(t_object *cylinder, t_ray ray)
 {
 	t_quadratic	q;
-	t_local	basis;
 	double	hit_z;
 	t_intersection	xs;
 	int	i;
 
-	basis = cylinder->basis;
 	xs.hit_distance = -1;
 	if (!solve_cylinder_quadratic(&q, ray, cylinder))
 		return (xs);
