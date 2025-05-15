@@ -95,6 +95,7 @@ int	check_plane(char *line, t_object *plane, int *object_index)
 		return (free_split(elements), ft_putstr_fd("Error: Plane ratio isn't in a valid range.\n", 2), 0);
 	if (!update_color(&plane->color, elements[3]))
 		return (free_split(elements), 0);
+	free_split(elements);
 	plane->type = PLANE;
 	*object_index += 1;
 	return (1);
@@ -124,6 +125,7 @@ int	check_cylinder(char *line, t_object *cylinder, int *object_index)
 	cylinder->height = ft_atof(elements[4]);
 	if (!update_color(&cylinder->color, elements[5]))
 		return (free_split(elements), 0);
+	free_split(elements);
 	cylinder->type = CYLINDER;
 	*object_index += 1;
 	return (1);

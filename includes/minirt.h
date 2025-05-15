@@ -28,6 +28,15 @@
 # define BRIGHT_GREEN 0x00ff00
 # define RED 0xff0000
 
+# define LEFT_ARROW  65363
+# define RIGHT_ARROW 65361
+# define UP_ARROW 65362
+# define DOWN_ARROW 65364
+# define ADD 65451
+# define SUBTRACT 65453
+# define SUBTRACT_H 65432
+# define ADD_H 65434
+
 # define X 0
 # define Y 1
 # define Z 2

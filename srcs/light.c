@@ -7,7 +7,7 @@ void	apply_lighting(t_scene *scene, t_intersection *hit, int *final_color)
 	double	dot;
 	double	light_scalar;
 
-
+	
 	light_direction = subtract_tuple(scene->light.position, hit->world_position);
 	light_direction = normalize_tuple(light_direction);
 

@@ -15,17 +15,17 @@
 void	translation(t_tuple *position, int keysym)
 {
 	printf("touch = %d\n", keysym);
-	if (keysym == 105) //i ->reculer
+	if (keysym == 'z') //z ->reculer
 		position->z += 0.5;
-	else if (keysym == 107) //k->avancer
+	else if (keysym == 'x') //x->avancer
 		position->z -= 0.5;
-	else if (keysym == 106) //j->droite
+	else if (keysym == 'g') //j->droite
 		position->x += 0.5;
-	else if (keysym == 101) //e ->gauche
+	else if (keysym == 'd') //e ->gauche
 		position->x -= 0.5;
-	else if (keysym == 117) //u->bas
+	else if (keysym == 'f') //u->bas
 		position->y -= 0.5;
-	else if (keysym == 111) // o->haut
+	else if (keysym == 'r') // o->haut
 		position->y += 0.5;
 }
 
@@ -33,28 +33,28 @@ void	translation(t_tuple *position, int keysym)
 // > JUST CHANGE TO R(otation)? then just use arrows to move whatever way??
 void	rotation(t_tuple *orientation, int keysym)
 {
-	if (keysym == 65363) //-> orientation gauche (Y)
+	if (keysym == LEFT_ARROW) //-> orientation gauche (Y)
 		*orientation = rotate_tuple(*orientation, Y, 0.1);
-	else if (keysym == 65361) //-> orientation droite (Y)
+	else if (keysym == RIGHT_ARROW) //-> orientation droite (Y)
 		*orientation = rotate_tuple(*orientation, Y, -0.1);
-	else if (keysym == 65362) //-> orientation haut (x)
+	else if (keysym == UP_ARROW) //-> orientation haut (x)
 		*orientation = rotate_tuple(*orientation, X, 0.1);
-	else if (keysym == 65364) //-> orientation bas (x)
+	else if (keysym == DOWN_ARROW) //-> orientation bas (x)
 		*orientation = rotate_tuple(*orientation, X, -0.1);
 }
 
 void	scaling_radius(double *radius, int keysym)
 {
-	if (keysym == 65451) // +
+	if (keysym == ADD) // +
 		*radius *= 1.1;
-	else if (keysym == 65453) // -
+	else if (keysym == SUBTRACT) // -
 		*radius *= 0.9;
 }
 
 void	scaling_height(double *height, int keysym)
 {
-	if (keysym == 65434) //9 -> +
+	if (keysym == ADD_H) //9 -> +
 		*height += 0.1;
-	else if (keysym == 65432) //6-> -
+	else if (keysym == SUBTRACT_H) //6-> -
 		*height -= 0.1;
 }
