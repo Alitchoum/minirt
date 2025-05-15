@@ -21,7 +21,7 @@ int	check_extension(char *file)
 	if (len < 3 || file[len - 3] != '.'
 		|| file[len - 2] != 'r' || file[len - 1] != 't')
 	{
-		ft_putstr_fd("Error: Extension doesn't valid.\n", 2);
+		ft_putstr_fd("Error: File extension isn't valid.\n", 2);
 		return (0);
 	}
 	return (1);

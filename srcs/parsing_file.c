@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 
+// removed "free line"
 static int	add_line_to_scene(t_scene *scene, char *line)
 {
 	char	*content;
@@ -19,7 +20,7 @@ static int	add_line_to_scene(t_scene *scene, char *line)
 
 	content = ft_strdup(line);
 	if (!content)
-		return (free(line), 0);
+		return (0); 
 	if (ft_strchr(content, '\n'))
 		content[ft_strlen(content) - 1] = '\0';
 	new_node = ft_lstnew(content);
@@ -44,7 +45,10 @@ int	create_scene_list(t_scene *scene, char *file)
 		if (ft_strncmp(line, "\n", 1) != 0)
 		{
 			if (!add_line_to_scene(scene, line))
-				return (free(line), close(fd), 0);
+			{
+				perror("Malloc");
+				return (free(line), close(fd), get_next_line(-5), 0);
+			}
 		}
 		free(line);
 		line = get_next_line(fd);
@@ -53,6 +57,7 @@ int	create_scene_list(t_scene *scene, char *file)
 	return (1);
 }
 
+// currently accepts "Camera"
 static int	count_nb_element(char *line, int *cam, int *ambient, int *light)
 {
 	if (ft_strncmp(line, "A", 1) == 0)
@@ -66,9 +71,8 @@ static int	count_nb_element(char *line, int *cam, int *ambient, int *light)
 	return (1);
 }
 
-// 1: Check element IDs are valid (1st word)
-// 2: Check right number of elements
-// 3: Correct num parameters for each element
+// to amend element id / object check -> accepts "sphere" or "Camera" etc
+// added a check for if there are no objects in the scene
 int	check_type_of_scene(t_list *lines, int *obj_count)
 {
 	t_list	*current;
@@ -93,8 +97,8 @@ int	check_type_of_scene(t_list *lines, int *obj_count)
 		}
 		current = current->next;
 	}
-	if (cam > 1 || ambient > 1 || light > 1)
-		return (ft_putstr_fd("Error: Nb elements doesn't valid.\n", 2), 0);
+	if (cam != 1 || ambient != 1 || light != 1 || *obj_count == 0)
+		return (ft_putstr_fd("Error: Must be 1 cam,ambient,light,shape.\n", 2), 0);
 	return (1);
 }
 
@@ -113,16 +117,16 @@ int	parse_scene(char *file, t_scene *scene)
 		return (ft_lstclear(&scene->lines, free), 0);
 	scene->objects = ft_calloc(scene->obj_count, sizeof(t_object));
 	if (!scene->objects)
-		return (ft_putstr_fd("Error: Malloc failed.\n", 2), 0);
+		return (ft_lstclear(&scene->lines, free), perror("Malloc"), 0); // added free scene lines
 	current = scene->lines;
 	while (current)
 	{
 		line = current->content;
 		if (!parse_element_line(line, scene, &element_count))
-			return (ft_lstclear(&scene->lines, free), 0);
+			return (ft_lstclear(&scene->lines, free), free(scene->objects), 0); //added free scene objects
 		current = current->next;
 	}
 	ft_lstclear(&scene->lines, free);
-	prepare_initial_computations(scene->objects, scene->obj_count);
+	prepare_initial_computations(&scene->camera, scene->objects, scene->obj_count);
 	return (1);
 }

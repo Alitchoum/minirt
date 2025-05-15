@@ -12,24 +12,23 @@
 
 #include "minirt.h"
 
-t_intersection	intersection_plane(t_ray ray, t_object *plane)
+t_xs	intersection_plane(t_ray ray, t_object *plane)
 {
 	t_tuple			diff;
 	double			denominator;
 	double			numerator;
 	double			dist;
-	t_intersection	xs;
+	t_xs			xs;
 
 	xs.hit_distance = -1;
-	denominator = dot_tuple(plane->normal, ray.direction);
+	denominator = dot(plane->normal, ray.direction);
 	if (is_equal(denominator, 0.0))
-		return	(xs);
-	diff = subtract_tuple(plane->position, ray.origin);
-	numerator = dot_tuple(plane->normal, diff);
+		return (xs);
+	diff = subtract(plane->position, ray.origin);
+	numerator = dot(plane->normal, diff);
 	dist = numerator / denominator;
 	if (dist < EPSILON)
 		return (xs);
 	xs.hit_distance = dist;
 	return (xs);
 }
-

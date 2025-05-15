@@ -20,7 +20,7 @@ static int	fill_cylinder_data(t_object *cylinder, char **elements)
 		return (0);
 	if (!is_valid_orientation_range(cylinder->orientation))
 		return (ft_putstr_fd("Error: Ratio isn't in a valid range.\n", 2), 0);
-	cylinder->orientation = normalize_tuple(cylinder->orientation);
+	cylinder->orientation = normalize(cylinder->orientation);
 	if (!is_valid_double(elements[3]) || !is_valid_double(elements[4]))
 		return (ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
 	cylinder->radius = ft_atof(elements[3]) / 2;

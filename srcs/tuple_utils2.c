@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 
-t_tuple	add_tuple(t_tuple a, t_tuple b)
+t_tuple	add(t_tuple a, t_tuple b)
 {
 	t_tuple	new;
 
@@ -23,7 +23,7 @@ t_tuple	add_tuple(t_tuple a, t_tuple b)
 	return (new);
 }
 
-t_tuple	subtract_tuple(t_tuple a, t_tuple b)
+t_tuple	subtract(t_tuple a, t_tuple b)
 {
 	t_tuple	new;
 
@@ -34,7 +34,7 @@ t_tuple	subtract_tuple(t_tuple a, t_tuple b)
 	return (new);
 }
 
-t_tuple	negate_tuple(t_tuple a)
+t_tuple	negate(t_tuple a)
 {
 	a.x = -a.x;
 	a.y = -a.y;
@@ -43,7 +43,7 @@ t_tuple	negate_tuple(t_tuple a)
 	return (a);
 }
 
-t_tuple	scale_tuple(t_tuple a, double scale)
+t_tuple	scale(t_tuple a, double scale)
 {
 	a.x *= scale;
 	a.y *= scale;
@@ -65,5 +65,6 @@ t_tuple	transform_normal(t_tuple local_normal, t_local basis)
 	world_normal.z = local_normal.x * basis.right.z
 		+ local_normal.y * basis.up.z
 		+ local_normal.z * basis.forward.z;
+	world_normal.w = 0;
 	return (world_normal);
 }

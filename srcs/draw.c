@@ -12,38 +12,7 @@
 
 #include "minirt.h"
 
-static	t_tuple	calc_ray_direction(t_cam *cam, t_local cam_basis, int col, int row)
-{
-	double	aspect_ratio;
-	double	fov_scale;
-	double	normalised_col;
-	double	normalised_row;
-	t_tuple	offset_right;
-	t_tuple	offset_up;
-	t_tuple	combined_offset;
-	t_tuple	look_at;
-	t_tuple	view_dir;
-
-	aspect_ratio = W_WIDTH / (double)W_HEIGHT;
-	fov_scale = tan(radians((cam->fov * 0.5)));
-	normalised_col = -((double)col / (double)W_WIDTH * 2 - 1);
-	normalised_row = -((double)row / (double)W_HEIGHT * 2 - 1);
-	offset_right = scale_tuple(cam_basis.right, normalised_col * aspect_ratio * fov_scale);
-	offset_up = scale_tuple(cam_basis.up, normalised_row * fov_scale);
-	combined_offset = add_tuple(offset_right, offset_up);
-	look_at = add_tuple(cam->position, cam->orientation);
-	view_dir = subtract_tuple(look_at, cam->position);
-	return (normalize_tuple(add_tuple(combined_offset, view_dir)));
-}
-
-void	setup_cam(t_cam *cam)
-{
-	cam->basis.forward = vector(0, 1, 0);
-	if (fabs(cam->orientation.x) < 1e-6 && fabs(cam->orientation.z) < 1e-6)
-		cam->basis.forward = vector(0, 0, 1); 
-	cam->basis.right = normalize_tuple(cross_tuple(cam->orientation, cam->basis.forward));
-	cam->basis.up = normalize_tuple(cross_tuple(cam->basis.right, cam->orientation));
-}
+static	t_tuple	calc_ray_direction(t_cam *cam, t_local cam_basis, int col, int row);
 
 int	render_image(t_scene *scene)
 {
@@ -71,10 +40,26 @@ int	render_image(t_scene *scene)
 	return (0);
 }
 
+static	t_tuple	calc_ray_direction(t_cam *cam, t_local cam_basis, int col, int row)
+{
+	double	normalised_col;
+	double	normalised_row;
+	t_tuple	offset;
+	t_tuple	look_at;
+	t_tuple	view_dir;
+
+	normalised_col = -((double)col / (double)W_WIDTH * 2 - 1);
+	normalised_row = -((double)row / (double)W_HEIGHT * 2 - 1);
+	offset = get_cam_offset(cam, cam_basis, normalised_row, normalised_col);
+	look_at = add(cam->position, cam->orientation);
+	view_dir = subtract(look_at, cam->position);
+	return (normalize(add(offset, view_dir)));
+}
+
 int	get_pixel_color(t_scene *scene, t_ray ray, t_object *objects)
 {
 	int	final_color;
-	t_intersection	closest_intersection;
+	t_xs	closest_intersection;
 
 	final_color = 0;
 	closest_intersection = get_closest_intersection(scene, ray, objects);
@@ -88,7 +73,7 @@ void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour)
 {
 	char	*dst;
 
-	if ((x >= 0 && x < W_WIDTH) && (y > 0 && y < W_HEIGHT))
+	if ((x >= 0 && x < W_WIDTH) && (y >= 0 && y < W_HEIGHT))
 	{
 		dst = map->addr + (y * map->l_l + x * (map->bpp / 8));
 		*(unsigned int *)dst = colour;

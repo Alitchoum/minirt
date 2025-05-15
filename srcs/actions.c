@@ -43,13 +43,13 @@ void	translation(t_tuple *position, int keysym)
 void	rotation(t_tuple *orientation, int keysym)
 {
 	if (keysym == LEFT_ARROW)
-		*orientation = rotate_tuple(*orientation, Y, 0.1);
+		*orientation = rotate(*orientation, Y, 0.1);
 	else if (keysym == RIGHT_ARROW)
-		*orientation = rotate_tuple(*orientation, Y, -0.1);
+		*orientation = rotate(*orientation, Y, -0.1);
 	else if (keysym == UP_ARROW)
-		*orientation = rotate_tuple(*orientation, X, 0.1);
+		*orientation = rotate(*orientation, X, 0.1);
 	else if (keysym == DOWN_ARROW)
-		*orientation = rotate_tuple(*orientation, X, -0.1);
+		*orientation = rotate(*orientation, X, -0.1);
 }
 
 // cylindre et sphere
@@ -57,9 +57,11 @@ void	rotation(t_tuple *orientation, int keysym)
 // - -> Reduire la taille
 void	scaling_radius(double *radius, int keysym)
 {
-	if (keysym == ADD)
+	if (keysym == ADD && *radius < INT_MAX)
+	{
 		*radius *= 1.1;
-	else if (keysym == SUBTRACT)
+	}
+	else if (keysym == SUBTRACT && *radius < INT_MAX)
 		*radius *= 0.9;
 }
 
@@ -68,8 +70,27 @@ void	scaling_radius(double *radius, int keysym)
 // - -> Reduire la longueur
 void	scaling_height(double *height, int keysym)
 {
-	if (keysym == ADD_H)
+	if (keysym == ADD_H && *height < INT_MAX)
 		*height += 0.1;
-	else if (keysym == SUBTRACT_H)
+	else if (keysym == SUBTRACT_H && *height < INT_MAX)
 		*height -= 0.1;
+}
+
+void	recomp_basis(t_object *cy, int keysym)
+{
+	if (keysym == LEFT_ARROW || keysym == RIGHT_ARROW || keysym == UP_ARROW || keysym == DOWN_ARROW)
+	{
+		cy->basis.forward = cy->orientation;
+		if (fabs(cy->basis.forward.x) < 0.9)
+		{	
+			cy->basis.right = cross(vector(1, 0, 0), cy->basis.forward);
+			cy->basis.right = normalize(cy->basis.right);
+		}
+		else
+		{
+			cy->basis.right = cross(vector(0, 1, 0), cy->basis.forward);
+			cy->basis.right = normalize(cy->basis.right);
+		}
+		cy->basis.up = normalize(cross(cy->basis.forward, cy->basis.right));
+	}
 }

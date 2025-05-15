@@ -15,20 +15,30 @@
 double	magnitude(t_tuple a)
 {
 	double	result;
+	double	x;
+	double	y;
+	double	z;
+	double	w;
 
-	result = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2) + pow(a.w, 2));
+	x = a.x * a.x;
+	y = a.y * a.y;
+	z = a.z * a.z;
+	w = a.w * a.w;
+
+	result = sqrt(x + y + z + w);
 	return (result);
 }
 
-t_tuple	normalize_tuple(t_tuple a)
+t_tuple	normalize(t_tuple a)
 {
 	double	mag;
 
 	mag = magnitude(a);
+	if (mag < EPSILON)
+        return (vector(0, 0, 0));
 	a.x /= mag;
 	a.y /= mag;
 	a.z /= mag;
-	a.w /= mag;
 	return (a);
 }
 
@@ -36,14 +46,15 @@ t_tuple	normalize_tuple(t_tuple a)
 // 1 means the vectors are identical
 // -1 means they point in opposite directions
 // to be used on VECTORS only, not POINTS
-double	dot_tuple(t_tuple a, t_tuple b)
+double	dot(t_tuple a, t_tuple b)
 {
 	return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w));
 }
 
 // returns a vector that is perpendicular to both of the original vectors
-t_tuple	cross_tuple(t_tuple a, t_tuple b)
+t_tuple	cross(t_tuple a, t_tuple b)
 {
+	t_tuple result;
 	double	x;
 	double	y;
 	double	z;
@@ -51,10 +62,14 @@ t_tuple	cross_tuple(t_tuple a, t_tuple b)
 	x = a.y * b.z - a.z * b.y;
 	y = a.z * b.x - a.x * b.z;
 	z = a.x * b.y - a.y * b.x;
-	return (vector(x, y, z));
+	result.x = x;
+	result.y = y;
+	result.z = z;
+	result.w = 0;
+	return (result);
 }
 
-t_tuple	rotate_tuple(t_tuple a, int axe, double angle)
+t_tuple	rotate(t_tuple a, int axe, double angle)
 {
 	t_tuple	rotate;
 
@@ -74,5 +89,5 @@ t_tuple	rotate_tuple(t_tuple a, int axe, double angle)
 		rotate.x = a.x * cos(angle) - a.y * sin(angle);
 		rotate.y = a.x * sin(angle) + a.y * cos(angle);
 	}
-	return (normalize_tuple(rotate));
+	return (normalize(rotate));
 }

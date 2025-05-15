@@ -14,15 +14,15 @@
 
 void	handle_mode(int keysym, t_scene *scene)
 {
-	if (keysym == 118)
+	if (keysym == 'v')
 		scene->mode = MODE_VIEW;
-	else if (keysym == 108)
+	else if (keysym == 'l')
 		scene->mode = MODE_LIGHT;
-	else if (keysym == 115)
+	else if (keysym == 's')
 		scene->mode = MODE_SPHERE;
-	else if (keysym == 99)
+	else if (keysym == 'c')
 		scene->mode = MODE_CYLINDER;
-	else if (keysym == 112)
+	else if (keysym == 'p')
 		scene->mode = MODE_PLANE;
 }
 
@@ -40,14 +40,12 @@ void	transform_objs_group(t_scene *scene, int object_type, int keysym)
 				rotation(&scene->objects[i].orientation, keysym);
 			else if (object_type == MODE_PLANE)
 				rotation(&scene->objects[i].normal, keysym);
-			scaling_radius(&scene->objects[i].radius, keysym);
+			scaling_radius(&scene->objects[i].radius_squared, keysym);
 			if (object_type == MODE_CYLINDER)
 			{
-				scaling_height(&scene->objects[i].height, keysym);
-				prep_initial_cylinder_computations(&scene->objects[i]);
+				scaling_height(&scene->objects[i].half_height, keysym);
+				recomp_basis(&scene->objects[i], keysym);
 			}
-			if (object_type == MODE_SPHERE)
-				prep_initial_sphere_computations(&scene->objects[i]);
 		}
 		i++;
 	}
@@ -71,7 +69,7 @@ void	handle_action(int keysym, t_scene *scene)
 int	do_keypress(int keysym, t_scene *scene)
 {
 	if (keysym == XK_Escape)
-		shut_down(scene);
+		shut_down(scene, EXIT_SUCCESS);
 	else
 	{
 		handle_mode(keysym, scene);

@@ -17,7 +17,7 @@ static int	check_ambient(char *line, t_scene *scene)
 	char	**elements;
 
 	elements = NULL;
-	elements = ft_split_set(line, " \t\r\v\f");
+	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 		return (ft_putstr_fd("Error: Split ambient failed.\n", 2), 0);
 	if (count_line_tab(elements) != 3)
@@ -46,7 +46,7 @@ static int	check_camera(char *line, t_scene *scene)
 		return (ft_putstr_fd("Error: Split camera failed.\n", 2), 0);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements),
-			ft_putstr_fd("Error: Invalid number of elements.\n", 2), 0);
+			ft_putstr_fd("Error: Invalid number of cam elements.\n", 2), 0);
 	if (!update_tuple(&scene->camera.position, elements[1], 1))
 		return (free_split(elements), 0);
 	if (!update_tuple(&scene->camera.orientation, elements[2], 0))
@@ -56,11 +56,11 @@ static int	check_camera(char *line, t_scene *scene)
 			ft_putstr_fd("Error: Cam orientation isn't valid.\n", 2), 0);
 	if (!is_valid_int(elements[3]))
 		return (free_split(elements),
-			ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
+			ft_putstr_fd("Error: Cam fov isn't a number.\n", 2), 0);
 	scene->camera.fov = ft_atoi(elements[3]);
 	if (scene->camera.fov < 0 || scene->camera.fov > 180)
 		return (free_split(elements),
-			ft_putstr_fd("Error: Cam ratio isn't in a valid range.\n", 2), 0);
+			ft_putstr_fd("Error: Cam fov isn't in a valid range.\n", 2), 0);
 	free_split(elements);
 	return (1);
 }
@@ -68,19 +68,19 @@ static int	check_camera(char *line, t_scene *scene)
 static int	check_light(char *line, t_scene *scene)
 {
 	char	**elements;
-
+	
 	elements = NULL;
 	elements = ft_split_set(line, WHITESPACE);
 	if (!elements)
 		return (ft_putstr_fd("Error: Split light failed.\n", 2), 0);
 	if (count_line_tab(elements) != 4)
 		return (free_split(elements),
-			ft_putstr_fd("Error: Invalid number of elements.\n", 2), 0);
+			ft_putstr_fd("Error: Invalid number of light elements.\n", 2), 0);
 	if (!update_tuple(&scene->light.position, elements[1], 1))
 		return (free_split(elements), 0);
 	if (!is_valid_double(elements[2]))
 		return (free_split(elements),
-			ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
+			ft_putstr_fd("Error: Light ratio isn't a number.\n", 2), 0);
 	scene->light.ratio = ft_atof(elements[2]);
 	if (scene->light.ratio < 0.0 || scene->light.ratio > 1.0)
 		return (free_split(elements),
