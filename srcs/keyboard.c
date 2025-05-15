@@ -70,7 +70,7 @@ void	handle_action(int keysym, t_scene *scene)
 int	do_keypress(int keysym, t_scene *scene)
 {
 	if (keysym == XK_Escape)
-		shut_down(scene);
+		shut_down(scene, EXIT_SUCCESS);
 	else
 	{
 		handle_mode(keysym, scene);

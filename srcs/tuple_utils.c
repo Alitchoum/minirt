@@ -17,7 +17,7 @@ double	distance(t_tuple a, t_tuple b)
 	t_tuple	c;
 	double	distance;
 
-	c = subtract_tuple(a, b);
+	c = subtract(a, b);
 	distance = magnitude(c);
 	return (distance);
 }

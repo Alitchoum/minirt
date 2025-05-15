@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersections.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: caburges <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/15 18:48:04 by caburges          #+#    #+#             */
+/*   Updated: 2025/05/15 18:48:05 by caburges         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
-t_intersection	finalize_hit_data(t_ray ray, t_intersection intersection);
+t_xs	finalize_hit_data(t_ray ray, t_xs xs);
 
-t_intersection	intersect(t_object *shape, t_ray ray)
+t_xs	intersect(t_object *shape, t_ray ray)
 {
 	if (shape->type == SPHERE)
 		return (intersect_sphere(shape, ray));
@@ -12,45 +24,49 @@ t_intersection	intersect(t_object *shape, t_ray ray)
 		return (intersection_plane(ray, shape));
 }
 
-t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects)
+void	set_closest_intersection(t_xs *closest, t_xs *cur, t_object *cur_shape)
 {
-	t_intersection	current_intersection;
-	t_intersection	closest_intersection;
-	t_object	*closest_shape;
-	int	i;
-	
-	closest_shape = NULL;
-	closest_intersection.hit_distance = INT_MAX;
-	i = 0;
-	while(i < scene->obj_count)
+	if ((cur->hit_distance < closest->hit_distance) && (cur->hit_distance >= 0))
 	{
-		current_intersection = intersect(&objects[i], ray);
-		if ((current_intersection.hit_distance < closest_intersection.hit_distance) && (current_intersection.hit_distance >= 0))
-		{
-			closest_intersection = current_intersection;
-			closest_shape = &objects[i];
-		}
+		*closest = *cur;
+		closest->object = cur_shape;
+	}
+}
+
+t_xs	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects)
+{
+	t_xs	xs;
+	t_xs	closest_xs;
+	int		i;
+
+	closest_xs.object = NULL;
+	closest_xs.hit_distance = INT_MAX;
+	i = 0;
+	while (i < scene->obj_count)
+	{
+		xs = intersect(&objects[i], ray);
+		set_closest_intersection(&closest_xs, &xs, &objects[i]);
 		i++;
 	}
-	if (closest_shape == NULL)
+	if (!closest_xs.object)
 	{
-		closest_intersection.hit_distance = -1;
-		return (closest_intersection);
+		closest_xs.hit_distance = -1;
+		return (closest_xs);
 	}
-	closest_intersection.object = closest_shape;
-	return (finalize_hit_data(ray, closest_intersection));
+	return (finalize_hit_data(ray, closest_xs));
 }
 
 // translates the hit (intersection) data back to world space
-t_intersection	finalize_hit_data(t_ray ray, t_intersection intersection)
+t_xs	finalize_hit_data(t_ray ray, t_xs x)
 {
-	intersection.world_position = position(ray, intersection.hit_distance);
-	if (intersection.object->type == PLANE)
-		intersection.world_normal = intersection.object->normal;
-	else if (intersection.object->type == SPHERE)
+	x.world_position = position(ray, x.hit_distance);
+	if (x.object->type == PLANE)
+		x.world_normal = x.object->normal;
+	else if (x.object->type == SPHERE)
 	{
-		ray.origin = subtract_tuple(ray.origin, intersection.object->position);
-		intersection.world_normal = normalize_tuple(subtract_tuple(intersection.world_position, intersection.object->position));
+		ray.origin = subtract(ray.origin, x.object->position);
+		x.world_normal = subtract(x.world_position, x.object->position);
+		x.world_normal = normalize(x.world_normal);
 	}
-	return (intersection);
+	return (x);
 }

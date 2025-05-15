@@ -1,22 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prepare_initial_computations.c                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: caburges <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/15 18:48:37 by caburges          #+#    #+#             */
+/*   Updated: 2025/05/15 18:48:38 by caburges         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
-// MERGE OK
+
 void	compute_cylinder_local_basis(t_local *basis, t_tuple orientation)
 {
 	basis->forward = orientation;
 	if (fabs(basis->forward.x) < 0.9)
-		basis->right = normalize_tuple(cross_tuple(vector(1, 0, 0), basis->forward));
+	{
+		basis->right = cross(vector(1, 0, 0), basis->forward);
+		basis->right = normalize(basis->right);
+	}
 	else
-		basis->right = normalize_tuple(cross_tuple(vector(0, 1, 0), basis->forward));
-	basis->up = normalize_tuple(cross_tuple(basis->forward, basis->right));
+	{
+		basis->right = cross(vector(0, 1, 0), basis->forward);
+		basis->right = normalize(basis->right);
+	}
+	basis->up = normalize(cross(basis->forward, basis->right));
 }
 
 void	prep_initial_cylinder_computations(t_object *cylinder)
 {
-	// radius squared
 	cylinder->radius_squared = pow(cylinder->radius, 2);
-	// half height
 	cylinder->half_height = cylinder->height / 2;
-	// local basis
 	compute_cylinder_local_basis(&cylinder->basis, cylinder->orientation);
 }
 

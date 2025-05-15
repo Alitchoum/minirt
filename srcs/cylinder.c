@@ -1,38 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cylinder.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: caburges <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/15 18:47:34 by caburges          #+#    #+#             */
+/*   Updated: 2025/05/15 18:47:36 by caburges         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
-// MERGE OK
-t_intersection	intersect_cap(t_object *cylinder, t_ray ray, double hit_z)
+
+// check if ray parallel to caps (no intersection possible)
+// get the distance along the ray that it hits
+// check is positive && inside the circle
+t_xs	intersect_cap(t_object *cylinder, t_ray ray, double hit_z)
 {
-	t_intersection	xs;
-	double	t;
+	t_xs	xs;
+	double	hit_dist;
 
 	xs.hit_distance = -1;
-
-	// check if ray parallel to caps (no intersection possible)
 	if (fabs(ray.direction.z) < EPSILON)
 		return (xs);
-
-	// get the distance along the ray that it hits
-	t = (hit_z - ray.origin.z) / ray.direction.z;
-
-	// check is positive && inside the circle
-	if (t >= 0)
+	hit_dist = (hit_z - ray.origin.z) / ray.direction.z;
+	if (hit_dist >= 0)
 	{
-		xs.point = position(ray, t);
+		xs.point = position(ray, hit_dist);
 		if (pow(xs.point.x, 2) + pow(xs.point.y, 2) <= cylinder->radius_squared)
-			xs.hit_distance = t;
+			xs.hit_distance = hit_dist;
 	}
 	return (xs);
 }
 
-t_intersection	intersect_barrel(t_object *cylinder, t_ray ray)
+//to change world_position to world_pos
+void	update_barrel_hit(t_ray ray, t_xs *xs, double new_dist, t_object *cy)
+{
+	if (xs->hit_distance < 0 || new_dist < xs->hit_distance)
+	{
+		xs->hit_distance = new_dist;
+		xs->world_position = position(ray, xs->hit_distance);
+		xs->local_normal = xs->world_position;
+		xs->local_normal.z = 0;
+		xs->local_normal.w = 0;
+		xs->local_normal = normalize(xs->local_normal);
+		xs->world_normal = transform_normal(xs->local_normal, cy->basis);
+	}
+}
+
+t_xs	intersect_barrel(t_object *cy, t_ray ray)
 {
 	t_quadratic	q;
-	double	hit_z;
-	t_intersection	xs;
-	int	i;
+	double		hit_z;
+	t_xs		xs;
+	int			i;
 
+	hit_z = 0;
 	xs.hit_distance = -1;
-	if (!solve_cylinder_quadratic(&q, ray, cylinder))
+	if (!solve_cylinder_quadratic(&q, ray, cy))
 		return (xs);
 	i = 0;
 	while (i < 2)
@@ -40,45 +65,30 @@ t_intersection	intersect_barrel(t_object *cylinder, t_ray ray)
 		if (q.t[i] >= 0)
 		{
 			hit_z = ray.origin.z + q.t[i] * ray.direction.z;
-			if (hit_z >= -cylinder->half_height && hit_z <= cylinder->half_height)
-			{
-				if (xs.hit_distance < 0 || q.t[i] < xs.hit_distance)
-				{
-					xs.hit_distance = q.t[i];
-					xs.world_position = position(ray, xs.hit_distance);
-					xs.local_normal = normalize_tuple(vector(xs.world_position.x, xs.world_position.y, 0));
-					xs.world_normal = transform_normal(xs.local_normal, cylinder->basis);
-				}
-			}
+			if (hit_z >= -cy->half_height && hit_z <= cy->half_height)
+				update_barrel_hit(ray, &xs, q.t[i], cy);
 		}
 		i++;
 	}
 	return (xs);
 }
 
-t_intersection	intersect_cylinder(t_object *cylinder, t_ray ray)
+t_xs	intersect_cylinder(t_object *cylinder, t_ray ray)
 {
-	t_intersection	barrel;
-	t_intersection	top_cap;
-	t_intersection	bottom_cap;
-	t_intersection closest;
+	t_xs	barrel;
+	t_xs	top_cap;
+	t_xs	bottom_cap;
+	t_xs	closest;
 
 	ray = rotate_ray_to_local_space(ray, cylinder);
-
 	barrel = intersect_barrel(cylinder, ray);
 	closest = barrel;
-
-	// check the top cap
 	top_cap = intersect_cap(cylinder, ray, cylinder->half_height);
 	if (top_cap.hit_distance >= 0)
 		top_cap.world_normal = cylinder->basis.forward;
-
-	// check the bottom cap
 	bottom_cap = intersect_cap(cylinder, ray, -cylinder->half_height);
 	if (bottom_cap.hit_distance >= 0)
-		bottom_cap.world_normal = scale_tuple(cylinder->basis.forward, -1);
-
-	// get the closest valid intersection between xs, topcap, bottom cap
+		bottom_cap.world_normal = scale(cylinder->basis.forward, -1);
 	if (top_cap.hit_distance >= 0 && (closest.hit_distance < 0 || top_cap.hit_distance < closest.hit_distance))
 		closest = top_cap;
 	if (bottom_cap.hit_distance >= 0 && (closest.hit_distance < 0 || bottom_cap.hit_distance < closest.hit_distance))
@@ -86,12 +96,11 @@ t_intersection	intersect_cylinder(t_object *cylinder, t_ray ray)
 	return (closest);
 }
 
-int	solve_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder)
+int	solve_cylinder_quadratic(t_quadratic *q, t_ray r, t_object *cy)
 {
-
-	q->a = ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y;
-	q->b = 2.0f * ((ray.origin.x * ray.direction.x) + (ray.origin.y * ray.direction.y));
-	q->c = (ray.origin.x * ray.origin.x) + (ray.origin.y * ray.origin.y) - cylinder->radius_squared;
+	q->a = pow(r.direction.x, 2) + pow(r.direction.y, 2);
+	q->b = 2.0f * ((r.origin.x * r.direction.x) + (r.origin.y * r.direction.y));
+	q->c = pow(r.origin.x, 2) + pow(r.origin.y, 2) - cy->radius_squared;
 	q->discriminant = get_discriminant(q->a, q->b, q->c);
 	if (q->discriminant < 0)
 		return (0);

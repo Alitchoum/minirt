@@ -26,18 +26,23 @@ int	render_image(t_scene *scene)
 	t_tuple	world_up = vector(0, 1, 0); // Default up direction
 	double	fov_scale = tan(radians((scene->camera.fov * 0.5)));
 	t_tuple	horizontal, vertical;
+	t_tuple offset_right;
+	t_tuple offset_up;// = scale_tuple(vertical, normalised_row * fov_scale);
+	t_tuple combined_offset;// = add_tuple(offset_right, offset_up);
+	t_tuple look_at;// = add_tuple(scene->camera.position, scene->camera.orientation);
+	t_tuple view_dir;// = subtract_tuple(look_at, scene->camera.position);
 
 	// Change the up vector if the camera orientation is along x or z axis
 	if (fabs(scene->camera.orientation.x) < 1e-6 && fabs(scene->camera.orientation.z) < 1e-6)
 		world_up = vector(0, 0, 1); // Change to use z-up
 
 	// Calculate horizontal and vertical vectors on the fly based on the camera orientation
-	horizontal = normalize_tuple(cross_tuple(scene->camera.orientation, world_up));
-	vertical = normalize_tuple(cross_tuple(horizontal, scene->camera.orientation));
+	horizontal = normalize(cross(scene->camera.orientation, world_up));
+	vertical = normalize(cross(horizontal, scene->camera.orientation));
 
 	int	col = 0;
 	int	row = 0;
-	int	color;
+	int	color = 0;
 
     // PUT A COLOUR ON EACH PIXEL OF THE SCREEN
 	while (row < W_HEIGHT)
@@ -50,12 +55,12 @@ int	render_image(t_scene *scene)
 			normalised_col = -((double)col / (double)W_WIDTH * 2 - 1);
 			normalised_row = -((double)row / (double)W_HEIGHT * 2 - 1);
             // Calculate the direction of the ray based on the pixel
-			t_tuple offset_right = scale_tuple(horizontal, normalised_col * aspect_ratio * fov_scale);
-			t_tuple offset_up = scale_tuple(vertical, normalised_row * fov_scale);
-			t_tuple combined_offset = add_tuple(offset_right, offset_up);
-			t_tuple look_at = add_tuple(scene->camera.position, scene->camera.orientation);
-			t_tuple view_dir = subtract_tuple(look_at, scene->camera.position);
-			ray_direction = normalize_tuple(add_tuple(combined_offset, view_dir));
+			offset_right = scale(horizontal, normalised_col * aspect_ratio * fov_scale);
+			offset_up = scale(vertical, normalised_row * fov_scale);
+			combined_offset = add(offset_right, offset_up);
+			look_at = add(scene->camera.position, scene->camera.orientation);
+			view_dir = subtract(look_at, scene->camera.position);
+			ray_direction = normalize(add(combined_offset, view_dir));
 
             // Create the ray and get the pixel color
 			ray = new_ray(scene->camera.position, ray_direction);
@@ -72,7 +77,7 @@ int	render_image(t_scene *scene)
 int	get_pixel_color(t_scene *scene, t_ray ray, t_object *objects)
 {
 	int	final_color;
-	t_intersection	closest_intersection;
+	t_xs	closest_intersection;
 
 	final_color = 0;
 	closest_intersection = get_closest_intersection(scene, ray, objects);
@@ -86,7 +91,7 @@ void	my_mlx_pixel_put(t_scene *map, int x, int y, int colour)
 {
 	char	*dst;
 
-	if ((x >= 0 && x < W_WIDTH) && (y > 0 && y < W_HEIGHT))
+	if ((x >= 0 && x < W_WIDTH) && (y >= 0 && y < W_HEIGHT))
 	{
 		dst = map->addr + (y * map->l_l + x * (map->bpp / 8));
 		*(unsigned int *)dst = colour;

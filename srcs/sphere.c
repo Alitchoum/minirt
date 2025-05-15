@@ -12,10 +12,11 @@
 
 #include "minirt.h"
 
-t_intersection	intersect_sphere(t_object *shape, t_ray ray)
+// NORM OK EXCEPT MISALIGNED VARIABLES
+t_xs	intersect_sphere(t_object *shape, t_ray ray)
 {
 	t_quadratic	q;
-	t_intersection	xs;
+	t_xs		xs;
 
 	prep_sphere_quadratic(&q, ray, shape);
 	if (q.discriminant < 0)
@@ -34,13 +35,13 @@ t_intersection	intersect_sphere(t_object *shape, t_ray ray)
 	return (xs);
 }
 
-void	prep_sphere_quadratic(t_quadratic *quadratic, t_ray ray, t_object *sphere)
+void	prep_sphere_quadratic(t_quadratic *q, t_ray ray, t_object *sphere)
 {
-	t_tuple	diff_sphere_camera;
+	t_tuple	diff_cam;
 
-	diff_sphere_camera = subtract_tuple(ray.origin, sphere->position);
-	quadratic->a = dot_tuple(ray.direction, ray.direction);
-	quadratic->b = 2.0f * dot_tuple(diff_sphere_camera, ray.direction);
-	quadratic->c = dot_tuple(diff_sphere_camera, diff_sphere_camera) - sphere->radius_squared;
-	quadratic->discriminant = get_discriminant(quadratic->a, quadratic->b, quadratic->c);
+	diff_cam = subtract(ray.origin, sphere->position);
+	q->a = dot(ray.direction, ray.direction);
+	q->b = 2.0f * dot(diff_cam, ray.direction);
+	q->c = dot(diff_cam, diff_cam) - sphere->radius_squared;
+	q->discriminant = get_discriminant(q->a, q->b, q->c);
 }

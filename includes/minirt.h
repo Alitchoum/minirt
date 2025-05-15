@@ -98,29 +98,6 @@ typedef struct s_light
 	t_color		color;
 }				t_light;
 
-typedef struct s_sphere
-{
-	t_tuple		center;
-	double		diametre;
-	t_color		color;
-}				t_sphere;
-
-typedef struct s_plane
-{
-	t_vector	viewpoint;
-	t_vector	*orientation;
-	t_color		*color;
-}				t_plane;
-
-typedef struct s_cylinder
-{
-	t_vector	*center;
-	t_vector	*orientation;
-	double		diametre;
-	double		height;
-	t_color		*color;
-}				t_cylinder;
-
 typedef struct s_quadratic
 {
 	double	a;
@@ -178,7 +155,6 @@ typedef struct s_scene
 	t_cam		camera;
 	t_light		light;
 	t_object	*objects;
-	t_sphere	*spheres;
 	int			nb_sp;
 	int			nb_cy;
 	int			nb_pl;
@@ -202,7 +178,7 @@ typedef struct s_intersection
 	t_tuple		world_position;
 	t_tuple		local_position;
 	t_tuple		local_normal;
-}	t_intersection;
+}	t_xs;
 
 //---FUNCTIONS UTILS---//
 
@@ -212,7 +188,7 @@ int				is_valid_int(char *s);
 int				is_valid_double(char *s);
 void			print_list(t_list *lines);
 int				is_valid_orientation_range(t_tuple orientation);
-int				shut_down(t_scene *scene);
+int				shut_down(t_scene *scene, int status);
 int				count_line_tab(char **s);
 
 //--DRAW--//
@@ -239,17 +215,17 @@ void			initialise_mlx(t_scene *scene);
 
 //--INTERSECTIONS--//
 
-t_intersection	intersect(t_object *shape, t_ray ray);
-t_intersection	intersect_cylinder(t_object *cylinder, t_ray ray);
+t_xs	intersect(t_object *shape, t_ray ray);
+t_xs	intersect_cylinder(t_object *cylinder, t_ray ray);
 int				solve_cylinder_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
 void			prep_sphere_quadratic(t_quadratic *q, t_ray ray, t_object *cylinder);
 
 
-t_intersection	intersect_sphere(t_object *shape, t_ray ray);
-t_intersection	intersection_plane(t_ray ray, t_object *plane);
-t_intersection	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects);
-void			apply_lighting(t_scene *scene, t_intersection *hit, int *final_color);
-int				is_in_shadow(t_scene *scene, t_tuple hit_position, t_tuple light_position, t_object *object, t_tuple hit_normal);
+t_xs	intersect_sphere(t_object *shape, t_ray ray);
+t_xs	intersection_plane(t_ray ray, t_object *plane);
+t_xs	get_closest_intersection(t_scene *scene, t_ray ray, t_object *objects);
+void			apply_lighting(t_scene *scene, t_xs *hit, int *final_color);
+int				is_in_shadow(t_scene *scene, t_object *object, t_xs *hit);
 double			specular_reflect(t_tuple hit_point, t_tuple normal, t_tuple light_dir, t_scene *scene);
 void			prep_quadratic(t_quadratic *quadratic, t_ray ray, t_object *object);
 
@@ -271,16 +247,16 @@ t_tuple		tuple(double x, double y, double z, double w);
 t_tuple		point(double x, double y, double z);
 t_tuple 	vector(double x, double y, double z);
 int			tuple_is_equal(t_tuple a, t_tuple b);
-t_tuple		add_tuple(t_tuple a, t_tuple b);
-t_tuple		subtract_tuple(t_tuple a, t_tuple b);
-t_tuple		negate_tuple(t_tuple a);
-t_tuple		scale_tuple(t_tuple a, double scale);
+t_tuple		add(t_tuple a, t_tuple b);
+t_tuple		subtract(t_tuple a, t_tuple b);
+t_tuple		negate(t_tuple a);
+t_tuple		scale(t_tuple a, double scale);
 double		magnitude(t_tuple a);
-t_tuple		normalize_tuple(t_tuple a);
-double		dot_tuple(t_tuple a, t_tuple b);
-t_tuple		cross_tuple(t_tuple a, t_tuple b);
+t_tuple		normalize(t_tuple a);
+double		dot(t_tuple a, t_tuple b);
+t_tuple		cross(t_tuple a, t_tuple b);
 double		distance(t_tuple a, t_tuple b);
-t_tuple 	rotate_tuple(t_tuple a, int axe, double angle);
+t_tuple 	rotate(t_tuple a, int axe, double angle);
 
 //-- RAY --//
 

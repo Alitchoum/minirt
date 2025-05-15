@@ -29,18 +29,16 @@ void	translation(t_tuple *position, int keysym)
 		position->y += 0.5;
 }
 
-// TO CHECK - BOTH DO THE SAME -
-// > JUST CHANGE TO R(otation)? then just use arrows to move whatever way??
 void	rotation(t_tuple *orientation, int keysym)
 {
 	if (keysym == LEFT_ARROW) //-> orientation gauche (Y)
-		*orientation = rotate_tuple(*orientation, Y, 0.1);
+		*orientation = rotate(*orientation, Y, 0.1);
 	else if (keysym == RIGHT_ARROW) //-> orientation droite (Y)
-		*orientation = rotate_tuple(*orientation, Y, -0.1);
+		*orientation = rotate(*orientation, Y, -0.1);
 	else if (keysym == UP_ARROW) //-> orientation haut (x)
-		*orientation = rotate_tuple(*orientation, X, 0.1);
+		*orientation = rotate(*orientation, X, 0.1);
 	else if (keysym == DOWN_ARROW) //-> orientation bas (x)
-		*orientation = rotate_tuple(*orientation, X, -0.1);
+		*orientation = rotate(*orientation, X, -0.1);
 }
 
 void	scaling_radius(double *radius, int keysym)
