@@ -84,11 +84,21 @@ typedef struct s_ambient
 	t_color	color;
 }			t_ambient;
 
+typedef struct s_local
+{
+	t_tuple	up;
+	t_tuple	right;
+	t_tuple	forward;
+}	t_local;
+
 typedef struct s_cam
 {
 	t_tuple		position;
 	t_tuple		orientation;
 	int			fov;
+	double		aspect_ratio;
+	double		fov_scale;
+	t_local		basis;
 }				t_cam;
 
 typedef struct s_light
@@ -148,13 +158,6 @@ typedef struct s_ray
 	t_tuple	origin;
 	t_tuple	direction;
 }	t_ray;
-
-typedef struct s_local
-{
-	t_tuple	up;
-	t_tuple	right;
-	t_tuple	forward;
-}	t_local;
 
 typedef struct s_object
 {
@@ -216,22 +219,24 @@ int				shut_down(t_scene *scene);
 int				count_line_tab(char **s);
 
 //--DRAW--//
+
 void			my_mlx_pixel_put(t_scene *map, int x, int y, int colour);
 int				render_image(t_scene *scene);
 int				rgb_to_int(t_color colour, double light_scalar);
+int				get_pixel_color(t_scene *scene, t_ray ray, t_object *objects);
 
 //---PARSING TYPE---//
-int		parse_element_line(char *line, t_scene *scene, int *sphere_count);
-void	prepare_initial_computations(t_object *shapes, int obj_count);
 
+int				parse_element_line(char *line, t_scene *scene, int *sphere_count);
+int				check_extension(char *file);
+void			prepare_initial_computations(t_object *shapes, int obj_count);
 int				parse_scene(char *file, t_scene *scene);
 int				parse_element_line(char *line, t_scene *scene, int *sphere_count);
 int				check_sphere(char *line, t_object *sphere, int *object_index);
 int				check_plane(char *line, t_object *plane, int *object_index);
 int				check_cylinder(char *line, t_object *cylinder, int *object_index);
-int	update_color(t_color *color, char *line);
-int	update_tuple(t_tuple *tuple, char *line, double w);
-
+int				update_color(t_color *color, char *line);
+int				update_tuple(t_tuple *tuple, char *line, double w);
 
 //--INIT MLX--//
 
@@ -290,11 +295,11 @@ t_ray		rotate_ray_to_local_space(t_ray ray, t_object *shape);
 
 // --KEYBOARD--//
 
-void	translation(t_tuple *position, int keysym);
-void	rotation(t_tuple *orientation, int keysym);
-void	scaling_radius(double *radius, int keysym);
-void	scaling_height(double *height, int keysym);
-void	prep_initial_cylinder_computations(t_object *cylinder);
-void	prep_initial_sphere_computations(t_object *sphere);
+void		translation(t_tuple *position, int keysym);
+void		rotation(t_tuple *orientation, int keysym);
+void		scaling_radius(double *radius, int keysym);
+void		scaling_height(double *height, int keysym);
+void		prep_initial_cylinder_computations(t_object *cylinder);
+void		prep_initial_sphere_computations(t_object *sphere);
 
 #endif

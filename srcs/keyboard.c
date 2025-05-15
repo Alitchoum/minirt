@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:20:04 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/05/14 17:34:34 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:27:08 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,11 @@ void	handle_mode(int keysym, t_scene *scene)
 		scene->mode = MODE_CYLINDER;
 	else if (keysym == 112)
 		scene->mode = MODE_PLANE;
-	printf("mode = %d\n",scene->mode);
 }
 
 void	transform_objs_group(t_scene *scene, int object_type, int keysym)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < scene->obj_count)
@@ -63,7 +62,9 @@ void	handle_action(int keysym, t_scene *scene)
 	}
 	else if (scene->mode == MODE_LIGHT)
 		translation(&scene->light.position, keysym);
-	else if (scene->mode == MODE_SPHERE || scene->mode == MODE_CYLINDER || scene->mode == MODE_PLANE)
+	else if (scene->mode == MODE_SPHERE
+		||scene->mode == MODE_CYLINDER
+		|| scene->mode == MODE_PLANE)
 		transform_objs_group(scene, scene->mode, keysym);
 }
 

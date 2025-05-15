@@ -15,7 +15,9 @@ SRCS = $(SRCS_DIR)main.c \
 		$(SRCS_DIR)parsing_file.c \
 		$(SRCS_DIR)parsing_types.c \
 		$(SRCS_DIR)check_objs.c \
+		$(SRCS_DIR)check_cylinder.c \
 		$(SRCS_DIR)utils.c \
+		$(SRCS_DIR)utils2.c \
 		$(SRCS_DIR)init_mlx.c \
 		$(SRCS_DIR)draw.c \
 		$(SRCS_DIR)sphere.c \
@@ -38,7 +40,7 @@ SRCS = $(SRCS_DIR)main.c \
 OBJS = $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)/%.o)
 
 run: all
-	./minirt scene/plane_test.rt
+	./minirt scene/cylinder_basic.rt
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:55:07 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/05/13 17:24:11 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:22:07 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_tuple	rotate_tuple(t_tuple a, int axe, double angle)
 	else if (axe == Y)
 	{
 		rotate.x = a.x * cos(angle) + a.z * sin(angle);
-		rotate.z = - a.x * sin(angle) + a.z * cos(angle);
+		rotate.z = -a.x * sin(angle) + a.z * cos(angle);
 	}
 	else if (axe == Z)
 	{

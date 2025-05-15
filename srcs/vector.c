@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caburges <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:26:04 by caburges          #+#    #+#             */
-/*   Updated: 2025/04/21 18:26:06 by caburges         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:20:00 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //Produit scalaire de 2 vecteurs
 double	vec3_dot(t_vector a, t_vector b)
 {
-	return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
+	return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z));
 }
 
 t_vector	vec3_add(t_vector a, t_vector b)
@@ -39,16 +39,19 @@ t_vector	vec3_subtract(t_vector a, t_vector b)
 }
 
 // NORMALISE UN VECTEUR (longueur 1) = direction
-t_vector vec3_normalize(t_vector a)
+t_vector	vec3_normalize(t_vector a)
 {
-	double len = sqrt(vec3_dot(a, a));
+	double	len;
+
+	len = sqrt(vec3_dot(a, a));
 	a.x /= len;
 	a.y /= len;
 	a.z /= len;
 	return (a);
 }
 
-//Permet de se deplacer par palier sur le rayon (vecteur directionnel * distance scalaire)
+//Permet de se deplacer par palier sur le rayon 
+//(vecteur directionnel * distance scalaire)
 //Acance recule sur axe du rayon
 t_vector	vec3_scale(t_vector a, double scale)
 {
@@ -57,4 +60,3 @@ t_vector	vec3_scale(t_vector a, double scale)
 	a.z *= scale;
 	return (a);
 }
-

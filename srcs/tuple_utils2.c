@@ -6,7 +6,7 @@
 /*   By: alsuchon <alsuchon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:55:14 by alsuchon          #+#    #+#             */
-/*   Updated: 2025/05/14 17:37:30 by alsuchon         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:25:20 by alsuchon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,14 @@ t_tuple	transform_normal(t_tuple local_normal, t_local basis)
 {
 	t_tuple	world_normal;
 
-	world_normal.x = local_normal.x * basis.right.x + local_normal.y * basis.up.x + local_normal.z * basis.forward.x;
-	world_normal.y = local_normal.x * basis.right.y + local_normal.y * basis.up.y + local_normal.z * basis.forward.y;
-	world_normal.z = local_normal.x * basis.right.z + local_normal.y * basis.up.z + local_normal.z * basis.forward.z;
-
+	world_normal.x = local_normal.x * basis.right.x
+		+ local_normal.y * basis.up.x
+		+ local_normal.z * basis.forward.x;
+	world_normal.y = local_normal.x * basis.right.y
+		+ local_normal.y * basis.up.y
+		+ local_normal.z * basis.forward.y;
+	world_normal.z = local_normal.x * basis.right.z
+		+ local_normal.y * basis.up.z
+		+ local_normal.z * basis.forward.z;
 	return (world_normal);
 }
