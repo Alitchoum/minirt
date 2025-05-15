@@ -14,15 +14,15 @@
 
 void	handle_mode(int keysym, t_scene *scene)
 {
-	if (keysym == 118)
+	if (keysym == 'v')
 		scene->mode = MODE_VIEW;
-	else if (keysym == 108)
+	else if (keysym == 'l')
 		scene->mode = MODE_LIGHT;
-	else if (keysym == 115)
+	else if (keysym == 's')
 		scene->mode = MODE_SPHERE;
-	else if (keysym == 99)
+	else if (keysym == 'c')
 		scene->mode = MODE_CYLINDER;
-	else if (keysym == 112)
+	else if (keysym == 'p')
 		scene->mode = MODE_PLANE;
 	printf("mode = %d\n",scene->mode);
 }
