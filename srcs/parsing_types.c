@@ -222,10 +222,14 @@ static int	check_cylinder(char *line, t_object *cylinder, int *object_index)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of cylinder isn't valid.\n", 2), 0);
 	if (!update_tuple(&cylinder->position, elements[1], 1))
 		return (free_split(elements), 0);
-	if (!update_tuple(&cylinder->orientation, elements[2], 1))
+	if (!update_tuple(&cylinder->orientation, elements[2], 0))
 		return (free_split(elements), 0);
+	if (magnitude(cylinder->orientation) < 1 - EPSILON)
+		printf("NO\n");
+	printf("cylinder: %f\n", magnitude(cylinder->orientation));
 	if (!is_valid_orientation_range(cylinder->orientation))
 		return (free_split(elements), ft_putstr_fd("Error: Cylinder ratio isn't in a valid range.\n", 2), 0);
+	cylinder->orientation = normalize_tuple(cylinder->orientation);
 	if (!is_valid_double(elements[3]))
 		return (free_split(elements), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
 	cylinder->radius = ft_atof(elements[3]) / 2;
