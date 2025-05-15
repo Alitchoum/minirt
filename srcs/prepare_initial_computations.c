@@ -1,5 +1,5 @@
 #include "minirt.h"
-
+// MERGE OK
 void	compute_cylinder_local_basis(t_local *basis, t_tuple orientation)
 {
 	basis->forward = orientation;
@@ -7,7 +7,7 @@ void	compute_cylinder_local_basis(t_local *basis, t_tuple orientation)
 		basis->right = normalize_tuple(cross_tuple(vector(1, 0, 0), basis->forward));
 	else
 		basis->right = normalize_tuple(cross_tuple(vector(0, 1, 0), basis->forward));
-	basis->up = cross_tuple(basis->forward, basis->right);
+	basis->up = normalize_tuple(cross_tuple(basis->forward, basis->right));
 }
 
 void	prep_initial_cylinder_computations(t_object *cylinder)

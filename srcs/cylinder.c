@@ -1,5 +1,5 @@
 #include "minirt.h"
-
+// MERGE OK
 t_intersection	intersect_cap(t_object *cylinder, t_ray ray, double hit_z)
 {
 	t_intersection	xs;

@@ -220,6 +220,8 @@ int				parse_element_line(char *line, t_scene *scene, int *sphere_count);
 int				check_sphere(char *line, t_object *sphere, int *object_index);
 int				check_plane(char *line, t_object *plane, int *object_index);
 int				check_cylinder(char *line, t_object *cylinder, int *object_index);
+int	update_color(t_color *color, char *line);
+int	update_tuple(t_tuple *tuple, char *line, double w);
 
 
 //--INIT MLX--//

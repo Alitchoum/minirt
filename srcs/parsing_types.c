@@ -16,51 +16,6 @@
 //Pour overflow ajouter verif direct dans atoi 
 //et atof putot que pour chaque données??
 
-//create & return a struct with code color RGB
-//CHECKS: int overflow; isdigit; split with isspace
-static int	update_color(t_color *color, char *line)
-{
-	char	**rgb = NULL;
-
-	rgb = ft_split(line, ',');
-	if (!rgb)
-		return (ft_putstr_fd("Error: Split color failed.\n", 2), 0);
-	if (count_line_tab(rgb) != 3)
-		return (free_split(rgb), ft_putstr_fd("Error Nb of elements isn't valid.\n", 2), 0);
-	if (!is_valid_int(rgb[0]) || !is_valid_int(rgb[1]) || !is_valid_int(rgb[2]))
-		return (free_split(rgb), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	color->r = ft_atoi(rgb[0]);
-	color->g = ft_atoi(rgb[1]);
-	color->b = ft_atoi(rgb[2]);
-	if ((color->r < 0 || color->r > 255) || (color->g < 0 || color->r > 255) ||
-		(color->b < 0 || color->b > 255))
-		return (free_split(rgb), ft_putstr_fd("Error: Color isn't in a valid range.\n", 2), 0);
-	color->r /= (double)255.0;
-	color->g /= (double)255.0;
-	color->b /= (double)255.0;
-	free_split(rgb);
-	return (1);
-}
-
-static int	update_tuple(t_tuple *tuple, char *line, double w)
-{
-	char	**coords = NULL;
-
-	coords = ft_split(line, ',');
-	if (!coords)
-		return (ft_putstr_fd("Error: Split vector failed.\n", 2), 0);
-	if (count_line_tab(coords) != 3)
-		return (free_split(coords), ft_putstr_fd("Error Nb of elements isn't valid.\n", 2), 0);
-	if (!is_valid_double(coords[0]) || !is_valid_double(coords[1]) || !is_valid_double(coords[2]))
-		return (free_split(coords), ft_putstr_fd("Error: Isn't a number.\n", 2), 0);
-	tuple->x = ft_atof(coords[0]);
-	tuple->y = ft_atof(coords[1]);
-	tuple->z = ft_atof(coords[2]);
-	tuple->w = w;
-	free_split(coords);
-	return (1);
-}
-
 //Parsing of the line ambient light (type A)
 static int	check_ambient(char *line, t_scene *scene)
 {

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minirt.h"
-
+// for camera, the translation goes the wrong way, fine for shapes
 void	translation(t_tuple *position, int keysym)
 {
 	printf("touch = %d\n", keysym);
@@ -20,15 +20,17 @@ void	translation(t_tuple *position, int keysym)
 	else if (keysym == 107) //k->avancer
 		position->z -= 0.5;
 	else if (keysym == 106) //j->droite
-		position->x -= 0.5;
-	else if (keysym == 101) //e ->gauche
 		position->x += 0.5;
+	else if (keysym == 101) //e ->gauche
+		position->x -= 0.5;
 	else if (keysym == 117) //u->bas
-		position->y += 0.5;
-	else if (keysym == 111) // o->haut
 		position->y -= 0.5;
+	else if (keysym == 111) // o->haut
+		position->y += 0.5;
 }
 
+// TO CHECK - BOTH DO THE SAME -
+// > JUST CHANGE TO R(otation)? then just use arrows to move whatever way??
 void	rotation(t_tuple *orientation, int keysym)
 {
 	if (keysym == 65363) //-> orientation gauche (Y)

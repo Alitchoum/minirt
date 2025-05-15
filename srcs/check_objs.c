@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 
-static int	update_color(t_color *color, char *line)
+int	update_color(t_color *color, char *line)
 {
 	char	**rgb = NULL;
 
@@ -36,7 +36,7 @@ static int	update_color(t_color *color, char *line)
 	return (1);
 }
 
-static int	update_tuple(t_tuple *tuple, char *line, double w)
+int	update_tuple(t_tuple *tuple, char *line, double w)
 {
 	char	**coords = NULL;
 
@@ -89,7 +89,7 @@ int	check_plane(char *line, t_object *plane, int *object_index)
 		return (free_split(elements), ft_putstr_fd("Error: Nb of elements of plane isn't valid.\n", 2), 0);
 	if (!update_tuple(&plane->position, elements[1], 1))
 		return (free_split(elements), 0);
-	if (!update_tuple(&plane->normal, elements[2], 1))
+	if (!update_tuple(&plane->normal, elements[2], 0))
 		return (free_split(elements), 0);
 	if (!is_valid_orientation_range(plane->normal))
 		return (free_split(elements), ft_putstr_fd("Error: Plane ratio isn't in a valid range.\n", 2), 0);
